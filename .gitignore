@@ -48,6 +48,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+secrets.xml
 
 # External tool builders
 .externalToolBuilders/
