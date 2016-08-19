@@ -19,13 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         !-- activities and everything here. meta-data last inside application tag -->
         <meta-data
             android:name="com.parse.pensum"
@@ -33,6 +31,8 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
+
+        <activity android:name=".HomeActivity"></activity>
     </application>
 
 </manifest>

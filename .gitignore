@@ -50,6 +50,7 @@ local.properties
 .loadpath
 secrets.xml
 
+.DS_Store
 # External tool builders
 .externalToolBuilders/
 
