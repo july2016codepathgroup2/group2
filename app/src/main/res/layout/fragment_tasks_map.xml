@@ -7,8 +7,8 @@
           android:layout_height="match_parent"
           map:mapType="normal"
           map:uiCompass="true"
-          map:uiRotateGestures="false"
-          map:uiScrollGestures="false"
+          map:uiRotateGestures="true"
+          map:uiScrollGestures="true"
           map:uiTiltGestures="false"
           map:uiZoomControls="true"
-          map:uiZoomGestures="false"/>
+          map:uiZoomGestures="true"/>

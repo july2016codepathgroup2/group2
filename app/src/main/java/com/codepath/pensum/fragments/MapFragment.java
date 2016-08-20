@@ -107,7 +107,10 @@ public class MapFragment extends Fragment implements
                     BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
                     for(int i = 0; i < tasks.size(); i++){
-                        LatLng point = tasks.get(i).getLatLng();
+                        // TODO fix this once we are actually sending geopoints into parse
+                        //ParseGeoPoint geoPoint = tasks.get(i).getLocation();
+
+                        LatLng point = new LatLng(33.78102,-84.41762);
                         String title = tasks.get(i).getTitle();
                         String snippet = tasks.get(i).getDescription();
                         Marker marker = map.addMarker(new MarkerOptions().position(point).title(title).snippet(snippet).icon(defaultMarker));

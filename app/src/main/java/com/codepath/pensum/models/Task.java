@@ -2,6 +2,7 @@ package com.codepath.pensum.models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -31,15 +32,10 @@ public class Task extends ParseObject {
         put("images",images);
     }
 
-    public void setLatitude(Double latitude) {
-        put("latitude",latitude);
+    public void setLocation(ParseGeoPoint location){
+        put("location",location);
     }
 
-    public void setLongitude(Double longitude) {
-        put("longitude",longitude);
-    }
-
-    @Override
     public void setObjectId(String objectId) {
         put("object_id",objectId);
     }
@@ -55,6 +51,8 @@ public class Task extends ParseObject {
     public void setTitle(String title) {
         put("title",title);
     }
+
+    public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
     public String getObjectId() { return getString("object_id"); }
 

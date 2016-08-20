@@ -34,10 +34,10 @@
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAKIqr8lcIqwNLXzxrYZoyXS8fm1vElTlQ" />
+            android:value="@string/google_maps_api_key" />
         <meta-data
             android:name="com.parse.APPLICATION_ID"
-            android:value="pensum" />
+            android:value="@string/app_name" />
     </application>
 
 
