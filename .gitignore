@@ -48,7 +48,9 @@ local.properties
 .classpath
 .settings/
 .loadpath
+secrets.xml
 
+.DS_Store
 # External tool builders
 .externalToolBuilders/
 
