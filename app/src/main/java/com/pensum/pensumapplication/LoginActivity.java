@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         add("email");
     }};
 
-    Button btnFbLogin;
+    ImageButton btnFbLogin;
     ProgressDialog pd;
 
     ParseUser user;
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             startWithCurrentUser();
         }
 
-        btnFbLogin = (Button) findViewById(R.id.btnFbLogin);
+        btnFbLogin = (ImageButton) findViewById(R.id.btnFbLogin);
 
         pd = new ProgressDialog(this);
         pd.setTitle("Loading...");
