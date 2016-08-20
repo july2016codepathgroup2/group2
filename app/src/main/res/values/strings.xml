@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Pensum</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="home">HOME</string>
+    <string name="profile">PROFILE</string>
+    <string name="my_tasks">MY TASKS</string>
+    <string name="messages">MESSAGES</string>
 </resources>

@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "com.codepath.pensum"
+        applicationId "com.pensum.pensumapplication"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -21,7 +21,7 @@ android {
 }
 
 ext {
-    supportLibVersion = '23.4.0'  // variable that can be referenced to keep support libs consistent
+    supportLibVersion = '24.2.0'  // variable that can be referenced to keep support libs consistent
 }
 
 dependencies {
@@ -36,6 +36,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.parse:parse-android:1.13.1'
     compile 'com.parse:parseinterceptors:0.0.2' // for logging API calls to LogCat
+    compile 'com.facebook.android:facebook-android-sdk:4.14.1'
+    compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
     compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.0.7'
     compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
