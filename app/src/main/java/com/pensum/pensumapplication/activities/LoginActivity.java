@@ -1,4 +1,4 @@
-package com.pensum.pensumapplication;
+package com.pensum.pensumapplication.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.pensum.pensumapplication.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
