@@ -32,4 +32,12 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'com.parse:parseinterceptors:0.0.2' // for logging API calls to LogCat
+    compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
+    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.0.7'
+    compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
+    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.0.7'
 }

@@ -12,15 +12,15 @@ import com.codepath.pensum.R;
 /**
  * Created by violetaria on 8/16/16.
  */
-public class TasksFragment extends Fragment {
+public class GridFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int page;
 
-    public static TasksFragment newInstance(int page) {
+    public static GridFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        TasksFragment fragment = new TasksFragment();
+        GridFragment fragment = new GridFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,4 +40,7 @@ public class TasksFragment extends Fragment {
         return view;
     }
 
+    public void setMyLocation(){
+        // TODO handle this here
+    }
 }
