@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardBackgroundColor="#E6E6E6"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="20dp">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivProfilePicture"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_centerHorizontal="true"
+            tools:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/tvType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivProfilePicture"
+            android:layout_centerHorizontal="true"
+            android:padding="5dp"
+            android:textColor="@android:color/white"
+            style="@android:style/TextAppearance.Medium"
+            android:background="@drawable/rounded_corner_textview"
+            tools:text="Label"/>
+
+        <TextView
+            android:id="@+id/tvTaskTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvType"
+            android:textColor="@android:color/black"
+            style="@android:style/TextAppearance.Medium"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            tools:text="Task Title"/>
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTaskTitle"
+            android:layout_centerHorizontal="true"
+            style="@android:style/TextAppearance.Large"
+            android:textStyle="bold"
+            android:textColor="#2BA11A"
+            tools:text="$100" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
