@@ -36,13 +36,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
@@ -102,22 +107,18 @@ public class MapFragment extends Fragment implements
         query.findInBackground(new FindCallback<Task>() {
             public void done(List<Task> tasks, ParseException e) {
                 if (e == null) {
-                    // clear out all old markers
+                    // clear out all old markers ?
                     //mMessages.clear();
                     BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
                     for(int i = 0; i < tasks.size(); i++){
-                        // TODO fix this once we are actually sending geopoints into parse
-                        //ParseGeoPoint geoPoint = tasks.get(i).getLocation();
-
-                        LatLng point = new LatLng(33.78102,-84.41762);
+                        ParseGeoPoint location = tasks.get(i).getLocation();
+                        LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
                         String title = tasks.get(i).getTitle();
                         Task task = tasks.get(i);
                         MarkerOptions markerOptions = new MarkerOptions().position(point).title(title).icon(defaultMarker);
                         Marker marker = map.addMarker(markerOptions);
                         markers.put(marker.getId(), task);
-                        // TODO how does this work????
-                        //map.setInfoWindowAdapter(new CustomWindowAdapter(getLayoutInflater(new Bundle())));
                     }
                 } else {
                     Log.e("message", "Error Loading Messages" + e);
@@ -131,7 +132,6 @@ public class MapFragment extends Fragment implements
         map = googleMap;
         if (map != null) {
             // Map is ready
-            //Toast.makeText(getContext(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             // TODO somehow get location in activity and pass down
             MapFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -154,30 +154,37 @@ public class MapFragment extends Fragment implements
 
                     View v = getActivity().getLayoutInflater().inflate(R.layout.custom_info_window, null);
 
-                    TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+                    TextView tvTitle = (TextView) v.findViewById(R.id.etTitle);
 
-                    TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
+                    TextView tvDescription = (TextView) v.findViewById(R.id.etDescription);
 
                     TextView tvBudget = (TextView) v.findViewById(R.id.tvBudget);
 
                     ImageView ivProfileImage = (ImageView) v.findViewById(R.id.ivProfileImage);
 
-                    //These are standard, just uses the Title and Snippet
-//                    tLocation.setText(arg0.getTitle());
-//
-//                    tSnippet.setText(arg0.getSnippet());
-
-                    //Now get the extra info you need from the HashMap
-                    //Store it in a MarkerHolder Object
                     Task task = markers.get(marker.getId()); //use the ID to get the info
 
                     tvTitle.setText(task.getTitle());
 
                     tvDescription.setText(task.getDescription());
 
-                    tvBudget.setText(task.getBudget().toString());
+                    tvBudget.setText("$"+task.getBudget().toString());
 
-                    // TODO put image here
+                    try {
+                        ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
+                        ParseFile profileImage = postedBy.getParseFile("profileThumb");
+                        if (profileImage != null){
+                            String imageUrl = profileImage.getUrl();
+                            Picasso.with(getContext()).load(imageUrl).
+                                    transform(new CropCircleTransformation()).into(ivProfileImage);
+                        } else {
+                            Picasso.with(getContext()).load(R.mipmap.ic_launcher).
+                                    transform(new CropCircleTransformation()).into(ivProfileImage);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
                     return v;
 
                 }
