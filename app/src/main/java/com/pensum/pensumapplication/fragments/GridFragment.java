@@ -19,17 +19,17 @@ import java.util.ArrayList;
  * Created by violetaria on 8/16/16.
  */
 public abstract class GridFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
+    //public static final String ARG_PAGE = "ARG_PAGE";
     public final int MAX_TASKS_TO_SHOW = 50;
 
-    private int page;
+   // private int page;
     public ArrayList<Task> tasks;
     private RecyclerView rvTasks;
     public TasksAdapter adapter;
 
     public static GridFragment newInstance(int page) {
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
+        //args.putInt(ARG_PAGE, page);
         GridFragment fragment = new TasksGridFragment();
         fragment.setArguments(args);
         return fragment;
@@ -38,7 +38,7 @@ public abstract class GridFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        page = getArguments().getInt(ARG_PAGE);
+        //page = getArguments().getInt(ARG_PAGE);
         tasks = new ArrayList<>();
         adapter = new TasksAdapter(tasks, getContext());
     }

@@ -5,26 +5,27 @@ import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.pensum.pensumapplication.models.Task;
 
 import java.util.List;
 
 /**
- * Created by violetaria on 8/21/16.
+ * Created by eddietseng on 8/19/16.
  */
-public class TasksGridFragment extends GridFragment {
+public class MyTasksGridFragment extends GridFragment {
 
-    public static TasksGridFragment newInstance() {
-        return (TasksGridFragment) GridFragment.newInstance(0);
+    public static MyTasksGridFragment newInstance(int page) {
+        return (MyTasksGridFragment) GridFragment.newInstance(page);
     }
-
-    public static TasksGridFragment newInstance(int page) {
-        return (TasksGridFragment) GridFragment.newInstance(page);
+    public static MyTasksGridFragment newInstance() {
+        return (MyTasksGridFragment) GridFragment.newInstance(0);
     }
 
     public void populateTasks() {
         // Construct query to execute
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+        query.whereEqualTo("posted_by", ParseUser.getCurrentUser());
         // Configure limit and sort order
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
@@ -45,5 +46,4 @@ public class TasksGridFragment extends GridFragment {
             }
         });
     }
-
 }
