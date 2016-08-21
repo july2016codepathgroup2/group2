@@ -40,7 +40,7 @@ public class Task extends ParseObject {
         put("posted_by",postedBy);
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         put("status", status);
     }
 
@@ -68,8 +68,8 @@ public class Task extends ParseObject {
 
     public ParseUser getPostedBy()  {return getParseUser("posted_by");}
 
-    public int getStatus() {
-        return getInt("status");
+    public String getStatus() {
+        return getString("status");
     }
 
     public String getTitle() {
@@ -87,15 +87,5 @@ public class Task extends ParseObject {
 
     public Task(){
     }
-
-    public Task(String title, String description, ParseUser postedBy, BigDecimal budget) {
-        super();
-        setTitle(title);
-        setDescription(description);
-        setPostedBy(postedBy);
-        setBudget(budget);
-        setStatus(0);
-    }
-
 
 }

@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.api_clients.ZipCodeApiClient;
+import com.pensum.pensumapplication.helpers.NetworkHelper;
 import com.pensum.pensumapplication.models.Task;
 
 import org.json.JSONException;
@@ -56,20 +58,23 @@ public class AddTaskActivity extends AppCompatActivity {
     public void saveTask(View view){
         ZipCodeApiClient client = new ZipCodeApiClient();
 
-        Task task = new Task();
-        task.setPostedBy(ParseUser.getCurrentUser());
-        task.setTitle(etTitle.getText().toString());
-        task.setDescription(etDescription.getText().toString());
-        task.setType(etType.getText().toString());
-        task.setBudget(new BigDecimal(etBudget.getText().toString()));
-        location = new ParseGeoPoint();
-        //if (NetworkHelper.isNetworkAvailable(this) && NetworkHelper.isOnline()) {
+        if (NetworkHelper.isNetworkAvailable(this) && NetworkHelper.isOnline()) {
             client.getLocationForZip(etLocation.getText().toString(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     try {
+                        Task task = new Task();
+                        task.setStatus("open");
+                        task.setPostedBy(ParseUser.getCurrentUser());
+                        task.setTitle(etTitle.getText().toString());
+                        task.setDescription(etDescription.getText().toString());
+                        task.setType(etType.getText().toString());
+                        task.setBudget(new BigDecimal(etBudget.getText().toString()));
+                        location = new ParseGeoPoint();
                         location.setLatitude(responseBody.getDouble("lat"));
                         location.setLongitude(responseBody.getDouble("lng"));
+                        task.setLocation(location);
+                        task.saveInBackground();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -80,11 +85,9 @@ public class AddTaskActivity extends AppCompatActivity {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                 }
             });
-            task.setLocation(location);
-            task.saveInBackground();
-//        } else {
-//            Toast.makeText(this, "You're offline task not saved.", Toast.LENGTH_LONG).show();
-//        }
+        } else {
+            Toast.makeText(this, "You're offline task not saved.", Toast.LENGTH_LONG).show();
+        }
         this.finish();
     }
 }
