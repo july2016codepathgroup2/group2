@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:id="@+id/tvTitleLabel"
+        android:layout_alignBaseline="@+id/etTitle"
+        android:layout_alignBottom="@+id/etTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etTitle"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/etDescription"
+        android:layout_alignStart="@+id/etDescription"
+        android:hint="@string/title_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        android:id="@+id/tvDescriptionLabel"
+        android:layout_alignBaseline="@+id/etDescription"
+        android:layout_alignBottom="@+id/etDescription"
+        android:layout_alignLeft="@+id/tvTitleLabel"
+        android:layout_alignStart="@+id/tvTitleLabel"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etDescription"
+        android:layout_alignParentTop="false"
+        android:layout_below="@id/etTitle"
+        android:layout_toRightOf="@+id/tvDescriptionLabel"
+        android:hint="@string/description_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDescription"
+        android:text="@string/budget"
+        android:id="@+id/tvBudgetLabel"
+        android:layout_alignBaseline="@+id/etBudget"
+        android:layout_alignBottom="@+id/etBudget"
+        android:layout_alignLeft="@+id/tvTitleLabel"
+        android:layout_alignStart="@+id/tvTitleLabel"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDescription"
+        android:layout_alignLeft="@+id/etDescription"
+        android:layout_alignStart="@+id/etDescription"
+        android:id="@+id/etBudget"
+        android:hint="@string/budget_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLocationLabel"
+        android:text="@string/location"
+        android:layout_alignBaseline="@+id/etLocation"
+        android:layout_alignBottom="@+id/etLocation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etBudget"
+        android:layout_alignLeft="@+id/etBudget"
+        android:layout_alignStart="@+id/etBudget"
+        android:id="@+id/etLocation"
+        android:hint="@string/location_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTypeLabel"
+        android:text="@string/type"
+        android:layout_alignBaseline="@+id/etType"
+        android:layout_alignBottom="@+id/etType"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etType"
+        android:hint="@string/type_hint"
+        android:layout_below="@+id/etLocation"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_alignStart="@+id/etLocation"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_task"
+        android:id="@+id/btnAddTask"
+        android:layout_below="@+id/etType"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+</RelativeLayout>

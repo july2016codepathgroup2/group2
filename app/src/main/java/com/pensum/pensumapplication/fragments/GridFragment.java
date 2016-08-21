@@ -86,9 +86,11 @@ public class GridFragment extends Fragment {
         query.findInBackground(new FindCallback<Task>() {
             public void done(List<Task> tasksFromQuery, ParseException e) {
                 if (e == null) {
+                    int previousContentSize = tasks.size();
                     tasks.clear();
+                    adapter.notifyItemRangeRemoved(0, previousContentSize);
                     tasks.addAll(tasksFromQuery);
-                    adapter.notifyItemRangeInserted(0, tasksFromQuery.size());
+                    adapter.notifyItemRangeInserted(0, tasksFromQuery.size()-1);
                 } else {
                     Log.e("message", "Error Loading Messages" + e);
                 }
