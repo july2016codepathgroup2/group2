@@ -7,4 +7,15 @@
     <string name="profile">PROFILE</string>
     <string name="my_tasks">MY TASKS</string>
     <string name="messages">MESSAGES</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="title_hint">Enter a title...</string>
+    <string name="description_hint">Enter a description...</string>
+    <string name="budget">Budget</string>
+    <string name="budget_hint">Enter a budget...</string>
+    <string name="location">Location</string>
+    <string name="location_hint">Enter zip code...</string>
+    <string name="type_hint">Enter a type...</string>
+    <string name="type">Type</string>
+    <string name="add_task">Add Task</string>
 </resources>

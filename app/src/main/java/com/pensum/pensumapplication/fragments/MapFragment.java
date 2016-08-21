@@ -154,9 +154,9 @@ public class MapFragment extends Fragment implements
 
                     View v = getActivity().getLayoutInflater().inflate(R.layout.custom_info_window, null);
 
-                    TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+                    TextView tvTitle = (TextView) v.findViewById(R.id.etTitle);
 
-                    TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
+                    TextView tvDescription = (TextView) v.findViewById(R.id.etDescription);
 
                     TextView tvBudget = (TextView) v.findViewById(R.id.tvBudget);
 

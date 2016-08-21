@@ -8,5 +8,5 @@ import com.parse.ParseObject;
  */
 @ParseClassName("Users")
 public class User extends ParseObject {
-
+    public String getObjectId(){ return getString("object_id"); }
 }
