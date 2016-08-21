@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -205,8 +206,14 @@ public class MapFragment extends Fragment implements
                 public boolean onMarkerClick(Marker marker) {
                     // TODO launch task detail activity
                     Task task = markers.get(marker.getId());
-
                     return false;
+                }
+            });
+            map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Task task = markers.get(marker.getId());
+                    showTaskDetailFragment(task);
                 }
             });
         } else {
@@ -397,5 +404,11 @@ public class MapFragment extends Fragment implements
                     "Sorry. Location services not available to you", Toast.LENGTH_LONG).show();
         }
     }
-
+    private void showTaskDetailFragment(Task task) {
+        FragmentManager fm = getFragmentManager();
+        TaskDetailFragment taskDetailFragment =
+                TaskDetailFragment.newInstance(task.getObjectId());
+        taskDetailFragment.show(fm, "fragment_task_detail");
+    }
 }
+
