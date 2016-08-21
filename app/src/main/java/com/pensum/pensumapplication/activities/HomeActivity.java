@@ -8,21 +8,26 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.fragments.AddTaskFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
 import com.pensum.pensumapplication.fragments.MyTasksFragment;
 import com.pensum.pensumapplication.fragments.ProfileFragment;
+import com.pensum.pensumapplication.helpers.KeyboardHelper;
+import com.pensum.pensumapplication.models.Task;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener, HomeFragment.OnAddTaskListener{
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -115,7 +120,9 @@ public class HomeActivity extends AppCompatActivity {
 
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment).commit();
+            fragmentTransaction.addToBackStack("add task fragment");
 
             // Highlight the selected item has been done by NavigationView
             menuItem.setChecked(true);
@@ -151,5 +158,28 @@ public class HomeActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+    }
+
+
+    @Override
+    public void onNewTaskCreated(Task task) {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            KeyboardHelper.hideKeyboard(this);
+            fm.popBackStack();
+        }
+        if (task != null) {
+
+        } else {
+            Toast.makeText(this, "You're offline task not saved.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onLaunchAddTask() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.flContent, new AddTaskFragment());
+        ft.addToBackStack("add task fragment");
+        ft.commit();
     }
 }

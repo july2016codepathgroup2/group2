@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,7 @@ public class MapFragment extends Fragment implements
     static final int MAX_TASKS_TO_SHOW = 50;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
-
+    private View view;
     private HashMap<String, Task> markers= new HashMap<String, Task>();
 
     @Override
@@ -79,18 +80,24 @@ public class MapFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks_map, container, false);
-        mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap map) {
-                    loadMap(map);
-                    populateTasks();
+       try {
+            if (view == null) {
+                view = inflater.inflate(R.layout.fragment_tasks_map, container, false);
+                mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap map) {
+                            loadMap(map);
+                            populateTasks();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
                 }
-            });
-        } else {
-            Toast.makeText(getContext(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
         }
         return view;
     }

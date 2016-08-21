@@ -1,6 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pensum.pensumapplication.R;
-import com.pensum.pensumapplication.activities.AddTaskActivity;
 import com.pensum.pensumapplication.adapters.DashboardPagerAdapter;
 
 /**
@@ -20,6 +19,27 @@ import com.pensum.pensumapplication.adapters.DashboardPagerAdapter;
 public class HomeFragment extends Fragment {
     public static String POSITION = "POSITION";
     FloatingActionButton fab;
+
+    private OnAddTaskListener listener;
+
+    public HomeFragment(){
+
+    }
+
+    public interface OnAddTaskListener  {
+        public void onLaunchAddTask();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnAddTaskListener) {
+            listener = (OnAddTaskListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement HomeFragment.OnAddTaskListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,8 +52,9 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), AddTaskActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(getActivity(), AddTaskActivity.class);
+                //startActivity(i);
+                listener.onLaunchAddTask();
             }
         });
         viewPager.setAdapter(new DashboardPagerAdapter(getChildFragmentManager(), getActivity()));
