@@ -10,6 +10,8 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@android:style/TextAppearance.Large"
+        android:textStyle="bold"
         tools:text="Task Title"/>
 
     <TextView
@@ -17,33 +19,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
+        style="@android:style/TextAppearance.Medium"
         tools:text="Description"/>
-
-    <TextView
-        android:id="@+id/tvImagesLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Images"
-        android:layout_below="@+id/tvDescription"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvTaskImages"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvImagesLabel"/>
 
     <TextView
         android:id="@+id/tvBudgetLabel"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Budget"
-        android:layout_below="@+id/rvTaskImages"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescription"
+        style="@android:style/TextAppearance.Medium"
+        android:text="Budget:"/>
 
     <TextView
-        android:id="@+id/tvStatus"
+        android:id="@+id/tvBudget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status"
-        android:layout_below="@+id/tvBudgetLabel"/>
+        style="@android:style/TextAppearance.Medium"
+        android:textStyle="bold"
+        android:textColor="#2BA11A"
+        android:text="Budget"
+        android:paddingLeft="10dp"
+        android:layout_below="@id/tvDescription"
+        android:layout_toRightOf="@id/tvBudgetLabel"/>
 
+    <TextView
+        android:id="@+id/tvStatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/TextAppearance.Medium"
+        android:text="Status:"
+        android:layout_below="@+id/tvBudget"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/status_array"
+        android:paddingLeft="10dp"
+        android:layout_below="@id/tvBudget"
+        android:layout_toRightOf="@+id/tvStatusLabel"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvTaskImages"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/tvStatusLabel"/>
 </RelativeLayout>

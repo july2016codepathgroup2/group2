@@ -46,7 +46,7 @@ public class TaskDetailFragment extends DialogFragment {
 
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvDescriptionLabel = (TextView) view.findViewById(R.id.tvDescription);
-        tvBudget = (TextView) view.findViewById(R.id.tvBudgetLabel);
+        tvBudget = (TextView) view.findViewById(R.id.tvBudget);
         fetchSelectedTaskAndPopulateView();
     }
 
