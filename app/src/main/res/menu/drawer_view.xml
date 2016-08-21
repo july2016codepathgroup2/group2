@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home"
-            android:icon="@drawable/ic_domain_black_24dp"
+            android:icon="@drawable/ic_home_black_24dp"
             android:title="HOME" />
         <item
             android:id="@+id/profile"
