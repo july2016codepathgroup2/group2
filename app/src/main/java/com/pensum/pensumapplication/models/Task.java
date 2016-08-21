@@ -36,10 +36,6 @@ public class Task extends ParseObject {
         put("location",location);
     }
 
-    public void setObjectId(String objectId) {
-        put("object_id",objectId);
-    }
-
     public void setPostedBy(ParseUser postedBy) {
         put("posted_by",postedBy);
     }
@@ -53,8 +49,6 @@ public class Task extends ParseObject {
     }
 
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
-
-    public String getObjectId() { return getString("object_id"); }
 
     public JSONArray getImages() {
         return getJSONArray("images");
