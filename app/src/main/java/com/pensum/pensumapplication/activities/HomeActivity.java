@@ -20,14 +20,16 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.fragments.AddTaskFragment;
+import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
 import com.pensum.pensumapplication.fragments.MyTasksFragment;
 import com.pensum.pensumapplication.fragments.ProfileFragment;
+import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
 import com.pensum.pensumapplication.models.Task;
 
-public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener, HomeFragment.OnAddTaskListener{
+public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener, HomeFragment.OnAddTaskListener, TaskDetailFragment.OnContactOwnerListener{
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -121,8 +123,8 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.addToBackStack("fragment");
             fragmentTransaction.replace(R.id.flContent, fragment).commit();
-            fragmentTransaction.addToBackStack("add task fragment");
 
             // Highlight the selected item has been done by NavigationView
             menuItem.setChecked(true);
@@ -181,5 +183,12 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ft.replace(R.id.flContent, new AddTaskFragment());
         ft.addToBackStack("add task fragment");
         ft.commit();
+    }
+
+    @Override
+    public void launchContactOwnerDialog(Task task) {
+        FragmentManager fm = getSupportFragmentManager();
+        ContactOwnerFragment contactOwnerFragment = ContactOwnerFragment.newInstance(task.getObjectId());
+        contactOwnerFragment.show(fm, "fragment_contact_owner");
     }
 }

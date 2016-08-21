@@ -1,16 +1,20 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
 
@@ -20,9 +24,25 @@ public class TaskDetailFragment extends DialogFragment {
     private TextView tvTitle;
     private Task task;
     private TextView tvBudget;
+    private Button btnContact;
+    private OnContactOwnerListener listener;
 
     public TaskDetailFragment() {
 
+    }
+
+    public interface OnContactOwnerListener {
+        public void launchContactOwnerDialog(Task task);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof  OnContactOwnerListener) {
+            listener = (OnContactOwnerListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + "must implement TaskDetailFragment.OnContactOwnerListener");
+        }
     }
 
     public static TaskDetailFragment newInstance(String taskId) {
@@ -47,6 +67,7 @@ public class TaskDetailFragment extends DialogFragment {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvDescriptionLabel = (TextView) view.findViewById(R.id.tvDescription);
         tvBudget = (TextView) view.findViewById(R.id.tvBudget);
+        btnContact = (Button) view.findViewById(R.id.btnContact);
         fetchSelectedTaskAndPopulateView();
     }
 
@@ -71,5 +92,22 @@ public class TaskDetailFragment extends DialogFragment {
         tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
         tvBudget.setText("$" + task.getBudget().toString());
+        // TODO create button programattically vs in the xml, right now it flashes in and out
+        try {
+            ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
+            if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
+                btnContact.setVisibility(View.INVISIBLE);
+            } else {
+                btnContact.setVisibility(View.VISIBLE);
+                btnContact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.launchContactOwnerDialog(task);
+                    }
+                });
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

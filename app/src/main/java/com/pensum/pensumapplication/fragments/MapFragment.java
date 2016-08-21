@@ -108,14 +108,10 @@ public class MapFragment extends Fragment implements
     }
 
     public void populateTasks(){
-        // Construct query to execute
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-        // Configure limit and sort order
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
-
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         query.findInBackground(new FindCallback<Task>() {
             public void done(List<Task> tasks, ParseException e) {
                 if (e == null) {

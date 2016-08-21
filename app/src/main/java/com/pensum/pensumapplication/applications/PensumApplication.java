@@ -7,6 +7,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Task;
 
 /**
@@ -18,7 +19,7 @@ public class PensumApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Task.class);
-//        ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(Message.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.parse_app_id)) // should correspond to APP_ID env variable

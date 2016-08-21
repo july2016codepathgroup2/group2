@@ -18,4 +18,6 @@
     <string name="type_hint">Enter a type...</string>
     <string name="type">Type</string>
     <string name="add_task">Add Task</string>
+    <string name="send">Send</string>
+    <string name="contact">Contact</string>
 </resources>
