@@ -95,6 +95,10 @@ public class MapFragment extends Fragment implements
                 } else {
                     Toast.makeText(getContext(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                if (mapFragment != null) {
+                    populateTasks();
+                }
             }
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
@@ -115,7 +119,7 @@ public class MapFragment extends Fragment implements
             public void done(List<Task> tasks, ParseException e) {
                 if (e == null) {
                     // clear out all old markers ?
-                    //mMessages.clear();
+                    map.clear();
                     BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
                     for(int i = 0; i < tasks.size(); i++){
