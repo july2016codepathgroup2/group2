@@ -23,7 +23,7 @@ import com.pensum.pensumapplication.fragments.AddTaskFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
-import com.pensum.pensumapplication.fragments.MyTasksFragment;
+import com.pensum.pensumapplication.fragments.MyTasksGridFragment;
 import com.pensum.pensumapplication.fragments.ProfileFragment;
 import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                 break;
 
             case R.id.my_tasks:
-                fragmentClass = MyTasksFragment.class;
+                fragmentClass = MyTasksGridFragment.class;
                 break;
 
             case R.id.messages:
