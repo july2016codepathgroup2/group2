@@ -2,6 +2,7 @@ package com.pensum.pensumapplication.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -51,11 +52,20 @@ public class GridFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frame_tasks, container, false);
+
+        adapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                showTaskDetailFragment(tasks.get(position));
+            }
+        });
+
         rvTasks = (RecyclerView) view.findViewById(R.id.rvTasks);
         rvTasks.setAdapter(adapter);
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvTasks.setLayoutManager(gridLayoutManager);
+
         populateTasks();
         return view;
     }
@@ -84,6 +94,12 @@ public class GridFragment extends Fragment {
                 }
             }
         });
+    }
 
+    private void showTaskDetailFragment(Task task) {
+        FragmentManager fm = getFragmentManager();
+        TaskDetailFragment taskDetailFragment =
+                TaskDetailFragment.newInstance(task.getObjectId());
+        taskDetailFragment.show(fm, "fragment_task_detail");
     }
 }

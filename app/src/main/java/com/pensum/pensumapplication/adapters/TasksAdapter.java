@@ -18,6 +18,8 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
+    private static OnItemClickListener listener;
+
     private List<Task> mTasks;
     private Context mContext;
     private TextView tvType;
@@ -69,19 +71,36 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         return mTasks.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivProfilePicture;
         public TextView tvType;
         public TextView tvTaskTitle;
         public TextView tvPrice;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             ivProfilePicture = (ImageView) itemView.findViewById(R.id.ivProfilePicture);
             tvType = (TextView) itemView.findViewById(R.id.tvType);
             tvTaskTitle = (TextView) itemView.findViewById(R.id.tvTaskTitle);
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onItemClick(itemView, getLayoutPosition());
+                    }
+                }
+            });
         }
     }
 }

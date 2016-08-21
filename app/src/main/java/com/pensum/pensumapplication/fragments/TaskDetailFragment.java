@@ -17,16 +17,17 @@ import com.pensum.pensumapplication.models.Task;
 public class TaskDetailFragment extends DialogFragment {
 
     private TextView tvDescriptionLabel;
+    private TextView tvTitle;
     private Task task;
+    private TextView tvBudget;
 
     public TaskDetailFragment() {
 
     }
 
-    public static TaskDetailFragment newInstance(String title, String taskId) {
+    public static TaskDetailFragment newInstance(String taskId) {
         TaskDetailFragment fragment = new TaskDetailFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
         args.putString("task_id", taskId);
         fragment.setArguments(args);
         return fragment;
@@ -43,14 +44,13 @@ public class TaskDetailFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvDescriptionLabel = (TextView) view.findViewById(R.id.tvDescription);
-        String title = getArguments().getString("title");
-        fetchSelectedTask();
-        getDialog().setTitle(title);
-        tvDescriptionLabel.setText(task.getDescription());
+        tvBudget = (TextView) view.findViewById(R.id.tvBudgetLabel);
+        fetchSelectedTaskAndPopulateView();
     }
 
-    private void fetchSelectedTask() {
+    private void fetchSelectedTaskAndPopulateView() {
         String taskId =  getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
         // First try to find from the cache and only then go to network
@@ -61,8 +61,15 @@ public class TaskDetailFragment extends DialogFragment {
                 if (e == null) {
                     // item was found
                     task = item;
+                    populateViews();
                 }
             }
         });
+    }
+
+    private void populateViews() {
+        tvDescriptionLabel.setText(task.getDescription());
+        tvTitle.setText(task.getTitle());
+        tvBudget.setText("$" + task.getBudget().toString());
     }
 }
