@@ -85,10 +85,11 @@ public class GridFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ParseQuery<Task> titleQuery = ParseQuery.getQuery(Task.class).whereContains("title", query);
-                ParseQuery<Task> descriptionQuery = ParseQuery.getQuery(Task.class).whereContains("description", query);
-                ParseQuery<Task> typeQuery = ParseQuery.getQuery(Task.class).whereContains("type", query);
-                ParseQuery<Task> postedByQuery = ParseQuery.getQuery(Task.class).whereContains("posted_by", query);
+                // Quick fix for case-insensitive search, won't scale
+                ParseQuery<Task> titleQuery = ParseQuery.getQuery(Task.class).whereMatches("title", "("+query+")", "i");
+                ParseQuery<Task> descriptionQuery = ParseQuery.getQuery(Task.class).whereMatches("description", "("+query+")", "i");
+                ParseQuery<Task> typeQuery = ParseQuery.getQuery(Task.class).whereMatches("type", "("+query+")", "i");
+                ParseQuery<Task> postedByQuery = ParseQuery.getQuery(Task.class).whereMatches("posted_by", "("+query+")", "i");
 
                 ParseQuery<Task> mainQuery = ParseQuery.or(Arrays.asList(titleQuery, descriptionQuery,
                         typeQuery, postedByQuery));
