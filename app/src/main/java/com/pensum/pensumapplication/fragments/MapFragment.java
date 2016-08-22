@@ -38,7 +38,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -180,9 +179,8 @@ public class MapFragment extends Fragment implements
 
                     try {
                         ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
-                        ParseFile profileImage = postedBy.getParseFile("profileThumb");
-                        if (profileImage != null){
-                            String imageUrl = profileImage.getUrl();
+                        String imageUrl = postedBy.getString("profilePicUrl");
+                        if (imageUrl != null){
                             Picasso.with(getContext()).load(imageUrl).
                                     transform(new CropCircleTransformation()).into(ivProfileImage);
                         } else {
