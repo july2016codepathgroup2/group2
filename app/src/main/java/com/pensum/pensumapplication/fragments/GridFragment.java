@@ -3,54 +3,32 @@ package com.pensum.pensumapplication.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.adapters.TasksAdapter;
 import com.pensum.pensumapplication.models.Task;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by violetaria on 8/16/16.
  */
 public abstract class GridFragment extends Fragment {
-    //public static final String ARG_PAGE = "ARG_PAGE";
     public final int MAX_TASKS_TO_SHOW = 50;
 
- //   private int page;
     public ArrayList<Task> tasks;
     private RecyclerView rvTasks;
     public TasksAdapter adapter;
-
-//    public static GridFragment newInstance(int page) {
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PAGE, page);
-//        GridFragment fragment = new TasksFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-//        page = getArguments().getInt(ARG_PAGE);
         tasks = new ArrayList<>();
         adapter = new TasksAdapter(tasks, getContext());
     }
@@ -76,55 +54,6 @@ public abstract class GridFragment extends Fragment {
 
         populateTasks();
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-        MenuItem searchItem  = menu.findItem(R.id.miSearch);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Quick fix for case-insensitive search, won't scale
-                ParseQuery<Task> titleQuery = ParseQuery.getQuery(Task.class).whereMatches("title", "("+query+")", "i");
-                ParseQuery<Task> descriptionQuery = ParseQuery.getQuery(Task.class).whereMatches("description", "("+query+")", "i");
-                ParseQuery<Task> typeQuery = ParseQuery.getQuery(Task.class).whereMatches("type", "("+query+")", "i");
-                ParseQuery<Task> postedByQuery = ParseQuery.getQuery(Task.class).whereMatches("posted_by", "("+query+")", "i");
-
-                ParseQuery<Task> mainQuery = ParseQuery.or(Arrays.asList(titleQuery, descriptionQuery,
-                        typeQuery, postedByQuery));
-
-                mainQuery.findInBackground(new FindCallback<Task>() {
-                    @Override
-                    public void done(List<Task> items, ParseException e) {
-                        if (e == null) {
-                            // Access the array of results here
-                            int previousContentSize = tasks.size();
-                            tasks.clear();
-                            adapter.notifyItemRangeRemoved(0, previousContentSize);
-
-                            tasks.addAll(items);
-                            adapter.notifyItemRangeRemoved(0, items.size());
-                        } else {
-                            Log.d("item", "Error: " + e.getMessage());
-                        }
-                    }
-                });
-
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
-                searchView.clearFocus();
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public void setMyLocation(){
