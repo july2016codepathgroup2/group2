@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
@@ -52,9 +54,19 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         Task task = mTasks.get(position);
 
         ivProfilePicture = holder.ivProfilePicture;
-//        String profilePicture = task.getPostedBy().getProfilePictureUrl();
-        Picasso.with(getContext()).load(R.mipmap.ic_launcher).
-                transform(new CropCircleTransformation()).into(ivProfilePicture);
+        try {
+            ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
+            String imageUrl = postedBy.getString("profilePicUrl");
+            if (imageUrl != null){
+                Picasso.with(getContext()).load(imageUrl).
+                        transform(new CropCircleTransformation()).into(ivProfilePicture);
+            } else {
+                Picasso.with(getContext()).load(R.mipmap.ic_launcher).
+                        transform(new CropCircleTransformation()).into(ivProfilePicture);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         tvType = holder.tvType;
         tvType.setText("#" + task.getType());
