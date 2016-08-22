@@ -22,7 +22,8 @@ import java.util.List;
 public class TasksFragment extends GridFragment implements FilterSearchDialogListener {
     private String typeFilter;
     private ParseGeoPoint locationFilter;
-    private Double budgetFilter;
+    private double budgetFilter;
+    private String zipCode;
 
     @Override
     public void populateTasks() {
@@ -51,10 +52,11 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
 
     // This is called when the filter search dialog is completed and the results have been passed
     @Override
-    public void onFinishFilterSearchDialog(String type, ParseGeoPoint location, double budget) {
+    public void onFinishFilterSearchDialog(String type, ParseGeoPoint location, double budget, String zipCode) {
         typeFilter = type;
         locationFilter = location;
         budgetFilter = budget;
+        this.zipCode = zipCode;
     }
 
     @Override
@@ -84,18 +86,17 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
                 queries.add(typeQuery);
                 queries.add(postedByQuery);
 
+                ParseQuery<Task> mainQuery = ParseQuery.or(queries);
+
                 if (typeFilter != null && !typeFilter.isEmpty()) {
-                    queries.add(ParseQuery.getQuery(Task.class).whereMatches("type", "("+query+")", "i"));
+                    mainQuery.whereMatches("type", "("+query+")", "i");
                 }
                 if (locationFilter != null) {
-                    ParseQuery<Task> locationQuery = ParseQuery.getQuery(Task.class).whereNear("location", locationFilter);
-                    queries.add(locationQuery);
+                    mainQuery.whereNear("location", locationFilter);
                 }
-                if (budgetFilter > -1) {
-                    queries.add(ParseQuery.getQuery(Task.class).whereGreaterThanOrEqualTo("budget", budgetFilter));
+                if (budgetFilter > 0) {
+                    mainQuery.whereGreaterThanOrEqualTo("budget", budgetFilter);
                 }
-
-                ParseQuery<Task> mainQuery = ParseQuery.or(queries);
                 mainQuery.findInBackground(new FindCallback<Task>() {
                     @Override
                     public void done(List<Task> items, ParseException e) {
@@ -133,7 +134,8 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 FragmentManager fm = getFragmentManager();
-                FilterSearchDialogFragment filterSearchDialogFragment = FilterSearchDialogFragment.newInstance();
+                FilterSearchDialogFragment filterSearchDialogFragment =
+                        FilterSearchDialogFragment.newInstance(typeFilter, budgetFilter, zipCode);
                 filterSearchDialogFragment.setTargetFragment(TasksFragment.this, 300);
                 filterSearchDialogFragment.show(fm, "fragment_Filter_Search");
                 return true;

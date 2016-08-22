@@ -50,7 +50,6 @@
         android:layout_below="@+id/etLocation"
         android:text="@string/budget"
         android:id="@+id/tvBudgetLabel"
-        android:inputType="numberDecimal"
         android:layout_alignBaseline="@+id/etBudget"
         android:layout_alignBottom="@+id/etBudget"
         android:layout_alignLeft="@+id/tvTypeLabel"
@@ -62,6 +61,7 @@
         android:layout_below="@+id/etLocation"
         android:layout_alignLeft="@+id/etLocation"
         android:layout_alignStart="@+id/etLocation"
+        android:inputType="numberDecimal"
         android:id="@+id/etBudget"
         android:hint="@string/budget_hint"/>
 

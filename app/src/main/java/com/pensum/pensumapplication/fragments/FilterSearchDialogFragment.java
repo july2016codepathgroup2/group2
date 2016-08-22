@@ -28,9 +28,12 @@ public class FilterSearchDialogFragment extends android.support.v4.app.DialogFra
 
     }
 
-    public static FilterSearchDialogFragment newInstance() {
+    public static FilterSearchDialogFragment newInstance(String type, double budget, String location) {
         FilterSearchDialogFragment fragment = new FilterSearchDialogFragment();
         Bundle args = new Bundle();
+        args.putString("type", type);
+        args.putDouble("budget", budget);
+        args.putString("location", location);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,8 +49,19 @@ public class FilterSearchDialogFragment extends android.support.v4.app.DialogFra
         super.onViewCreated(view, savedInstanceState);
 
         etType = (EditText) view.findViewById(R.id.etType);
+        String type = getArguments().getString("type");
+        etType.setText(type);
+
         etBudget = (EditText) view.findViewById(R.id.etBudget);
+        Double budget = getArguments().getDouble("budget");
+        if (budget > 0) {
+            etBudget.setText(Double.toString(budget));
+        }
+
         etLocation = (EditText) view.findViewById(R.id.etLocation);
+        String location = getArguments().getString("location");
+        etLocation.setText(location);
+
         btnSaveFilters = (Button) view.findViewById(R.id.btnSaveFilters);
 
         btnSaveFilters.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +74,6 @@ public class FilterSearchDialogFragment extends android.support.v4.app.DialogFra
 
     public void sendBackFilters() {
         String type = "";
-        ParseGeoPoint location;
         double budget = -1;
 
         final FilterSearchDialogListener listener = (FilterSearchDialogListener) getTargetFragment();
@@ -71,18 +84,19 @@ public class FilterSearchDialogFragment extends android.support.v4.app.DialogFra
         if (!etBudget.getText().toString().isEmpty()) {
             budget = Double.parseDouble(etBudget.getText().toString());
         }
-        if (!etLocation.getText().toString().isEmpty()) {
+        final String zipCode = etLocation.getText().toString();
+        if (!zipCode.isEmpty()) {
             ZipCodeApiClient client = new ZipCodeApiClient();
             final String finalType = type;
             final double finalBudget = budget;
-            client.getLocationForZip(etLocation.getText().toString(), new JsonHttpResponseHandler() {
+            client.getLocationForZip(zipCode, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     try {
                         ParseGeoPoint location = new ParseGeoPoint();
                         location.setLatitude(responseBody.getDouble("lat"));
                         location.setLongitude(responseBody.getDouble("lng"));
-                        listener.onFinishFilterSearchDialog(finalType, location, finalBudget);
+                        listener.onFinishFilterSearchDialog(finalType, location, finalBudget, zipCode);
                         dismiss();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -95,12 +109,12 @@ public class FilterSearchDialogFragment extends android.support.v4.app.DialogFra
                 }
             });
         } else {
-            listener.onFinishFilterSearchDialog(type, null, budget);
+            listener.onFinishFilterSearchDialog(type, null, budget, zipCode);
             dismiss();
         }
     }
 
     public interface FilterSearchDialogListener {
-        void onFinishFilterSearchDialog(String type, ParseGeoPoint location, double budget);
+        void onFinishFilterSearchDialog(String type, ParseGeoPoint location, double budget, String zipCode);
     }
 }
