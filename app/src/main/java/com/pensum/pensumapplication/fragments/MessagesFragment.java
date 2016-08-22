@@ -16,12 +16,12 @@ import java.util.List;
  * Created by violetaria on 8/21/16.
  */
 public class MessagesFragment extends GridFragment{
-    public static MessagesFragment newInstance(int page) {
-        return (MessagesFragment) GridFragment.newInstance(page);
-    }
-    public static MessagesFragment newInstance() {
-        return (MessagesFragment) GridFragment.newInstance(0);
-    }
+//    public static MessagesFragment newInstance(int page) {
+//        return (MessagesFragment) GridFragment.newInstance(page);
+//    }
+//    public static MessagesFragment newInstance() {
+//        return (MessagesFragment) GridFragment.newInstance(0);
+//    }
 
     public void populateTasks() {
         ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");

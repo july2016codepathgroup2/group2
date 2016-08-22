@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnCloseEditSkill"
+        android:src="@drawable/ic_clear_black_24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skill Name:"
+        android:id="@+id/tvSkillName"
+        android:layout_below="@+id/btnCloseEditSkill"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/etSkillName"
+        android:layout_below="@+id/tvSkillName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Experience:"
+        android:hint="Please enter skill name"
+        android:id="@+id/tvSkillExperience"
+        android:layout_below="@+id/etSkillName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RadioGroup
+        android:id="@+id/radio_exp_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSkillExperience"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" >
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&lt; 1 year"
+            android:id="@+id/rbLessOne"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 ~ 2 years"
+            android:id="@+id/rbOneToTwo" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 ~ 5 years"
+            android:id="@+id/rbTwoToFive"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 ~ 10 years"
+            android:id="@+id/rbFiveToTen"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 ~ 20 years"
+            android:id="@+id/rbTenToTwenty" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20+ years"
+            android:id="@+id/rbTwentyPlus"/>
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save"
+        android:id="@+id/btnSkillSave"
+        android:layout_below="@+id/radio_exp_group"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

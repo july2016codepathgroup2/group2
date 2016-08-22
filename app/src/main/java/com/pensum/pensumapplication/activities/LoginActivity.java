@@ -2,9 +2,6 @@ package com.pensum.pensumapplication.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,7 +16,6 @@ import com.facebook.HttpMethod;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
@@ -27,12 +23,6 @@ import com.pensum.pensumapplication.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     ParseUser user;
     String name;
-    Bitmap bitmap;
+    String profilePicUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,36 +118,21 @@ public class LoginActivity extends AppCompatActivity {
     private void userDataUpdate() {
         user = ParseUser.getCurrentUser();
         user.put("fbName", name);
+        user.put("profilePicUrl", profilePicUrl);
 
-        //Saving profile photo as a ParseFile
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if (bitmap != null) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-            byte[] data = stream.toByteArray();
-            String thumbName = name.replaceAll("\\s+", "");
-            final ParseFile parseFile = new ParseFile(thumbName + "_thumb.jpg", data);
-
-            parseFile.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    user.put("profileThumb", parseFile);
-
-                    //Finally save all the user details
-                    user.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            Toast.makeText(LoginActivity.this, "New user:" + name + " Signed up", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
-            });
-        }
+        //Finally save all the user details
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Toast.makeText(LoginActivity.this,
+                        "New user:" + name + " Signed up", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getUserDetailsFromFB() {
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "name,picture");
+        parameters.putString("fields", "name");
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -167,19 +142,39 @@ public class LoginActivity extends AppCompatActivity {
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
                         try {
-                            Log.d("Response", response.getRawResponse());
+                            Log.d("Profile Response", response.getRawResponse());
 
                             name = response.getJSONObject().getString("name");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
 
-                            JSONObject picture = response.getJSONObject().getJSONObject("picture");
-                            JSONObject data = picture.getJSONObject("data");
+        parameters.remove("fields");
+        parameters.putString("type", "large");
+        parameters.putString("redirect", "false");
 
-                            //  Returns a 50x50 profile picture
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/picture",
+                parameters,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        try {
+                            Log.d("Profile Pic Response", response.getRawResponse());
+
+                            JSONObject data = response.getJSONObject().getJSONObject("data");
+
                             String pictureUrl = data.getString("url");
 
                             Log.d("Profile pic", "url: " + pictureUrl);
+                            profilePicUrl = pictureUrl;
 
-                            new ProfilePhotoAsync(pictureUrl).execute();
+//                            new ProfilePhotoAsync(pictureUrl).execute();
+                            userDataUpdate();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -187,44 +182,5 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         ).executeAsync();
-    }
-
-    public class ProfilePhotoAsync extends AsyncTask<String, String, String> {
-        String url;
-
-        public ProfilePhotoAsync(String url) {
-            this.url = url;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            // Fetching data from URI and storing in bitmap
-            bitmap = DownloadImageBitmap(url);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            userDataUpdate();
-        }
-    }
-
-    public static Bitmap DownloadImageBitmap(String url) {
-        Bitmap bm = null;
-        try {
-            URL aURL = new URL(url);
-            URLConnection conn = aURL.openConnection();
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();
-        } catch (IOException e) {
-            Log.e("IMAGE", "Error getting bitmap", e);
-        }
-        return bm;
     }
 }

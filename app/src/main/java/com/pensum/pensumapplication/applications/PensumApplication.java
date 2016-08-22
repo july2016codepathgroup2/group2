@@ -9,6 +9,7 @@ import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
+import com.pensum.pensumapplication.models.Skill;
 import com.pensum.pensumapplication.models.Task;
 
 /**
@@ -22,6 +23,7 @@ public class PensumApplication extends Application {
         ParseObject.registerSubclass(Task.class);
         ParseObject.registerSubclass(Conversation.class);
         ParseObject.registerSubclass(Message.class);
+        ParseObject.registerSubclass(Skill.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.parse_app_id)) // should correspond to APP_ID env variable

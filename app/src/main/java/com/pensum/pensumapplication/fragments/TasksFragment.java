@@ -14,13 +14,13 @@ import java.util.List;
  */
 public class TasksFragment extends GridFragment {
 
-    public static TasksFragment newInstance() {
-        return (TasksFragment) GridFragment.newInstance(0);
-    }
-
-    public static TasksFragment newInstance(int page) {
-        return (TasksFragment) GridFragment.newInstance(page);
-    }
+//    public static TasksFragment newInstance() {
+//        return (TasksFragment) GridFragment.newInstance(0);
+//    }
+//
+//    public static TasksFragment newInstance(int page) {
+//        return (TasksFragment) GridFragment.newInstance(page);
+//    }
 
     public void populateTasks() {
         // Construct query to execute

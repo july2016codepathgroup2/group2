@@ -29,7 +29,7 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return TasksFragment.newInstance(position + 1);
+            return new TasksFragment();
         } else if (position == 1) {
             return new MapFragment();
         } else {
