@@ -7,6 +7,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Skill;
 import com.pensum.pensumapplication.models.Task;
@@ -20,6 +21,7 @@ public class PensumApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Task.class);
+        ParseObject.registerSubclass(Conversation.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Skill.class);
 

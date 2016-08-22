@@ -3,6 +3,7 @@ package com.pensum.pensumapplication.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
@@ -103,13 +105,37 @@ public class ContactOwnerFragment extends DialogFragment {
     }
 
     public void sendMessage(View view){
+        ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
+        query.getFirstInBackground(new GetCallback<Conversation>() {
+            public void done(Conversation conversationFromQuery, ParseException e) {
+                if (e == null) {
+                    Conversation c;
+                    if(conversationFromQuery != null) {
+                        c = conversationFromQuery;
+                    } else {
+                        c = new Conversation();
+                        c.setTask(task);
+                        c.setCandidate(ParseUser.getCurrentUser());
+                        c.setOwner(postedBy);
+                        c.saveInBackground();
+                    }
+                    createMessage(c);
+                } else {
+                    Log.e("message", "Error Loading Messages" + e);
+                }
+            }
+        });
+        dismiss();
+    }
+
+    private void createMessage(Conversation c){
         Message message = new Message();
         message.setFrom(ParseUser.getCurrentUser());
         message.setTo(postedBy);
-        message.setTask(task);
+        message.setConversation(c);
         message.setMessage(etMessage.getText().toString());
         message.saveInBackground();
-        dismiss();
     }
 
 }

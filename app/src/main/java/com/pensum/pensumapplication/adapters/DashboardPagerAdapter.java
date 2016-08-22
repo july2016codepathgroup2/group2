@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.pensum.pensumapplication.fragments.GridFragment;
 import com.pensum.pensumapplication.fragments.MapFragment;
+import com.pensum.pensumapplication.fragments.TasksFragment;
 
 /**
  * Created by violetaria on 8/16/16.
@@ -28,11 +28,8 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // don't have to use the same fragment type here,
-        //  a grid fragment for position 0
-        //  have a map fragment for position 1 based on what sent in
         if (position == 0) {
-            return GridFragment.newInstance(position + 1);
+            return new TasksFragment();
         } else if (position == 1) {
             return new MapFragment();
         } else {

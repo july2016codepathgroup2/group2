@@ -29,28 +29,28 @@ import java.util.List;
 /**
  * Created by violetaria on 8/16/16.
  */
-public class GridFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
-    private final int MAX_TASKS_TO_SHOW = 50;
+public abstract class GridFragment extends Fragment {
+    //public static final String ARG_PAGE = "ARG_PAGE";
+    public final int MAX_TASKS_TO_SHOW = 50;
 
-    private int page;
-    private ArrayList<Task> tasks;
+ //   private int page;
+    public ArrayList<Task> tasks;
     private RecyclerView rvTasks;
-    private TasksAdapter adapter;
+    public TasksAdapter adapter;
 
-    public static GridFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        GridFragment fragment = new GridFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static GridFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        GridFragment fragment = new TasksFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        page = getArguments().getInt(ARG_PAGE);
+//        page = getArguments().getInt(ARG_PAGE);
         tasks = new ArrayList<>();
         adapter = new TasksAdapter(tasks, getContext());
     }
@@ -58,6 +58,7 @@ public class GridFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.frame_tasks, container, false);
 
         adapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
@@ -130,29 +131,7 @@ public class GridFragment extends Fragment {
         // TODO handle this here
     }
 
-    private void populateTasks() {
-        // Construct query to execute
-        ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-        // Configure limit and sort order
-        query.setLimit(MAX_TASKS_TO_SHOW);
-        query.orderByDescending("createdAt");
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
-
-        query.findInBackground(new FindCallback<Task>() {
-            public void done(List<Task> tasksFromQuery, ParseException e) {
-                if (e == null) {
-                    int previousContentSize = tasks.size();
-                    tasks.clear();
-                    adapter.notifyItemRangeRemoved(0, previousContentSize);
-                    tasks.addAll(tasksFromQuery);
-                    adapter.notifyItemRangeInserted(0, tasksFromQuery.size()-1);
-                } else {
-                    Log.e("message", "Error Loading Messages" + e);
-                }
-            }
-        });
-    }
+    abstract void populateTasks();
 
     private void showTaskDetailFragment(Task task) {
         FragmentManager fm = getFragmentManager();
