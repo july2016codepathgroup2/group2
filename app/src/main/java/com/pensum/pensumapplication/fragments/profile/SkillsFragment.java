@@ -59,7 +59,12 @@ public class SkillsFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
 
         rvSkills.setAdapter(aSkills);
-        rvSkills.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvSkills.setLayoutManager(new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
 
         populateSkills();
         return v;
