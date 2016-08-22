@@ -7,7 +7,12 @@
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:title="Search">
+        android:title="@string/search">
     </item>
-
+    <item android:id="@+id/miFilterSearch"
+        android:title="@string/filter_search"
+        android:orderInCategory="100"
+        android:icon="@drawable/search_filter_icon"
+        app:showAsAction="ifRoom">
+    </item>
 </menu>

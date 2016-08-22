@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:layout_margin="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/type"
+        android:id="@+id/tvTypeLabel"
+        android:layout_alignBaseline="@+id/etType"
+        android:layout_alignBottom="@+id/etType"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etType"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_alignStart="@+id/etLocation"
+        android:hint="@string/type_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location"
+        android:id="@+id/tvLocationLabel"
+        android:layout_alignBaseline="@+id/etLocation"
+        android:layout_alignBottom="@+id/etLocation"
+        android:layout_alignLeft="@+id/tvTypeLabel"
+        android:layout_alignStart="@+id/tvTypeLabel"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etLocation"
+        android:layout_alignParentTop="false"
+        android:layout_below="@id/etType"
+        android:layout_toRightOf="@+id/tvLocationLabel"
+        android:inputType="number"
+        android:hint="@string/location_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:text="@string/budget"
+        android:id="@+id/tvBudgetLabel"
+        android:layout_alignBaseline="@+id/etBudget"
+        android:layout_alignBottom="@+id/etBudget"
+        android:layout_alignLeft="@+id/tvTypeLabel"
+        android:layout_alignStart="@+id/tvTypeLabel"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_alignStart="@+id/etLocation"
+        android:inputType="numberDecimal"
+        android:id="@+id/etBudget"
+        android:hint="@string/budget_hint"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/done"
+        android:id="@+id/btnSaveFilters"
+        android:layout_below="@+id/etBudget"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+</RelativeLayout>

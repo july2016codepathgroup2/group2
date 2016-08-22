@@ -20,4 +20,7 @@
     <string name="add_task">Add Task</string>
     <string name="send">Send</string>
     <string name="contact">Contact</string>
+    <string name="done">Done</string>
+    <string name="filter_search">Filter Search</string>
+    <string name="search">Search</string>
 </resources>
