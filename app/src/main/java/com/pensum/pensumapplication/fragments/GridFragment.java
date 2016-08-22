@@ -30,7 +30,7 @@ public abstract class GridFragment extends Fragment {
     public static GridFragment newInstance(int page) {
         Bundle args = new Bundle();
         //args.putInt(ARG_PAGE, page);
-        GridFragment fragment = new TasksGridFragment();
+        GridFragment fragment = new TasksFragment();
         fragment.setArguments(args);
         return fragment;
     }

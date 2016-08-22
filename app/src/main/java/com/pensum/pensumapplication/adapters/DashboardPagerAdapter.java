@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.pensum.pensumapplication.fragments.MapFragment;
-import com.pensum.pensumapplication.fragments.TasksGridFragment;
+import com.pensum.pensumapplication.fragments.TasksFragment;
 
 /**
  * Created by violetaria on 8/16/16.
@@ -29,7 +29,7 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return TasksGridFragment.newInstance(position + 1);
+            return TasksFragment.newInstance(position + 1);
         } else if (position == 1) {
             return new MapFragment();
         } else {

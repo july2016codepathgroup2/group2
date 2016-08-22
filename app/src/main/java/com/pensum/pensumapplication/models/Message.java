@@ -14,22 +14,17 @@ public class Message extends ParseObject{
     public void setFrom(ParseUser from){
         put("from",from);
     }
-
     public void setTo(ParseUser to){
         put("to",to);
     }
-
     public void setMessage(String message){
         put("message",message);
     }
-
-    public void setTask(Task task){
-        put("task",task);
-    }
+    public void setConversation(Conversation conversation) { put("conversation",conversation); }
 
     public ParseUser getFrom() { return getParseUser("from"); }
     public ParseUser getTo() { return getParseUser("to"); }
     public String getMessage() { return getString("message"); }
-    public Task getTask() { return (Task) getParseObject("task"); }
+    public Conversation getConversation() { return (Conversation) getParseObject("conversation");}
 
 }
