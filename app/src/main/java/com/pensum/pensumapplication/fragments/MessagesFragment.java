@@ -24,9 +24,23 @@ public class MessagesFragment extends GridFragment{
 //    }
 
     public void populateTasks() {
-        ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");
-        query.whereEqualTo("owner",ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<Conversation>() {
+//        ParseQuery<Conversation> innerQuery = ParseQuery.getQuery("Conversation");
+//        innerQuery.whereEqualTo("owner",ParseUser.getCurrentUser());
+//        ParseQuery<Task> query = ParseQuery.getQuery("Task");
+//        query.whereMatchesQuery("task",innerQuery);
+
+        List<ParseQuery<Conversation>> queries = new ArrayList<>();
+
+        ParseQuery<Conversation> ownerQuery = ParseQuery.getQuery("Conversation");
+        ownerQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
+
+        queries.add(ownerQuery);
+        ParseQuery<Conversation> candidateQuery = ParseQuery.getQuery("Conversation");
+        candidateQuery.whereEqualTo("candidate", ParseUser.getCurrentUser());
+
+        queries.add(candidateQuery);
+        ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(queries);
+        mainConversationQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {
                     ArrayList<Task> tasksFromQuery = new ArrayList<>();

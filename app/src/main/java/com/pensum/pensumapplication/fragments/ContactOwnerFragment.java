@@ -106,26 +106,28 @@ public class ContactOwnerFragment extends DialogFragment {
 
     public void sendMessage(View view){
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
-        query.getFirstInBackground(new GetCallback<Conversation>() {
-            public void done(Conversation conversationFromQuery, ParseException e) {
-                if (e == null) {
-                    Conversation c;
-                    if(conversationFromQuery != null) {
-                        c = conversationFromQuery;
+        // TODO figure out which cache policy to use here
+        //query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY); // or CACHE_ONLY
+            query.getFirstInBackground(new GetCallback<Conversation>() {
+                public void done(Conversation conversationFromQuery, ParseException e) {
+                    if (e == null) {
+                        createMessage(conversationFromQuery);
                     } else {
-                        c = new Conversation();
-                        c.setTask(task);
-                        c.setCandidate(ParseUser.getCurrentUser());
-                        c.setOwner(postedBy);
-                        c.saveInBackground();
+                        String message = e.getMessage();
+                        if (message.toLowerCase().contains("no results found for query")){
+                            Conversation c;
+                            c = new Conversation();
+                            c.setTask(task);
+                            c.setCandidate(ParseUser.getCurrentUser());
+                            c.setOwner(postedBy);
+                            c.saveInBackground();
+                            createMessage(c);
+                        } else {
+                            Log.e("message", "Error Loading Messages" + e);
+                        }
                     }
-                    createMessage(c);
-                } else {
-                    Log.e("message", "Error Loading Messages" + e);
                 }
-            }
-        });
+            });
         dismiss();
     }
 
