@@ -24,20 +24,43 @@ public class MessagesFragment extends GridFragment{
 //    }
 
     public void populateTasks() {
-        ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");
-        query.whereEqualTo("owner",ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<Conversation>() {
+        List<ParseQuery<Conversation>> subConversationQueries = new ArrayList<>();
+
+        ParseQuery<Conversation> ownerQuery = ParseQuery.getQuery("Conversation");
+        ownerQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
+
+        subConversationQueries.add(ownerQuery);
+        ParseQuery<Conversation> candidateQuery = ParseQuery.getQuery("Conversation");
+        candidateQuery.whereEqualTo("candidate", ParseUser.getCurrentUser());
+
+        subConversationQueries.add(candidateQuery);
+        ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task");
+
+//        ParseQuery<Task> taskQuery = ParseQuery.getQuery("Task");
+//        taskQuery.whereMatchesQuery("task",mainConversationQuery);
+//        taskQuery.findInBackground(new FindCallback<Task>() {
+//            @Override
+//            public void done(List<Task> tasksFromQuery, ParseException e) {
+//               if(e == null) {
+//                   int previousContentSize = tasks.size();
+//                    tasks.clear();
+//                    adapter.notifyItemRangeRemoved(0, previousContentSize);
+//                    tasks.addAll(tasksFromQuery);
+//                    adapter.notifyItemRangeInserted(0, tasksFromQuery.size());
+//               } else {
+//                   Log.e("message", "Error Loading Messages" + e);
+//               }
+//            }
+//        });
+
+        mainConversationQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {
                     ArrayList<Task> tasksFromQuery = new ArrayList<>();
                     // TODO fix the query so that it actually brings back the Tasks
                     for(int i = 0; i < conversationsFromQuery.size(); i++){
-                        try {
-                            Task task = conversationsFromQuery.get(i).getTask().fetchIfNeeded();
-                            tasksFromQuery.add(task);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
+                        Task task = conversationsFromQuery.get(i).getTask();
+                        tasksFromQuery.add(conversationsFromQuery.get(i).getTask());
                     }
                     int previousContentSize = tasks.size();
                     tasks.clear();
