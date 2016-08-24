@@ -108,6 +108,8 @@ public class MapFragment extends Fragment implements
 
     public void populateTasks(){
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+        query.whereNotEqualTo("posted_by",ParseUser.getCurrentUser());
+        query.whereEqualTo("status","open");
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY

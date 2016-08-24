@@ -12,6 +12,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.fragments.FilterSearchDialogFragment.FilterSearchDialogListener;
 import com.pensum.pensumapplication.helpers.SearchHelper;
@@ -30,6 +31,8 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
     public void populateTasks() {
         // Construct query to execute
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+        query.whereNotEqualTo("posted_by", ParseUser.getCurrentUser());
+        query.whereEqualTo("status","open");
         // Configure limit and sort order
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
