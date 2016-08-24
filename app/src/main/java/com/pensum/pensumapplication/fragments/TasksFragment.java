@@ -14,9 +14,9 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.fragments.FilterSearchDialogFragment.FilterSearchDialogListener;
+import com.pensum.pensumapplication.helpers.SearchHelper;
 import com.pensum.pensumapplication.models.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TasksFragment extends GridFragment implements FilterSearchDialogListener {
@@ -24,6 +24,7 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
     private ParseGeoPoint locationFilter;
     private double budgetFilter;
     private String zipCode;
+    private SearchView searchView;
 
     @Override
     public void populateTasks() {
@@ -57,6 +58,25 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
         locationFilter = location;
         budgetFilter = budget;
         this.zipCode = zipCode;
+
+        String query = searchView.getQuery().toString();
+        FindCallback<Task> finishSearchCallback = new FindCallback<Task>() {
+            @Override
+            public void done(List<Task> items, ParseException e) {
+                if (e == null) {
+                    // Access the array of results here
+                    int previousContentSize = tasks.size();
+                    tasks.clear();
+                    adapter.notifyItemRangeRemoved(0, previousContentSize);
+
+                    tasks.addAll(items);
+                    adapter.notifyItemRangeRemoved(0, items.size());
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        };
+        SearchHelper.searchForTasksWith(query, typeFilter, locationFilter, budgetFilter, finishSearchCallback);
     }
 
     @Override
@@ -69,35 +89,12 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
 
     private void setupSearchMenuItem(Menu menu) {
         MenuItem searchItem  = menu.findItem(R.id.miSearch);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Quick fix for case-insensitive search, won't scale
-                ParseQuery<Task> titleQuery = ParseQuery.getQuery(Task.class).whereMatches("title", "("+query+")", "i");
-                ParseQuery<Task> descriptionQuery = ParseQuery.getQuery(Task.class).whereMatches("description", "("+query+")", "i");
-                ParseQuery<Task> typeQuery = ParseQuery.getQuery(Task.class).whereMatches("type", "("+query+")", "i");
-                ParseQuery<Task> postedByQuery = ParseQuery.getQuery(Task.class).whereMatches("posted_by", "("+query+")", "i");
-
-                List<ParseQuery<Task>> queries = new ArrayList<>();
-                queries.add(titleQuery);
-                queries.add(descriptionQuery);
-                queries.add(typeQuery);
-                queries.add(postedByQuery);
-
-                ParseQuery<Task> mainQuery = ParseQuery.or(queries);
-
-                if (typeFilter != null && !typeFilter.isEmpty()) {
-                    mainQuery.whereMatches("type", "("+query+")", "i");
-                }
-                if (locationFilter != null) {
-                    mainQuery.whereNear("location", locationFilter);
-                }
-                if (budgetFilter > 0) {
-                    mainQuery.whereGreaterThanOrEqualTo("budget", budgetFilter);
-                }
-                mainQuery.findInBackground(new FindCallback<Task>() {
+                FindCallback<Task> finishSearchCallback = new FindCallback<Task>() {
                     @Override
                     public void done(List<Task> items, ParseException e) {
                         if (e == null) {
@@ -112,8 +109,10 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
                             Log.d("item", "Error: " + e.getMessage());
                         }
                     }
-                });
+                };
 
+                SearchHelper.searchForTasksWith(query, typeFilter, locationFilter,
+                        budgetFilter, finishSearchCallback);
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();
