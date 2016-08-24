@@ -23,4 +23,7 @@
     <string name="done">Done</string>
     <string name="filter_search">Filter Search</string>
     <string name="search">Search</string>
+    <string name="posted">Posted</string>
+    <string name="accepted">Accepted</string>
+    <string name="completed">Completed</string>
 </resources>

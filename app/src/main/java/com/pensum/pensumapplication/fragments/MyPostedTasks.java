@@ -13,24 +13,20 @@ import java.util.List;
 /**
  * Created by eddietseng on 8/19/16.
  */
-public class MyTasksFragment extends GridFragment {
+public class MyPostedTasks extends GridFragment {
 //
-//    public static MyTasksFragment newInstance(int page) {
-//        return (MyTasksFragment) GridFragment.newInstance(page);
+//    public static MyPostedTasks newInstance(int page) {
+//        return (MyPostedTasks) GridFragment.newInstance(page);
 //    }
-//    public static MyTasksFragment newInstance() {
-//        return (MyTasksFragment) GridFragment.newInstance(0);
+//    public static MyPostedTasks newInstance() {
+//        return (MyPostedTasks) GridFragment.newInstance(0);
 //    }
 
     public void populateTasks() {
-        // Construct query to execute
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
         query.whereEqualTo("posted_by", ParseUser.getCurrentUser());
-        // Configure limit and sort order
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
 
         query.findInBackground(new FindCallback<Task>() {
             public void done(List<Task> tasksFromQuery, ParseException e) {

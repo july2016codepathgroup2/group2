@@ -9,10 +9,24 @@
             android:id="@+id/profile"
             android:icon="@drawable/ic_person_black_24dp"
             android:title="PROFILE" />
-        <item
-            android:id="@+id/my_tasks"
-            android:icon="@drawable/ic_assignment_black_24dp"
-            android:title="MY TASKS" />
+        <item android:title="MY TASKS">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/my_posted_tasks"
+                        android:icon="@drawable/ic_assignment_black_24dp"
+                        android:title="@string/posted"/>
+                    <item
+                        android:id="@+id/my_accepted_tasks"
+                        android:icon="@drawable/ic_assignment_black_24dp"
+                        android:title="@string/accepted"/>
+                    <item
+                        android:id="@+id/my_completed_tasks"
+                        android:icon="@drawable/ic_assignment_black_24dp"
+                        android:title="@string/completed"/>
+                </group>
+            </menu>
+        </item>
         <item
             android:id="@+id/messages"
             android:icon="@drawable/ic_mail_black_24dp"
