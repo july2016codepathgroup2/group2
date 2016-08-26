@@ -142,7 +142,8 @@ public class ConversationFragment extends Fragment {
                     conversations.addAll(conversationsFromQuery);
                     adapter.notifyItemRangeInserted(0, conversationsFromQuery.size());
                 } else {
-                    Log.e("message", "Error Loading Messages" + e);}
+                    Log.e("message", "Error Loading Messages" + e);
+                }
             }
         });
     }

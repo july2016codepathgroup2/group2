@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -26,8 +27,10 @@ public class TaskDetailFragment extends DialogFragment {
     private TextView tvTitle;
     private Task task;
     private TextView tvBudget;
-    private Button btnContact;
+//    private Button btnContact;
     private OnContactOwnerListener listener;
+    private TextView tvStatus;
+    private RelativeLayout rlTaskDetail;
 
     public TaskDetailFragment() {
 
@@ -35,6 +38,7 @@ public class TaskDetailFragment extends DialogFragment {
 
     public interface OnContactOwnerListener {
         public void launchContactOwnerDialog(Task task);
+        public void launchAcceptCandidateDialog(Task task);
     }
 
     @Override
@@ -69,7 +73,10 @@ public class TaskDetailFragment extends DialogFragment {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvDescriptionLabel = (TextView) view.findViewById(R.id.tvDescription);
         tvBudget = (TextView) view.findViewById(R.id.tvBudget);
-        btnContact = (Button) view.findViewById(R.id.btnContact);
+//        btnContact = (Button) view.findViewById(R.id.btnContact);
+        tvStatus = (TextView) view.findViewById(R.id.tvStatus);
+        rlTaskDetail = (RelativeLayout) view.findViewById(R.id.rlTaskDetail);
+
         fetchSelectedTaskAndPopulateView();
     }
 
@@ -94,20 +101,34 @@ public class TaskDetailFragment extends DialogFragment {
         tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
-        // TODO create button programattically vs in the xml, right now it flashes in and out
+        tvStatus.setText(task.getStatus());
         try {
             ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
+            Button button = new Button(getContext());
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            params.addRule(RelativeLayout.ALIGN_PARENT_END);
+            button.setLayoutParams(params); //causes layout update
             if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
-                btnContact.setVisibility(View.INVISIBLE);
+                button.setText(getResources().getString(R.string.accept));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.launchAcceptCandidateDialog(task);
+                    }
+                });
             } else {
-                btnContact.setVisibility(View.VISIBLE);
-                btnContact.setOnClickListener(new View.OnClickListener() {
+                button.setText(getResources().getString(R.string.contact));
+                button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         listener.launchContactOwnerDialog(task);
                     }
                 });
             }
+            rlTaskDetail.addView(button);
         } catch (ParseException e) {
             e.printStackTrace();
         }

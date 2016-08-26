@@ -50,13 +50,22 @@
         android:text="Status:"
         android:layout_below="@+id/tvBudget"/>
 
-    <Spinner
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/status_array"
+        android:id="@+id/tvStatus"
         android:paddingLeft="10dp"
         android:layout_below="@id/tvBudget"
-        android:layout_toRightOf="@+id/tvStatusLabel"/>
+        android:layout_toRightOf="@+id/tvStatusLabel"
+        tools:text="Open"/>
+
+    <!--<Spinner-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:entries="@array/status_array"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:layout_below="@id/tvBudget"-->
+        <!--android:layout_toRightOf="@+id/tvStatusLabel"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTaskImages"
@@ -64,12 +73,12 @@
         android:layout_height="100dp"
         android:layout_below="@+id/tvStatusLabel"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/contact"
-        android:id="@+id/btnContact"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/contact"-->
+        <!--android:id="@+id/btnContact"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"/>-->
 </RelativeLayout>
