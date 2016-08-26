@@ -121,11 +121,15 @@ public class ConversationFragment extends Fragment {
         ParseQuery<Conversation> ownerQuery = ParseQuery.getQuery("Conversation");
         ownerQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
         ownerQuery.whereEqualTo("task", task);
+        ownerQuery.include("candidate");
+        ownerQuery.include("posted_by");
 
         subConversationQueries.add(ownerQuery);
         ParseQuery<Conversation> candidateQuery = ParseQuery.getQuery("Conversation");
         candidateQuery.whereEqualTo("candidate", ParseUser.getCurrentUser());
         candidateQuery.whereEqualTo("task", task);
+        candidateQuery.include("candidate");
+        candidateQuery.include("posted_by");
 
         subConversationQueries.add(candidateQuery);
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task");
