@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
@@ -74,12 +73,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Conversation conversation = conversations.get(position);
-        ParseUser candidate = null;
-        try {
-            candidate = conversation.getCandidate().fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ParseUser candidate = conversation.getCandidate();
 
         TextView tvName = holder.tvName;
         tvName.setText(FormatterHelper.formatName(candidate.getString("fbName")));

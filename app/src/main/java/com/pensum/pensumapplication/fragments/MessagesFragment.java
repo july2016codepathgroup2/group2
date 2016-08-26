@@ -2,6 +2,7 @@ package com.pensum.pensumapplication.fragments;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -48,23 +49,6 @@ public class MessagesFragment extends GridFragment{
         subConversationQueries.add(candidateQuery);
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task");
 
-//        ParseQuery<Task> taskQuery = ParseQuery.getQuery("Task");
-//        taskQuery.whereMatchesQuery("task",mainConversationQuery);
-//        taskQuery.findInBackground(new FindCallback<Task>() {
-//            @Override
-//            public void done(List<Task> tasksFromQuery, ParseException e) {
-//               if(e == null) {
-//                   int previousContentSize = tasks.size();
-//                    tasks.clear();
-//                    adapter.notifyItemRangeRemoved(0, previousContentSize);
-//                    tasks.addAll(tasksFromQuery);
-//                    adapter.notifyItemRangeInserted(0, tasksFromQuery.size());
-//               } else {
-//                   Log.e("message", "Error Loading Messages" + e);
-//               }
-//            }
-//        });
-
         mainConversationQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {
@@ -86,15 +70,11 @@ public class MessagesFragment extends GridFragment{
     }
 
     public void showDetailFragment(Task task) {
-        listener.launchConversationsFragment(task);
+        if(task.getPostedBy() == ParseUser.getCurrentUser()){
+            listener.launchConversationsFragment(task);
+        } else {
+            // TODO link here directly to messages if you are the candidate
+            Toast.makeText(getContext(),"Go to messages from posted_by",Toast.LENGTH_LONG).show();
+        }
     }
-
-//    private void showConversationFragment(Task task) {
-//        FragmentTransaction fts = getChildFragmentManager().beginTransaction();
-//        ConversationFragment conversationFragment =
-//                ConversationFragment.newInstance(task.getObjectId());
-//        fts.replace(R.id.flContent, conversationFragment);
-//        fts.addToBackStack("convo list");
-//        fts.commit();
-//    }
 }
