@@ -25,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +38,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class AddTaskFragment extends Fragment {
     @BindView(R.id.etTitle) EditText etTitle;
-    @BindView(R.id.etDescription) EditText etDescription;
+//    @BindView(R.id.etDescription) EditText etDescription;
     @BindView(R.id.etType) EditText etType;
     @BindView(R.id.etBudget) EditText etBudget;
     @BindView(R.id.etLocation) EditText etLocation;
@@ -120,9 +122,10 @@ public class AddTaskFragment extends Fragment {
                         task.setStatus("open");
                         task.setPostedBy(ParseUser.getCurrentUser());
                         task.setTitle(etTitle.getText().toString());
-                        task.setDescription(etDescription.getText().toString());
+                        //task.setDescription(etDescription.getText().toString());
                         task.setType(etType.getText().toString());
-                        task.setBudget(new BigDecimal(etBudget.getText().toString()));
+                        NumberFormat nf = NumberFormat.getCurrencyInstance();
+                        task.setBudget(new BigDecimal(nf.parse(etBudget.getText().toString()).toString()));
                         location = new ParseGeoPoint();
                         location.setLatitude(responseBody.getDouble("lat"));
                         location.setLongitude(responseBody.getDouble("lng"));
@@ -130,6 +133,8 @@ public class AddTaskFragment extends Fragment {
                         task.saveInBackground();
                         listener.onNewTaskCreated(task);
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
