@@ -169,7 +169,6 @@ public class ContactOwnerFragment extends DialogFragment {
                 }
             }
         });
-        dismiss();
     }
 
     private void createMessage(Conversation c){
@@ -187,6 +186,7 @@ public class ContactOwnerFragment extends DialogFragment {
         message.setConversation(c);
         message.setMessage(etMessage.getText().toString());
         message.saveInBackground();
+        dismiss();
     }
 
 }
