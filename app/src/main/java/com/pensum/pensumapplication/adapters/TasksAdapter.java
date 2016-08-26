@@ -14,6 +14,7 @@ import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -75,7 +76,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         tvTaskTitle.setText(task.getTitle());
 
         tvPrice = holder.tvPrice;
-        tvPrice.setText("$" + task.getBudget());
+        tvPrice.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
     }
 
     @Override

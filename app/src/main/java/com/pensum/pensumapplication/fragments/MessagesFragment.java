@@ -1,5 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -16,12 +17,23 @@ import java.util.List;
  * Created by violetaria on 8/21/16.
  */
 public class MessagesFragment extends GridFragment{
-//    public static MessagesFragment newInstance(int page) {
-//        return (MessagesFragment) GridFragment.newInstance(page);
-//    }
-//    public static MessagesFragment newInstance() {
-//        return (MessagesFragment) GridFragment.newInstance(0);
-//    }
+
+    private OnConversationClickedListener listener;
+
+    public interface OnConversationClickedListener{
+        public void launchConversationsFragment(Task task);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnConversationClickedListener) {
+            listener = (OnConversationClickedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement MessagesFragment.OnConversationClickedListener");
+        }
+    }
 
     public void populateTasks() {
         List<ParseQuery<Conversation>> subConversationQueries = new ArrayList<>();
@@ -72,4 +84,17 @@ public class MessagesFragment extends GridFragment{
             }
         });
     }
+
+    public void showDetailFragment(Task task) {
+        listener.launchConversationsFragment(task);
+    }
+
+//    private void showConversationFragment(Task task) {
+//        FragmentTransaction fts = getChildFragmentManager().beginTransaction();
+//        ConversationFragment conversationFragment =
+//                ConversationFragment.newInstance(task.getObjectId());
+//        fts.replace(R.id.flContent, conversationFragment);
+//        fts.addToBackStack("convo list");
+//        fts.commit();
+//    }
 }

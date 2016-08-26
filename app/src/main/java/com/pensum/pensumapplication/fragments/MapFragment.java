@@ -45,6 +45,7 @@ import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -177,7 +178,7 @@ public class MapFragment extends Fragment implements
 
                     tvDescription.setText(task.getDescription());
 
-                    tvBudget.setText("$"+task.getBudget().toString());
+                    tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
 
                     try {
                         ParseUser postedBy = task.getPostedBy().fetchIfNeeded();

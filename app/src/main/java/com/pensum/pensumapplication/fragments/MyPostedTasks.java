@@ -1,5 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -41,5 +42,12 @@ public class MyPostedTasks extends GridFragment {
                 }
             }
         });
+    }
+
+    public void showDetailFragment(Task task) {
+        FragmentManager fm = getFragmentManager();
+        TaskDetailFragment taskDetailFragment =
+                TaskDetailFragment.newInstance(task.getObjectId());
+        taskDetailFragment.show(fm, "fragment_task_detail");
     }
 }

@@ -26,4 +26,11 @@
     <string name="posted">Posted</string>
     <string name="accepted">Accepted</string>
     <string name="completed">Completed</string>
+    <string name="accept">Accept</string>
+    <string name="Decline"/>
+    <string name="decline">Decline</string>
+    <string name="message">Message</string>
+    <string name="cancel">Cancel</string>
+    <string name="price">Price Offered</string>
+    <string name="zero_dollars">$0.00</string>
 </resources>
