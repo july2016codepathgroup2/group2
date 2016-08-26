@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.fragments.AddTaskFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
+import com.pensum.pensumapplication.fragments.ConversationFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
 import com.pensum.pensumapplication.fragments.MyAcceptedTasks;
@@ -31,7 +32,7 @@ import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
 import com.pensum.pensumapplication.models.Task;
 
-public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener, HomeFragment.OnAddTaskListener, TaskDetailFragment.OnContactOwnerListener{
+public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener, HomeFragment.OnAddTaskListener, TaskDetailFragment.OnContactOwnerListener, MessagesFragment.OnConversationClickedListener{
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -198,5 +199,14 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         FragmentManager fm = getSupportFragmentManager();
         ContactOwnerFragment contactOwnerFragment = ContactOwnerFragment.newInstance(task.getObjectId());
         contactOwnerFragment.show(fm, "fragment_contact_owner");
+    }
+
+    @Override
+    public void launchConversationsFragment(Task task) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ConversationFragment conversationFragment = ConversationFragment.newInstance(task.getObjectId());
+        ft.replace(R.id.flContent, conversationFragment);
+        ft.addToBackStack("convo list");
+        ft.commit();
     }
 }

@@ -3,6 +3,8 @@ package com.pensum.pensumapplication.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,23 +20,34 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * Created by violetaria on 8/21/16.
  */
+
 public class ContactOwnerFragment extends DialogFragment {
-    private TextView tvTitle;
-    private TextView tvBudget;
-    private TextView tvName;
-    private EditText etMessage;
-    private Button btnSend;
-    private ImageView ivProfileImage;
+    @BindView(R.id.tvTitle) TextView tvTitle;
+    @BindView(R.id.tvBudget) TextView tvBudget;
+    @BindView(R.id.tvName) TextView tvName;
+    @BindView(R.id.etMessage) EditText etMessage;
+    @BindView(R.id.btnSend) Button btnSend;
+    @BindView(R.id.btnCancel) Button btnCancel;
+    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.etOffer) EditText etOffer;
+    private Unbinder unbinder;
     private Task task;
     private ParseUser postedBy;
 
@@ -64,29 +77,57 @@ public class ContactOwnerFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_contact_owner, parent, false);
+        View view = inflater.inflate(R.layout.fragment_contact_owner, parent, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        tvBudget = (TextView) view.findViewById(R.id.tvBudget);
-        tvName = (TextView) view.findViewById(R.id.tvName);
-        etMessage = (EditText) view.findViewById(R.id.etMessage);
-        ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
-        btnSend = (Button) view.findViewById(R.id.btnSend);
-
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendMessage(view);
             }
         });
+
+        etOffer.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String s = editable.toString();
+                etOffer.removeTextChangedListener(this);
+                String formatted = FormatterHelper.formatMoney(s);
+                etOffer.setText(formatted);
+                etOffer.setSelection(formatted.length());
+                etOffer.addTextChangedListener(this);
+            }
+        });
     }
 
     private void populateViews(){
         tvTitle.setText(task.getTitle());
-        tvBudget.setText("$" + task.getBudget().toString());
+        tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         try{
             postedBy = task.getPostedBy().fetchIfNeeded();
             tvName.setText(postedBy.getString("fbName"));
@@ -108,31 +149,39 @@ public class ContactOwnerFragment extends DialogFragment {
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
         // TODO figure out which cache policy to use here
         //query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY); // or CACHE_ONLY
-            query.getFirstInBackground(new GetCallback<Conversation>() {
-                public void done(Conversation conversationFromQuery, ParseException e) {
-                    if (e == null) {
-                        createMessage(conversationFromQuery);
+        query.getFirstInBackground(new GetCallback<Conversation>() {
+            public void done(Conversation conversationFromQuery, ParseException e) {
+                if (e == null) {
+                    createMessage(conversationFromQuery);
+                } else {
+                    String message = e.getMessage();
+                    if (message.toLowerCase().contains("no results found for query")){
+                        Conversation c;
+                        c = new Conversation();
+                        c.setTask(task);
+                        c.setCandidate(ParseUser.getCurrentUser());
+                        c.setOwner(postedBy);
+                        c.saveInBackground();
+                        createMessage(c);
                     } else {
-                        String message = e.getMessage();
-                        if (message.toLowerCase().contains("no results found for query")){
-                            Conversation c;
-                            c = new Conversation();
-                            c.setTask(task);
-                            c.setCandidate(ParseUser.getCurrentUser());
-                            c.setOwner(postedBy);
-                            c.saveInBackground();
-                            createMessage(c);
-                        } else {
-                            Log.e("message", "Error Loading Messages" + e);
-                        }
+                        Log.e("message", "Error Loading Messages" + e);
                     }
                 }
-            });
+            }
+        });
         dismiss();
     }
 
     private void createMessage(Conversation c){
         Message message = new Message();
+        c.setUnreadOwnerMessageFlag(true);
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        try {
+            c.setOffer(new BigDecimal(nf.parse(etOffer.getText().toString()).toString()));
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        c.saveInBackground();
         message.setFrom(ParseUser.getCurrentUser());
         message.setTo(postedBy);
         message.setConversation(c);

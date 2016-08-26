@@ -18,6 +18,8 @@ import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
 
+import java.text.NumberFormat;
+
 public class TaskDetailFragment extends DialogFragment {
 
     private TextView tvDescriptionLabel;
@@ -91,7 +93,7 @@ public class TaskDetailFragment extends DialogFragment {
     private void populateViews() {
         tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
-        tvBudget.setText("$" + task.getBudget().toString());
+        tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         // TODO create button programattically vs in the xml, right now it flashes in and out
         try {
             ParseUser postedBy = task.getPostedBy().fetchIfNeeded();

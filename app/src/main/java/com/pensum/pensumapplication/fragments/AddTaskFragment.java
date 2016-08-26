@@ -3,6 +3,8 @@ package com.pensum.pensumapplication.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.api_clients.ZipCodeApiClient;
+import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.helpers.NetworkHelper;
 import com.pensum.pensumapplication.models.Task;
 
@@ -23,19 +26,23 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by violetaria on 8/21/16.
  */
 public class AddTaskFragment extends Fragment {
-    private EditText etTitle;
-    private EditText etDescription;
-    private EditText etType;
-    private EditText etBudget;
-    private EditText etLocation;
-    private Button btnAddTask;
+    @BindView(R.id.etTitle) EditText etTitle;
+    @BindView(R.id.etDescription) EditText etDescription;
+    @BindView(R.id.etType) EditText etType;
+    @BindView(R.id.etBudget) EditText etBudget;
+    @BindView(R.id.etLocation) EditText etLocation;
+    @BindView(R.id.btnAddTask) Button btnAddTask;
     ParseGeoPoint location;
+    private Unbinder unbinder;
 
     private OnTaskSavedListener listener;
 
@@ -60,18 +67,39 @@ public class AddTaskFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_task, parent, false);
+        View view = inflater.inflate(R.layout.fragment_add_task, parent, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        etTitle = (EditText) view.findViewById(R.id.etTitle);
-        etDescription = (EditText) view.findViewById(R.id.etDescription);
-        etType = (EditText) view.findViewById(R.id.etType);
-        etBudget = (EditText) view.findViewById(R.id.etBudget);
-        etLocation = (EditText) view.findViewById(R.id.etLocation);
-        btnAddTask = (Button) view.findViewById(R.id.btnAddTask);
+        etBudget.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String s = editable.toString();
+                etBudget.removeTextChangedListener(this);
+                String formatted = FormatterHelper.formatMoney(s);
+                etBudget.setText(formatted);
+                etBudget.setSelection(formatted.length());
+                etBudget.addTextChangedListener(this);
+            }
+        });
         btnAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
