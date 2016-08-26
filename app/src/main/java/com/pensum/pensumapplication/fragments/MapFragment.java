@@ -11,9 +11,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,11 +47,14 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.fragments.FilterSearchDialogFragment.FilterSearchDialogListener;
+import com.pensum.pensumapplication.helpers.SearchHelper;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import permissions.dispatcher.NeedsPermission;
@@ -59,7 +67,8 @@ import permissions.dispatcher.RuntimePermissions;
 public class MapFragment extends Fragment implements
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        FilterSearchDialogListener {
 
     private LocationRequest mLocationRequest;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -71,10 +80,17 @@ public class MapFragment extends Fragment implements
     private GoogleMap map;
     private View view;
     private HashMap<String, Task> markers= new HashMap<String, Task>();
+    private Map<String, Marker> taskTitleToMarkerMap = new HashMap<>();
+    private SearchView searchView;
+    private String typeFilter;
+    private ParseGeoPoint locationFilter;
+    private double budgetFilter;
+    private String zipCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -127,6 +143,7 @@ public class MapFragment extends Fragment implements
                         Task task = tasks.get(i);
                         MarkerOptions markerOptions = new MarkerOptions().position(point).title(title).icon(defaultMarker);
                         Marker marker = map.addMarker(markerOptions);
+                        taskTitleToMarkerMap.put(task.getTitle(), marker);
                         markers.put(marker.getId(), task);
                     }
                 } else {
@@ -216,7 +233,6 @@ public class MapFragment extends Fragment implements
             Toast.makeText(getContext(), "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
     }
-//
 
     private boolean isGooglePlayServicesAvailable() {
         // Check that Google Play services is available
@@ -258,12 +274,104 @@ public class MapFragment extends Fragment implements
        }
     }
 
-
     protected void connectClient() {
         // Connect the client.
         if (isGooglePlayServicesAvailable() && mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        setupSearchMenuItem(menu);
+        setupFilterSearchMenuItem(menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onFinishFilterSearchDialog(String type, ParseGeoPoint location, double budget, String zipCode) {
+        typeFilter = type;
+        locationFilter = location;
+        budgetFilter = budget;
+        this.zipCode = zipCode;
+
+        String query = searchView.getQuery().toString();
+        FindCallback<Task> finishSearchCallback = new FindCallback<Task>() {
+            @Override
+            public void done(List<Task> tasks, ParseException e) {
+                if (e == null) {
+                    if (tasks.size() > 0) {
+                        Task currentTask = tasks.get(0);
+                        ParseGeoPoint location = currentTask.getLocation();
+                        LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 12.0f));
+                        Marker marker = taskTitleToMarkerMap.get(currentTask.getTitle());
+                        marker.showInfoWindow();
+                    }
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        };
+        SearchHelper.searchForTasksWith(query, typeFilter, locationFilter, budgetFilter, finishSearchCallback);
+    }
+
+    private void setupSearchMenuItem(Menu menu) {
+        MenuItem searchItem  = menu.findItem(R.id.miSearch);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                FindCallback<Task> finishSearchCallback = new FindCallback<Task>() {
+                    @Override
+                    public void done(List<Task> tasks, ParseException e) {
+                        if (e == null) {
+                            //Right now it's only going to show the top-most result
+                            if (tasks.size() > 0) {
+                                Task currentTask = tasks.get(0);
+                                ParseGeoPoint location = currentTask.getLocation();
+                                LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 12.0f));
+                                Marker marker = taskTitleToMarkerMap.get(currentTask.getTitle());
+                                marker.showInfoWindow();
+                            }
+                        } else {
+                            Log.d("item", "Error: " + e.getMessage());
+                        }
+                    }
+                };
+
+                SearchHelper.searchForTasksWith(query, typeFilter, locationFilter,
+                        budgetFilter, finishSearchCallback);
+                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
+                // see https://code.google.com/p/android/issues/detail?id=24599
+                searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void setupFilterSearchMenuItem(Menu menu) {
+        MenuItem filterItem = menu.findItem(R.id.miFilterSearch);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                FragmentManager fm = getFragmentManager();
+                FilterSearchDialogFragment filterSearchDialogFragment =
+                        FilterSearchDialogFragment.newInstance(typeFilter, budgetFilter, zipCode);
+                filterSearchDialogFragment.setTargetFragment(MapFragment.this, 300);
+                filterSearchDialogFragment.show(fm, "fragment_Filter_Search");
+                return true;
+            }
+        });
     }
 
 
