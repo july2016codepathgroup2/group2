@@ -167,7 +167,7 @@ public class MapFragment extends Fragment implements
             map.getUiSettings().setRotateGesturesEnabled(true);
             map.getUiSettings().setScrollGesturesEnabled(true);
             map.getUiSettings().setTiltGesturesEnabled(false);
-            map.getUiSettings().setZoomControlsEnabled(true);
+            map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setZoomGesturesEnabled(true);
             map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
