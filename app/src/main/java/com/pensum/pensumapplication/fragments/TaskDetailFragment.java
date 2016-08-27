@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -17,24 +19,34 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Task;
+import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class TaskDetailFragment extends DialogFragment {
 
-    private TextView tvDescriptionLabel;
-    private TextView tvTitle;
+    @BindView(R.id.tvDescription)TextView tvDescriptionLabel;
+    @BindView(R.id.tvTitle)TextView tvTitle;
+    @BindView(R.id.tvBudget)TextView tvBudget;
+    @BindView(R.id.btnContact)Button btnContact;
+    @BindView(R.id.ivTaskDetailOwnerProf)ImageView ivTaskDetailOwnerProf;
+    @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
+
     private Task task;
-    private TextView tvBudget;
-    private Button btnContact;
     private OnContactOwnerListener listener;
+    private Unbinder unbinder;
 
     public TaskDetailFragment() {
 
     }
 
     public interface OnContactOwnerListener {
-        public void launchContactOwnerDialog(Task task);
+        void launchContactOwnerDialog(Task task);
     }
 
     @Override
@@ -59,18 +71,21 @@ public class TaskDetailFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_task_detail, container);
+        View view = inflater.inflate(R.layout.fragment_task_detail, container);
+        unbinder = ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        tvDescriptionLabel = (TextView) view.findViewById(R.id.tvDescription);
-        tvBudget = (TextView) view.findViewById(R.id.tvBudget);
-        btnContact = (Button) view.findViewById(R.id.btnContact);
         fetchSelectedTaskAndPopulateView();
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void fetchSelectedTaskAndPopulateView() {
@@ -94,12 +109,21 @@ public class TaskDetailFragment extends DialogFragment {
         tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
+        if(task.getImages() == null || task.getImages().length() < 1)
+            rvTaskImages.setVisibility(View.GONE);
+
         // TODO create button programattically vs in the xml, right now it flashes in and out
         try {
             ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
             if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
                 btnContact.setVisibility(View.INVISIBLE);
             } else {
+                String imageUrl = postedBy.getString("profilePicUrl");
+                if (imageUrl != null){
+                    Picasso.with(getContext()).load(imageUrl).
+                            transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
+                }
+
                 btnContact.setVisibility(View.VISIBLE);
                 btnContact.setOnClickListener(new View.OnClickListener() {
                     @Override
