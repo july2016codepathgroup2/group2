@@ -89,16 +89,17 @@ public class ProfileSkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            if(!isUser)
-                ivSkillDelete.setVisibility(View.INVISIBLE);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(listener != null)
-                        listener.onRowClicked(getAdapterPosition());
-                }
-            });
+            if(!isUser) // any user
+                ivSkillDelete.setImageResource(0);
+            else { // current user
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null)
+                            listener.onRowClicked(getAdapterPosition());
+                    }
+                });
+            }
         }
 
         @Override

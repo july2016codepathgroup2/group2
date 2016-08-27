@@ -32,7 +32,9 @@ import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
 import com.pensum.pensumapplication.models.Task;
 
-public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener, HomeFragment.OnAddTaskListener, TaskDetailFragment.OnContactOwnerListener, MessagesFragment.OnConversationClickedListener{
+public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
+        HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
+        MessagesFragment.OnConversationClickedListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -123,10 +125,15 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         }
 
         if(fragmentClass != null) {
-            try {
-                fragment = (Fragment) fragmentClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(fragmentClass==ProfileFragment.class) {
+                fragment = ProfileFragment.newInstance(null);
+            }
+            else {
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             // Insert the fragment by replacing any existing fragment
@@ -199,6 +206,13 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         FragmentManager fm = getSupportFragmentManager();
         ContactOwnerFragment contactOwnerFragment = ContactOwnerFragment.newInstance(task.getObjectId());
         contactOwnerFragment.show(fm, "fragment_contact_owner");
+    }
+
+    @Override
+    public void launchProfileFragment(String userId) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack("profile fragment");
+        ft.replace(R.id.flContent, ProfileFragment.newInstance(userId)).commit();
     }
 
     @Override

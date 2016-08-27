@@ -13,7 +13,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
@@ -21,7 +24,6 @@ import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.fragments.profile.EditSkillFragment;
 import com.pensum.pensumapplication.fragments.profile.ErrorSkillsFragment;
 import com.pensum.pensumapplication.fragments.profile.SkillsFragment;
-import com.pensum.pensumapplication.fragments.profile.StatusFragment;
 import com.pensum.pensumapplication.models.Skill;
 import com.squareup.picasso.Picasso;
 
@@ -41,14 +43,21 @@ public class ProfileFragment extends Fragment
         implements EditSkillFragment.EditSkillFragmentListener,
         ProfileSkillAdapter.SwipeDeleteListener {
     //    @BindView(R.id.ivProfBGImage)ImageView ivProfBGImage;
-    @BindView(R.id.ivProfImage)
-    ImageView ivProfImage;
-    @BindView(R.id.tvProfName)
-    TextView tvProfName;
+    @BindView(R.id.ivProfImage)ImageView ivProfImage;
+    @BindView(R.id.tvProfName)TextView tvProfName;
+    @BindView(R.id.btnProfAddSkill)ImageButton btnProfAddSkill;
 
     private Unbinder unbinder;
     private List<Skill> skills;
     private ParseUser user;
+
+    public static ProfileFragment newInstance(String userId) {
+        ProfileFragment profileFragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString("userId", userId);
+        profileFragment.setArguments(args);
+        return profileFragment;
+    }
 
     @Nullable
     @Override
@@ -56,23 +65,6 @@ public class ProfileFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         unbinder = ButterKnife.bind(this, view);
         skills = new ArrayList<>();
-
-        //TODO blur the background
-
-        user = ParseUser.getCurrentUser(); //TODO change to any user
-        if (user != null) {
-            ivProfImage.setImageResource(0);
-
-            String fbName = (String) user.get("fbName");
-            tvProfName.setText(fbName);
-
-            String profileUrl = (String) user.get("profilePicUrl");
-            Picasso.with(getContext()).load(profileUrl).into(ivProfImage);
-
-            if (user.get("skills") != null) {
-                skills = (List<Skill>) user.get("skills");
-            }
-        }
 
         return view;
     }
@@ -82,8 +74,45 @@ public class ProfileFragment extends Fragment
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        Fragment fragmentSkills = SkillsFragment.newInstance(null);
-        Fragment fragmentStatus = new StatusFragment();
+        final String userId = getArguments().getString("userId");
+
+        if (userId != null) { //any user
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+            query.whereEqualTo("objectId", userId);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> objects, ParseException e) {
+                    if (e == null) {
+                        user = (ParseUser)objects.get(0);
+                        populateView(userId);
+                    } else {
+                        Log.e("message", "Error fetch user with id" + e);
+                    }
+                    btnProfAddSkill.setVisibility(View.INVISIBLE);
+                }
+            });
+        } else { //current user
+            user = ParseUser.getCurrentUser();
+            populateView(null);
+        }
+    }
+
+    private void populateView(String userId) {
+        if (user.get("skills") != null)
+            skills = (List<Skill>) user.get("skills");
+
+        //TODO blur the background
+        if (user != null) {
+            ivProfImage.setImageResource(0);
+
+            String fbName = (String) user.get("fbName");
+            tvProfName.setText(fbName);
+
+            String profileUrl = (String) user.get("profilePicUrl");
+            Picasso.with(getContext()).load(profileUrl).into(ivProfImage);
+        }
+
+        Fragment fragmentSkills = SkillsFragment.newInstance(userId);
+//        Fragment fragmentStatus = new StatusFragment();
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
@@ -115,25 +144,23 @@ public class ProfileFragment extends Fragment
     // Current user only
     @Override
     public void onFinishEditDialog(Skill skill, int position) {
-        if( position == -1 ) { // Add new
+        if (position == -1) { // Add new
             skills.add(0, skill);
 
-            user.put("skills",skills);
+            user.put("skills", skills);
             user.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    if(e == null) {
+                    if (e == null) {
                         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                         Fragment fragmentSkills = SkillsFragment.newInstance(null);
                         transaction.replace(R.id.flProfSkills, fragmentSkills).commit();
-                    }
-                    else {
+                    } else {
                         Log.e("message", "Error saving skill to parse" + e);
                     }
                 }
             });
-        }
-        else { // Update
+        } else { // Update
             skills.set(position, skill); // Manual sync the list (might not needed)
         }
     }
@@ -141,13 +168,13 @@ public class ProfileFragment extends Fragment
     @Override
     public void onSwipeDelete(String id) {
         Iterator it = skills.iterator();
-        while(it.hasNext()) {
-            Skill skill = (Skill)it.next();
-            if(skill.getObjectId().equals(id))
+        while (it.hasNext()) {
+            Skill skill = (Skill) it.next();
+            if (skill.getObjectId().equals(id))
                 it.remove();
         }
 
-        user.put("skills",skills);
+        user.put("skills", skills);
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -159,7 +186,7 @@ public class ProfileFragment extends Fragment
             }
         });
 
-        if(skills.size() == 0) {
+        if (skills.size() == 0) {
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.replace(R.id.flProfSkills, new ErrorSkillsFragment()).commit();
         }

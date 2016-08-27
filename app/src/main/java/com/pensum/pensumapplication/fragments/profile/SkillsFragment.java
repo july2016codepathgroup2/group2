@@ -46,12 +46,10 @@ public class SkillsFragment extends Fragment
         Bundle args = new Bundle();
         boolean isUser = false;
 
-        if(userId != null) {
+        if(userId!=null)
             args.putString("userId", userId);
-        }
-        else {
+        else
             isUser = true;
-        }
 
         args.putBoolean("isUser", isUser);
         frag.setArguments(args);
@@ -83,10 +81,11 @@ public class SkillsFragment extends Fragment
             }
         });
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(aSkills);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(rvSkills);
-
+        if(getArguments().getBoolean("isUser")) {
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(aSkills);
+            mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(rvSkills);
+        }
         populateSkills();
         return v;
     }

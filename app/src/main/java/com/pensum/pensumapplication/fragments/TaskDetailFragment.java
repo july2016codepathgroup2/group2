@@ -38,22 +38,23 @@ public class TaskDetailFragment extends DialogFragment {
     @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
 
     private Task task;
-    private OnContactOwnerListener listener;
+    private OnTaskDetailActionListener listener;
     private Unbinder unbinder;
 
     public TaskDetailFragment() {
 
     }
 
-    public interface OnContactOwnerListener {
+    public interface OnTaskDetailActionListener {
         void launchContactOwnerDialog(Task task);
+        void launchProfileFragment(String userId);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof  OnContactOwnerListener) {
-            listener = (OnContactOwnerListener) context;
+        if(context instanceof  OnTaskDetailActionListener) {
+            listener = (OnTaskDetailActionListener) context;
         } else {
             throw new ClassCastException(context.toString() + "must implement TaskDetailFragment.OnContactOwnerListener");
         }
@@ -118,11 +119,7 @@ public class TaskDetailFragment extends DialogFragment {
             if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
                 btnContact.setVisibility(View.INVISIBLE);
             } else {
-                String imageUrl = postedBy.getString("profilePicUrl");
-                if (imageUrl != null){
-                    Picasso.with(getContext()).load(imageUrl).
-                            transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
-                }
+                final String userId = postedBy.getObjectId();
 
                 btnContact.setVisibility(View.VISIBLE);
                 btnContact.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +128,22 @@ public class TaskDetailFragment extends DialogFragment {
                         listener.launchContactOwnerDialog(task);
                     }
                 });
+
+                ivTaskDetailOwnerProf.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.launchProfileFragment(userId);
+
+                        // Close the dialog and return back to the parent
+                        dismiss();
+                    }
+                });
+            }
+
+            String imageUrl = postedBy.getString("profilePicUrl");
+            if (imageUrl != null){
+                Picasso.with(getContext()).load(imageUrl).
+                        transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
             }
         } catch (ParseException e) {
             e.printStackTrace();
