@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.fragments.profile.EditSkillFragment;
 import com.pensum.pensumapplication.fragments.profile.ErrorSkillsFragment;
 import com.pensum.pensumapplication.fragments.profile.SkillsFragment;
@@ -26,6 +26,7 @@ import com.pensum.pensumapplication.models.Skill;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,7 +38,8 @@ import butterknife.Unbinder;
  * Created by eddietseng on 8/19/16.
  */
 public class ProfileFragment extends Fragment
-        implements EditSkillFragment.EditSkillFragmentListener {
+        implements EditSkillFragment.EditSkillFragmentListener,
+        ProfileSkillAdapter.SwipeDeleteListener {
     //    @BindView(R.id.ivProfBGImage)ImageView ivProfBGImage;
     @BindView(R.id.ivProfImage)
     ImageView ivProfImage;
@@ -106,28 +108,60 @@ public class ProfileFragment extends Fragment
     public void addSkill(ImageButton button) {
         FragmentManager fm = getChildFragmentManager();
         EditSkillFragment editSkillDialogFragment =
-                EditSkillFragment.newInstance("Add Skill", null);
+                EditSkillFragment.newInstance("Add Skill", null, -1); // negative 1 for new skill
         editSkillDialogFragment.show(fm, "fragment_profile_edit_skill");
     }
 
     // Current user only
     @Override
-    public void onFinishEditDialog(Skill skill) {
-        Toast.makeText(getContext(), "Save skill" + skill.toString(), Toast.LENGTH_SHORT).show();
-        skills.add(0, skill);
+    public void onFinishEditDialog(Skill skill, int position) {
+        if( position == -1 ) { // Add new
+            skills.add(0, skill);
+
+            user.put("skills",skills);
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null) {
+                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                        Fragment fragmentSkills = SkillsFragment.newInstance(null);
+                        transaction.replace(R.id.flProfSkills, fragmentSkills).commit();
+                    }
+                    else {
+                        Log.e("message", "Error saving skill to parse" + e);
+                    }
+                }
+            });
+        }
+        else { // Update
+            skills.set(position, skill); // Manual sync the list (might not needed)
+        }
+    }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        Iterator it = skills.iterator();
+        while(it.hasNext()) {
+            Skill skill = (Skill)it.next();
+            if(skill.getObjectId().equals(id))
+                it.remove();
+        }
+
         user.put("skills",skills);
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e == null) {
-                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                    Fragment fragmentSkills = SkillsFragment.newInstance(null);
-                    transaction.replace(R.id.flProfSkills, fragmentSkills).commit();
-                }
-                else {
-                    Log.e("message", "Error saving skill to parse" + e);
+                if (e == null) {
+                    Log.e("message", "Delete skill from parse user successfully");
+                } else {
+                    Log.e("message", "Error delete skill from parse user" + e);
                 }
             }
         });
+
+        if(skills.size() == 0) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.flProfSkills, new ErrorSkillsFragment()).commit();
+        }
     }
 }

@@ -3,17 +3,23 @@ package com.pensum.pensumapplication.fragments.profile;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.models.Skill;
@@ -28,15 +34,26 @@ import butterknife.Unbinder;
 /**
  * Created by eddietseng on 8/21/16.
  */
-public class SkillsFragment extends Fragment {
+public class SkillsFragment extends Fragment
+        implements RecyclerViewClickListener, EditSkillFragment.EditSkillFragmentListener,
+        ProfileSkillAdapter.SwipeDeleteListener {
     private ArrayList<Skill> skills;
     protected ProfileSkillAdapter aSkills;
+    private ItemTouchHelper mItemTouchHelper;
 
     public static SkillsFragment newInstance(String userId) {
         SkillsFragment frag = new SkillsFragment();
         Bundle args = new Bundle();
-        if(userId != null)
+        boolean isUser = false;
+
+        if(userId != null) {
             args.putString("userId", userId);
+        }
+        else {
+            isUser = true;
+        }
+
+        args.putBoolean("isUser", isUser);
         frag.setArguments(args);
         return frag;
     }
@@ -49,7 +66,7 @@ public class SkillsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         skills = new ArrayList<>();
-        aSkills = new ProfileSkillAdapter(skills);
+        aSkills = new ProfileSkillAdapter(skills, this, this, getArguments().getBoolean("isUser"));
     }
 
     @Override
@@ -65,6 +82,10 @@ public class SkillsFragment extends Fragment {
                 return false;
             }
         });
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(aSkills);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(rvSkills);
 
         populateSkills();
         return v;
@@ -115,5 +136,63 @@ public class SkillsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onRowClicked(int position) {
+        Skill skill = skills.get(position);
+        FragmentManager fm = getChildFragmentManager();
+        EditSkillFragment editSkillDialogFragment =
+                EditSkillFragment.newInstance("Add Skill", skill.getObjectId(), position);
+        editSkillDialogFragment.show(fm, "fragment_profile_edit_skill");
+    }
+
+    @Override
+    public void onFinishEditDialog(Skill skill, int position) {
+        if( position != -1 ) { // Update
+            String oldSkillId = skill.getObjectId();
+            ParseObject oldSkill = ParseObject.createWithoutData("Skill", oldSkillId);
+            oldSkill.put("skillName",skill.getSkillName());
+            oldSkill.put("skillExperience",skill.getSkillExperiences());
+
+            skills.set(position, skill);
+            aSkills.notifyItemChanged(position);
+
+            oldSkill.saveInBackground(new SaveCallback() {
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Toast.makeText(getContext(),"Update successfully",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(),"Update failed",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        //Forward to parent
+        Fragment fragment = getParentFragment();
+        if( fragment instanceof EditSkillFragment.EditSkillFragmentListener )
+            ((EditSkillFragment.EditSkillFragmentListener)fragment).onFinishEditDialog(skill,position);
+    }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Skill");
+        query.whereEqualTo("objectId",id);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    object.deleteInBackground();
+                } else
+                    Toast.makeText(getContext(),"Delete failed",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Forward to parent
+        Fragment fragment = getParentFragment();
+        if( fragment instanceof ProfileSkillAdapter.SwipeDeleteListener ) {
+            ((ProfileSkillAdapter.SwipeDeleteListener)fragment).onSwipeDelete(id);
+        }
     }
 }
