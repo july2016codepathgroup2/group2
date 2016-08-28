@@ -77,4 +77,9 @@ public class MessagesFragment extends GridFragment{
             listener.launchChatFragment(conversation);
         }
     }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        // Not applicable
+    }
 }

@@ -23,11 +23,12 @@ import java.util.List;
 /**
  * Created by violetaria on 8/16/16.
  */
-public abstract class GridFragment extends Fragment {
+public abstract class GridFragment extends Fragment
+        implements TasksAdapter.SwipeDeleteListener {
     public final int MAX_TASKS_TO_SHOW = 50;
 
     public ArrayList<Task> tasks;
-    private RecyclerView rvTasks;
+    protected RecyclerView rvTasks;
     public TasksAdapter adapter;
 
     @Override
@@ -35,7 +36,7 @@ public abstract class GridFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         tasks = new ArrayList<>();
-        adapter = new TasksAdapter(tasks, getContext());
+        adapter = new TasksAdapter(tasks, getContext(), this);
     }
 
     @Override
@@ -85,4 +86,6 @@ public abstract class GridFragment extends Fragment {
 
     abstract void showDetailFragment(Task task, Conversation conversation);
 
+    @Override
+    public abstract void onSwipeDelete(String id);
 }

@@ -153,4 +153,8 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
         taskDetailFragment.show(fm, "fragment_task_detail");
     }
 
+    @Override
+    public void onSwipeDelete(String id) {
+        // Not applicable
+    }
 }
