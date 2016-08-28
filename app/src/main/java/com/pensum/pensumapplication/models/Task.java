@@ -2,6 +2,7 @@ package com.pensum.pensumapplication.models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -56,6 +57,10 @@ public class Task extends ParseObject {
         put("title",title);
     }
 
+    public void setTaskPic(ParseFile taskPic) {
+        put("taskPic", taskPic);
+    }
+
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
     public JSONArray getImages() {
@@ -93,6 +98,10 @@ public class Task extends ParseObject {
     }
 
     public ParseUser getCandidate() { return getParseUser("candidate"); }
+
+    public ParseFile getTaskPic() {
+        return getParseFile("taskPic");
+    }
 
     public LatLng getLatLng() {
         LatLng latlng = new LatLng(getLatitude(), getLongitude());
