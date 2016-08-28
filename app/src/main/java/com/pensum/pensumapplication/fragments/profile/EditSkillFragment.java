@@ -14,14 +14,11 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Skill;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +31,6 @@ import butterknife.Unbinder;
 public class EditSkillFragment extends DialogFragment {
     @BindView(R.id.etSkillName)EditText etSkillName;
     @BindView(R.id.radio_exp_group) RadioGroup expGroup;
-//    @BindView(R.id.btnSkillSave) RadioGroup btnSkillSave;
 
     private Unbinder unbinder;
     ProgressDialog pd;
@@ -84,16 +80,16 @@ public class EditSkillFragment extends DialogFragment {
         if( skillId != null ) {
             title = getArguments().getString("title", "Edit Skill");
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Skill");
-            query.whereEqualTo("objectId",skillId);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> objects, ParseException e) {
+            ParseQuery<Skill> query = ParseQuery.getQuery(Skill.class);
+            query.getInBackground(skillId, new GetCallback<Skill>() {
+                @Override
+                public void done(Skill object, ParseException e) {
                     if (e == null) {
                         Toast.makeText(getContext(),"Get Skill Success",Toast.LENGTH_SHORT).show();
-                        Skill skill = (Skill)objects.get(0);
-                        etSkillName.setText(skill.getSkillName());
 
-                        int exp = skill.getSkillExperiences();
+                        etSkillName.setText(object.getSkillName());
+
+                        int exp = object.getSkillExperiences();
                         if(exp!=0) {
                             switch (exp) {
                                 case 1:
@@ -144,18 +140,17 @@ public class EditSkillFragment extends DialogFragment {
         if(etSkillName.length() > 0 && expGroup.getCheckedRadioButtonId() != -1) {
             if(skillId != null) {
                 pd.show();
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("Skill");
-                query.whereEqualTo("objectId",skillId);
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> objects, ParseException e) {
+                ParseQuery<Skill> query = ParseQuery.getQuery(Skill.class);
+                query.getInBackground(skillId, new GetCallback<Skill>() {
+                    @Override
+                    public void done(Skill object, ParseException e) {
                         if (e == null) {
-                            Log.d("Parse","Get skill from parse" + objects.toString());
-                            Skill skill = (Skill) objects.get(0);
-                            configureSkill(skill);
+                            Log.d("Parse","Get skill from parse");
+                            configureSkill(object);
 
                             EditSkillFragmentListener listener =
                                     (EditSkillFragmentListener) getParentFragment();
-                            listener.onFinishEditDialog(skill, position);
+                            listener.onFinishEditDialog(object, position);
                         } else {
                             Log.d("Parse","Get skill from parse error" + e.toString());
                             e.printStackTrace();

@@ -13,13 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.models.Skill;
@@ -114,22 +112,20 @@ public class SkillsFragment extends Fragment
 
         // Construct query to execute
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId",userId);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> objects, ParseException e) {
+        query.getInBackground(userId, new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
                 if (e == null) {
-                    if(objects.size() == 1) {
-                        List<Skill> skillList = objects.get(0).getList("skills");
-                        for( Skill s : skillList) {
-                            try {
-                                s.fetchIfNeeded();
-                            } catch (ParseException ex) {
-                                Log.e("message", "Error fetching skill" + ex);
-                            }
+                    List<Skill> skillList = object.getList("skills");
+                    for( Skill s : skillList) {
+                        try {
+                            s.fetchIfNeeded();
+                        } catch (ParseException ex) {
+                            Log.e("message", "Error fetching skill" + ex);
                         }
-                        skills.addAll(skillList);
-                        aSkills.notifyItemRangeInserted(0, skillList.size());
                     }
+                    skills.addAll(skillList);
+                    aSkills.notifyItemRangeInserted(0, skillList.size());
                 } else {
                     Log.e("message", "Error getting user" + e);
                 }
@@ -157,15 +153,7 @@ public class SkillsFragment extends Fragment
             skills.set(position, skill);
             aSkills.notifyItemChanged(position);
 
-            oldSkill.saveInBackground(new SaveCallback() {
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Toast.makeText(getContext(),"Update successfully",Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(),"Update failed",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            oldSkill.saveInBackground();
         }
 
         //Forward to parent
@@ -176,14 +164,13 @@ public class SkillsFragment extends Fragment
 
     @Override
     public void onSwipeDelete(String id) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Skill");
-        query.whereEqualTo("objectId",id);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
+        ParseQuery<Skill> query = ParseQuery.getQuery(Skill.class);
+        query.getInBackground(id, new GetCallback<Skill>() {
             @Override
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
+            public void done(Skill object, ParseException e) {
+                if (e == null)
                     object.deleteInBackground();
-                } else
+                else
                     Toast.makeText(getContext(),"Delete failed",Toast.LENGTH_SHORT).show();
             }
         });

@@ -14,9 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
@@ -31,7 +30,6 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -133,13 +131,13 @@ public class AddTaskFragment extends Fragment {
             String taskId = getArguments().getString("taskId");
             btnAddTask.setText("Edit Task");
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Task");
-            query.whereEqualTo("objectId",taskId);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> objects, com.parse.ParseException e) {
+            ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+            query.getInBackground(taskId,new GetCallback<Task>() {
+                @Override
+                public void done(Task object, com.parse.ParseException e) {
                     if (e == null) {
                         Log.d("Parse","Get task from parse");
-                        task = (Task)objects.get(0);
+                        task = object;
                         populateView(task);
                     } else {
                         Log.d("Parse","Get task from parse error" + e.toString());
