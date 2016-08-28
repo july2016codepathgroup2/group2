@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -129,8 +128,6 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
-                            Toast.makeText(getContext(), "Successfully created message on Parse",
-                                    Toast.LENGTH_LONG).show();
                             refreshMessages();
                         } else {
                             Log.d("debug", "Failed to save message", e);
