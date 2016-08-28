@@ -2,7 +2,6 @@ package com.pensum.pensumapplication.fragments;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -76,7 +75,6 @@ public class MessagesFragment extends GridFragment{
         } else {
             // go directly to messages if you are the candidate
             listener.launchChatFragment(conversation);
-            Toast.makeText(getContext(),"Go to messages from posted_by",Toast.LENGTH_LONG).show();
         }
     }
 }
