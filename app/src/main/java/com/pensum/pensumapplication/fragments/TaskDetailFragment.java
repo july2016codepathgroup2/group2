@@ -111,15 +111,6 @@ public class TaskDetailFragment extends DialogFragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-//        , new GetCallback<Task>() {
-//            public void done(Task item, ParseException e) {
-//                if (e == null) {
-//                    // item was found
-//                    task = item;
-//                }
-//            }
-//        });
     }
 
     private void populateViews(View view) {
