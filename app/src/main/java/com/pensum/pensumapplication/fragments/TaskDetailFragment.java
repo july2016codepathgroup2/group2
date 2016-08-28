@@ -1,7 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -53,7 +51,7 @@ public class TaskDetailFragment extends DialogFragment {
         void launchContactOwnerDialog(Task task);
         void launchProfileFragment(String userId);
         void launchEditTaskFragment(Task task);
-        public void launchAcceptCandidateDialog(Task task);
+        void launchAcceptCandidateDialog(Task task);
     }
 
     @Override
@@ -78,16 +76,21 @@ public class TaskDetailFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task_detail, container);
+        View view;
+        fetchSelectedTask();
+        if (TextUtils.equals(task.getPostedBy().getObjectId(),ParseUser.getCurrentUser().getObjectId())){
+            view = inflater.inflate(R.layout.fragment_task_detail_owner, container);
+        } else {
+            view = inflater.inflate(R.layout.fragment_task_detail, container);
+        }
         unbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fetchSelectedTaskAndPopulateView();
+        populateViews(view);
     }
 
     @Override public void onDestroyView() {
@@ -95,83 +98,75 @@ public class TaskDetailFragment extends DialogFragment {
         unbinder.unbind();
     }
 
-    private void fetchSelectedTaskAndPopulateView() {
+    private void fetchSelectedTask() {
         String taskId =  getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
         //TODO The update data will not show
         // First try to find from the cache and only then go to network
         // query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         // Execute the query to find the object with ID
-        query.getInBackground(taskId, new GetCallback<Task>() {
-            public void done(Task item, ParseException e) {
-                if (e == null) {
-                    // item was found
-                    task = item;
-                    populateViews();
-                }
-            }
-        });
+        query.include("posted_by");
+        try {
+            task = query.get(taskId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+//        , new GetCallback<Task>() {
+//            public void done(Task item, ParseException e) {
+//                if (e == null) {
+//                    // item was found
+//                    task = item;
+//                }
+//            }
+//        });
     }
 
-    private void populateViews() {
+    private void populateViews(View view) {
         tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         tvStatus.setText(task.getStatus());
-        if(task.getImages() == null || task.getImages().length() < 1)
+        if(task.getImages() == null || task.getImages().length() < 1) {
             rvTaskImages.setVisibility(View.GONE);
-        try {
-            ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
-            Button button = new Button(getContext());
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            params.addRule(RelativeLayout.ALIGN_PARENT_END);
-            button.setId(0);
-            button.setLayoutParams(params); //causes layout update
-            if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
-                if(TextUtils.equals(task.getStatus(),"open")){
-                    ImageButton ibEditTask = new ImageButton(getContext());
-                    RelativeLayout.LayoutParams ibParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT);
-                    ibParams.addRule(RelativeLayout.LEFT_OF, button.getId());
-                    ibParams.addRule(RelativeLayout.START_OF, button.getId());
-                    int[] attrs = new int[]{R.attr.selectableItemBackground};
-                    TypedArray typedArray = getContext().obtainStyledAttributes(attrs);
-                    int backgroundResource = typedArray.getResourceId(0, 0);
-                    ibEditTask.setBackgroundResource(backgroundResource);
-                    typedArray.recycle();
-                    ibEditTask.setBackground(getResources().getDrawable(R.drawable.ic_create_black_24dp,null));
-                    ibEditTask.setLayoutParams(ibParams);
-                    ibEditTask.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            listener.launchEditTaskFragment(task);
-                            dismiss();
-                        }
-                    });
-                    button.setText(getResources().getString(R.string.accept));
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            listener.launchAcceptCandidateDialog(task);
-                            dismiss();
-                        }
-                    });
-                } else if (TextUtils.equals(task.getStatus(),"accepted")){
-                    button.setText(getResources().getString(R.string.complete));
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // TODO this needs to be written
-                            //listener.launchCompleteTaskDialog(task);
-                        }
-                    });
-                }
+        }
+
+        Button btnAction = (Button) view.findViewById(R.id.btnAction);
+        ParseUser postedBy = task.getPostedBy();
+         if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
+
+             if(TextUtils.equals(task.getStatus(),"open")){
+                 btnAction.setText(getResources().getString(R.string.accept));
+                 btnAction.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         listener.launchAcceptCandidateDialog(task);
+                         dismiss();
+                     }
+                 });
+             } else if (TextUtils.equals(task.getStatus(),"accepted")){
+                 btnAction.setText(getResources().getString(R.string.complete));
+                 btnAction.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         // TODO this needs to be written
+                         //listener.launchCompleteTaskDialog(task);
+                     }
+                 });
+             }
+
+             ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
+
+             ibEditTask.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     listener.launchEditTaskFragment(task);
+                     dismiss();
+                 }
+             });
             } else {
-                button.setText(getResources().getString(R.string.contact));
-                button.setOnClickListener(new View.OnClickListener() {
+             btnAction.setText(getResources().getString(R.string.contact));
+             btnAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         listener.launchContactOwnerDialog(task);
@@ -195,9 +190,6 @@ public class TaskDetailFragment extends DialogFragment {
                 Picasso.with(getContext()).load(imageUrl).
                         transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
             }
-            rlTaskDetail.addView(button);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 }
+

@@ -63,10 +63,4 @@ public abstract class GridFragment extends Fragment {
 
     abstract void showDetailFragment(Task task);
 
-//    private void showDetailFragment(Task task) {
-//        FragmentManager fm = getFragmentManager();
-//        TaskDetailFragment taskDetailFragment =
-//                TaskDetailFragment.newInstance(task.getObjectId());
-//        taskDetailFragment.show(fm, "fragment_task_detail");
-//    }
 }
