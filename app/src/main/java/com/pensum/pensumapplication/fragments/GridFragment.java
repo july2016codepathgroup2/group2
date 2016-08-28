@@ -8,11 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.adapters.TasksAdapter;
+import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by violetaria on 8/16/16.
@@ -33,7 +39,7 @@ public abstract class GridFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.frame_tasks, container, false);
@@ -41,7 +47,23 @@ public abstract class GridFragment extends Fragment {
         adapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                showDetailFragment(tasks.get(position));
+                //Searching for conversation
+                final Task clickedTask = tasks.get(position);
+                ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");
+                query.whereEqualTo("task", clickedTask);
+                query.whereEqualTo("owner", clickedTask.getPostedBy());
+                query.whereEqualTo("candidate", ParseUser.getCurrentUser());
+                query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                query.findInBackground(new FindCallback<Conversation>() {
+                    @Override
+                    public void done(List<Conversation> conversations, ParseException e) {
+                        Conversation conversation = null;
+                        if (conversations.size() > 0) {
+                            conversation = conversations.get(0);
+                        }
+                        showDetailFragment(clickedTask, conversation);
+                    }
+                });
             }
         });
 
@@ -61,6 +83,6 @@ public abstract class GridFragment extends Fragment {
 
     abstract void populateTasks();
 
-    abstract void showDetailFragment(Task task);
+    abstract void showDetailFragment(Task task, Conversation conversation);
 
 }

@@ -7,6 +7,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class MyCompletedTasks extends GridFragment{
         });
     }
 
-    public void showDetailFragment(Task task) {
+    public void showDetailFragment(Task task, Conversation conversation) {
         FragmentManager fm = getFragmentManager();
         TaskDetailFragment taskDetailFragment =
                 TaskDetailFragment.newInstance(task.getObjectId());

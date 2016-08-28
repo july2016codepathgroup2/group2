@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.fragments.AcceptTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.AddTaskFragment;
+import com.pensum.pensumapplication.fragments.ChatFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.ConversationFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
@@ -31,6 +32,7 @@ import com.pensum.pensumapplication.fragments.MyPostedTasks;
 import com.pensum.pensumapplication.fragments.ProfileFragment;
 import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
+import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
@@ -251,6 +253,15 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ConversationFragment conversationFragment = ConversationFragment.newInstance(task.getObjectId());
         ft.replace(R.id.flContent, conversationFragment);
         ft.addToBackStack("convo list");
+        ft.commit();
+    }
+
+    @Override
+    public void launchChatFragment(Conversation conversation) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ChatFragment chatFragment = ChatFragment.newInstance(conversation.getObjectId());
+        ft.replace(R.id.flContent, chatFragment);
+        ft.addToBackStack("chat fragment");
         ft.commit();
     }
 }
