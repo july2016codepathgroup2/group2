@@ -26,6 +26,7 @@ import com.pensum.pensumapplication.fragments.CompleteTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.ConversationFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
+import com.pensum.pensumapplication.fragments.MapFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
 import com.pensum.pensumapplication.fragments.MyAcceptedTasks;
 import com.pensum.pensumapplication.fragments.MyCompletedTasks;
@@ -38,7 +39,7 @@ import com.pensum.pensumapplication.models.Task;
 
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
-        MessagesFragment.OnConversationClickedListener {
+        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -219,6 +220,8 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ft.commit();
     }
 
+
+
     @Override
     public void launchContactOwnerDialog(Task task) {
         FragmentManager fm = getSupportFragmentManager();
@@ -272,4 +275,11 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         completeTaskDialogFragment.show(fm, "fragment_complete_task");
     }
 
+    @Override
+    public void infoWindowClicked(Task task) {
+        FragmentManager fm = getSupportFragmentManager();
+        TaskDetailFragment taskDetailFragment =
+                TaskDetailFragment.newInstance(task.getObjectId());
+        taskDetailFragment.show(fm, "fragment_task_detail");
+    }
 }
