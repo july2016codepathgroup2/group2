@@ -148,7 +148,7 @@ public class MapFragment extends Fragment implements
         query.include("posted_by");
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
         query.findInBackground(new FindCallback<Task>() {
             public void done(List<Task> tasks, ParseException e) {
                 if (e == null) {
@@ -199,15 +199,15 @@ public class MapFragment extends Fragment implements
                 public View getInfoContents(Marker marker) {
 
                     View v = getActivity().getLayoutInflater().inflate(R.layout.custom_info_window, null);
-                    TextView tvTitle = (TextView) v.findViewById(R.id.etTitle);
-                    TextView tvDescription = (TextView) v.findViewById(R.id.etDescription);
+                    TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+                    TextView tvType = (TextView) v.findViewById(R.id.tvType);
                     TextView tvBudget = (TextView) v.findViewById(R.id.tvBudget);
                     ImageView ivProfileImage = (ImageView) v.findViewById(R.id.ivProfileImage);
 
                     Task task = markers.get(marker.getId()); //use the ID to get the info
                     tvTitle.setText(task.getTitle());
-                    tvDescription.setText(task.getDescription());
                     tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
+                    tvType.setText("#"+task.getType());
                     ParseUser postedBy = task.getPostedBy();
                     String imageUrl = postedBy.getString("profilePicUrl");
                     if (imageUrl != null) {

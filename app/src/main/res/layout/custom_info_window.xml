@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
               xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
@@ -14,33 +14,34 @@
         android:id="@+id/ivProfileImage"/>
 
     <TextView
-        android:id="@+id/etTitle"
+        android:id="@+id/tvType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/infoWindowText"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:singleLine="true"
+        android:padding="5dp"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        style="@android:style/TextAppearance.Medium"
+        android:background="@drawable/rounded_corner_textview"
+        tools:text="Label"/>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        style="@android:style/TextAppearance.Medium"
+        android:gravity="center"
         android:layout_marginBottom="5dp"
         tools:text="I need my house cleaned"
         android:layout_gravity="center"/>
 
     <TextView
-        android:id="@+id/etDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/infoWindowText"
-        android:textSize="12sp"
-        tools:text="It's really messy and unorganized, and I need help."
-        android:layout_gravity="center"
-        />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvBudget"
-        android:textColor="@color/infoWindowText"
-        android:textSize="12sp"
+        style="@android:style/TextAppearance.Large"
+        android:textStyle="bold"
+        android:textColor="#2BA11A"
         tools:text="$55.00"
         android:layout_gravity="center"
         />
