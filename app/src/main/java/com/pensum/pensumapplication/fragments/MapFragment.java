@@ -2,6 +2,7 @@ package com.pensum.pensumapplication.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -80,7 +81,7 @@ public class MapFragment extends Fragment implements
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private View view;
-    private HashMap<String, Task> markers= new HashMap<String, Task>();
+    private HashMap<String, Task> markers = new HashMap<String, Task>();
     private Map<String, Marker> taskTitleToMarkerMap = new HashMap<>();
     private SearchView searchView;
     private String typeFilter;
@@ -88,16 +89,33 @@ public class MapFragment extends Fragment implements
     private double budgetFilter;
     private String zipCode;
 
+    private InfoWindowListener listener;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
+    public interface InfoWindowListener {
+        void infoWindowClicked(Task task);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof InfoWindowListener) {
+            listener = (InfoWindowListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement MapFragment.InfoWindowListener");
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       try {
+        try {
             if (view == null) {
                 view = inflater.inflate(R.layout.fragment_tasks_map, container, false);
                 mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
@@ -123,13 +141,14 @@ public class MapFragment extends Fragment implements
         return view;
     }
 
-    public void populateTasks(){
+    public void populateTasks() {
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-        query.whereNotEqualTo("posted_by",ParseUser.getCurrentUser());
-        query.whereEqualTo("status","open");
+        query.whereNotEqualTo("posted_by", ParseUser.getCurrentUser());
+        query.whereEqualTo("status", "open");
+        query.include("posted_by");
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
         query.findInBackground(new FindCallback<Task>() {
             public void done(List<Task> tasks, ParseException e) {
                 if (e == null) {
@@ -137,9 +156,9 @@ public class MapFragment extends Fragment implements
                     map.clear();
                     BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
-                    for(int i = 0; i < tasks.size(); i++){
+                    for (int i = 0; i < tasks.size(); i++) {
                         ParseGeoPoint location = tasks.get(i).getLocation();
-                        LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
+                        LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
                         String title = tasks.get(i).getTitle();
                         Task task = tasks.get(i);
                         MarkerOptions markerOptions = new MarkerOptions().position(point).title(title).icon(defaultMarker);
@@ -180,45 +199,30 @@ public class MapFragment extends Fragment implements
                 public View getInfoContents(Marker marker) {
 
                     View v = getActivity().getLayoutInflater().inflate(R.layout.custom_info_window, null);
-
-                    TextView tvTitle = (TextView) v.findViewById(R.id.etTitle);
-
-                    TextView tvDescription = (TextView) v.findViewById(R.id.etDescription);
-
+                    TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+                    TextView tvType = (TextView) v.findViewById(R.id.tvType);
                     TextView tvBudget = (TextView) v.findViewById(R.id.tvBudget);
-
                     ImageView ivProfileImage = (ImageView) v.findViewById(R.id.ivProfileImage);
 
                     Task task = markers.get(marker.getId()); //use the ID to get the info
-
                     tvTitle.setText(task.getTitle());
-
-                    tvDescription.setText(task.getDescription());
-
                     tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
-
-                    try {
-                        ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
-                        String imageUrl = postedBy.getString("profilePicUrl");
-                        if (imageUrl != null){
-                            Picasso.with(getContext()).load(imageUrl).
-                                    transform(new CropCircleTransformation()).into(ivProfileImage);
-                        } else {
-                            Picasso.with(getContext()).load(R.mipmap.ic_launcher).
-                                    transform(new CropCircleTransformation()).into(ivProfileImage);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    tvType.setText("#"+task.getType());
+                    ParseUser postedBy = task.getPostedBy();
+                    String imageUrl = postedBy.getString("profilePicUrl");
+                    if (imageUrl != null) {
+                        Picasso.with(getContext()).load(imageUrl).
+                                transform(new CropCircleTransformation()).into(ivProfileImage);
+                    } else {
+                        Picasso.with(getContext()).load(R.mipmap.ic_launcher).
+                                transform(new CropCircleTransformation()).into(ivProfileImage);
                     }
-
                     return v;
-
                 }
             });
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    // TODO launch task detail activity
                     Task task = markers.get(marker.getId());
                     return false;
                 }
@@ -246,7 +250,7 @@ public class MapFragment extends Fragment implements
             return true;
         } else {
             // Get the error dialog from Google Play services
-            if(googleAPI.isUserResolvableError(resultCode)) {
+            if (googleAPI.isUserResolvableError(resultCode)) {
                 googleAPI.getErrorDialog(getActivity(), resultCode,
                         CONNECTION_FAILURE_RESOLUTION_REQUEST).show();
             }
@@ -266,13 +270,13 @@ public class MapFragment extends Fragment implements
     void getMyLocation() {
         if (map != null) {
             // Now that map has loaded, let's get our location!
-        map.setMyLocationEnabled(true);
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
-        connectClient();
-       }
+            map.setMyLocationEnabled(true);
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+            connectClient();
+        }
     }
 
     protected void connectClient() {
@@ -319,7 +323,7 @@ public class MapFragment extends Fragment implements
     }
 
     private void setupSearchMenuItem(Menu menu) {
-        MenuItem searchItem  = menu.findItem(R.id.miSearch);
+        MenuItem searchItem = menu.findItem(R.id.miSearch);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -397,7 +401,7 @@ public class MapFragment extends Fragment implements
         switch (requestCode) {
 
             case CONNECTION_FAILURE_RESOLUTION_REQUEST:
-			/*
+            /*
 			 * If the result code is Activity.RESULT_OK, try to connect again
 			 */
                 switch (resultCode) {
@@ -509,11 +513,9 @@ public class MapFragment extends Fragment implements
                     "Sorry. Location services not available to you", Toast.LENGTH_LONG).show();
         }
     }
+
     private void showTaskDetailFragment(Task task) {
-        FragmentManager fm = getFragmentManager();
-        TaskDetailFragment taskDetailFragment =
-                TaskDetailFragment.newInstance(task.getObjectId());
-        taskDetailFragment.show(fm, "fragment_task_detail");
+        listener.infoWindowClicked(task);
     }
 }
 
