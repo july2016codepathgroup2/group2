@@ -11,6 +11,7 @@ import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Skill;
 import com.pensum.pensumapplication.models.Task;
+import com.pensum.pensumapplication.models.Stat;
 
 /**
  * Created by violetaria on 8/17/16.
@@ -24,6 +25,7 @@ public class PensumApplication extends Application {
         ParseObject.registerSubclass(Conversation.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Skill.class);
+        ParseObject.registerSubclass(Stat.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.parse_app_id)) // should correspond to APP_ID env variable

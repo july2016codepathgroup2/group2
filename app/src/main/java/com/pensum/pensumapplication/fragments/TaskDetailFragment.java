@@ -52,6 +52,7 @@ public class TaskDetailFragment extends DialogFragment {
         void launchProfileFragment(String userId);
         void launchEditTaskFragment(Task task);
         void launchAcceptCandidateDialog(Task task);
+        void launchCompleteTaskDialogFragment(Task task);
     }
 
     @Override
@@ -140,8 +141,8 @@ public class TaskDetailFragment extends DialogFragment {
                  btnAction.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View view) {
-                         // TODO this needs to be written
-                         //listener.launchCompleteTaskDialog(task);
+                         listener.launchCompleteTaskDialogFragment(task);
+                         dismiss();
                      }
                  });
              }

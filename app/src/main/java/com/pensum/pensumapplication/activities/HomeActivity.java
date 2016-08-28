@@ -22,6 +22,7 @@ import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.fragments.AcceptTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.AddTaskFragment;
 import com.pensum.pensumapplication.fragments.ChatFragment;
+import com.pensum.pensumapplication.fragments.CompleteTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.ConversationFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
@@ -264,4 +265,11 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ft.addToBackStack("chat fragment");
         ft.commit();
     }
+
+    public void launchCompleteTaskDialogFragment(Task task){
+        FragmentManager fm = getSupportFragmentManager();
+        CompleteTaskDialogFragment completeTaskDialogFragment = CompleteTaskDialogFragment.newInstance(task.getObjectId());
+        completeTaskDialogFragment.show(fm, "fragment_complete_task");
+    }
+
 }
