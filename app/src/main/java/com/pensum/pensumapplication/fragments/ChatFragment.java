@@ -1,8 +1,11 @@
 package com.pensum.pensumapplication.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +14,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.adapters.ChatListAdapter;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 
-public class ChatFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+public class ChatFragment extends Fragment {
+    private final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
+    private final int POLL_INTERVAL = 1000;
+
+    private RecyclerView rvChat;
+    private List<Message> messages;
+    private ChatListAdapter adapter;
+    private boolean firstLoad;
     private EditText etChatMessage;
     private Button btSendChat;
     private ParseUser sendingUser;
@@ -80,7 +95,16 @@ public class ChatFragment extends Fragment {
     }
 
     private void setupMessagePosting(View view) {
+        messages = new ArrayList<>();
+        firstLoad = true;
+        adapter = new ChatListAdapter(getContext(), messages);
+
+        rvChat = (RecyclerView) view.findViewById(R.id.rvChat);
+        rvChat.setAdapter(adapter);
+        rvChat.setLayoutManager(new LinearLayoutManager(getContext()));
+
         etChatMessage = (EditText) view.findViewById(R.id.etChatMessage);
+
         btSendChat = (Button) view.findViewById(R.id.btSendChat);
         btSendChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,12 +121,43 @@ public class ChatFragment extends Fragment {
                         if (e == null) {
                             Toast.makeText(getContext(), "Successfully created message on Parse",
                                     Toast.LENGTH_LONG).show();
+                            refreshMessages();
                         } else {
                             Log.d("debug", "Failed to save message", e);
                         }
                     }
                 });
                 etChatMessage.setText(null);
+            }
+        });
+    }
+
+    private void refreshMessages() {
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
+        query.orderByDescending("createdAt");
+        query.whereEqualTo("conversation", conversation);
+        query.findInBackground(new FindCallback<Message>() {
+            @Override
+            public void done(List<Message> queriedMessages, ParseException e) {
+                if (e == null) {
+                    int previousMessagesSize = messages.size();
+                    // check to see that we only refresh adapter if we get new messages
+                    if (previousMessagesSize != queriedMessages.size()) {
+                        messages.clear();
+                        adapter.notifyItemRangeRemoved(0, previousMessagesSize);
+                        Collections.reverse(queriedMessages);
+                        messages.addAll(queriedMessages);
+                        adapter.notifyItemRangeInserted(0, queriedMessages.size());
+                        rvChat.scrollToPosition(adapter.getItemCount() - 1);
+                        if (firstLoad) {
+                            rvChat.scrollToPosition(adapter.getItemCount() - 1);
+                            firstLoad = false;
+                        }
+                    }
+                } else {
+                    Log.e("message", "Error Loading Messages" + e);
+                }
             }
         });
     }
