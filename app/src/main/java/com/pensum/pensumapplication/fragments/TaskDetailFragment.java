@@ -1,10 +1,11 @@
 package com.pensum.pensumapplication.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
@@ -36,8 +38,9 @@ public class TaskDetailFragment extends DialogFragment {
     @BindView(R.id.tvStatus)TextView tvStatus;
     @BindView(R.id.tvBudget)TextView tvBudget;
     @BindView(R.id.ivTaskDetailOwnerProf)ImageView ivTaskDetailOwnerProf;
-    @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
+//    @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
     @BindView(R.id.rlTaskDetail) RelativeLayout rlTaskDetail;
+    @BindView(R.id.ivTaskPic) ImageView ivTaskPic;
 
     private Task task;
     private OnTaskDetailActionListener listener;
@@ -118,8 +121,17 @@ public class TaskDetailFragment extends DialogFragment {
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         tvStatus.setText(task.getStatus());
-        if(task.getImages() == null || task.getImages().length() < 1) {
-            rvTaskImages.setVisibility(View.GONE);
+//        if(task.getImages() == null || task.getImages().length() < 1) {
+//            rvTaskImages.setVisibility(View.GONE);
+//        }
+
+        try {
+            ParseFile parseFile = task.getTaskPic();
+            byte[] data = parseFile.getData();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            ivTaskPic.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Button btnAction = (Button) view.findViewById(R.id.btnAction);
