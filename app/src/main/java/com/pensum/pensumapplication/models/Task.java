@@ -40,6 +40,14 @@ public class Task extends ParseObject {
         put("posted_by",postedBy);
     }
 
+    public void setCandidate(ParseUser candidate) {
+        put("candidate",candidate);
+    }
+
+    public void setAcceptedoffer(BigDecimal acceptedOffer) {
+        put("accepted_offer",acceptedOffer);
+    }
+
     public void setStatus(String status) {
         put("status", status);
     }
@@ -62,6 +70,10 @@ public class Task extends ParseObject {
         return getDouble("budget");
     }
 
+    public Double getAcceptedOffer() {
+        return getDouble("accepted_offer");
+    }
+
     public String getDescription() {
         return getString("description");
     }
@@ -79,6 +91,8 @@ public class Task extends ParseObject {
     public String getType() {
         return getString("type");
     }
+
+    public ParseUser getCandidate() { return getParseUser("candidate"); }
 
     public LatLng getLatLng() {
         LatLng latlng = new LatLng(getLatitude(), getLongitude());

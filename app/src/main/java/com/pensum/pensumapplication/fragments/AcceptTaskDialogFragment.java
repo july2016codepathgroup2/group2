@@ -20,6 +20,7 @@ import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,6 @@ public class AcceptTaskDialogFragment extends DialogFragment {
     @BindView(R.id.btnAccept) Button btnAccept;
 
     private Unbinder unbinder;
-    private Task task;
     private ArrayList<Conversation> conversations;
 
     public AcceptTaskDialogFragment(){}
@@ -51,29 +51,40 @@ public class AcceptTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        conversations = new ArrayList<>();
         String taskObjectId = getArguments().getString("task_object_id");
+        Task task = new Task();
+        task.setObjectId(taskObjectId);
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
         //query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
-        query.whereEqualTo("task.objectId", taskObjectId);
+        query.whereEqualTo("task", task);
         query.include("candidate");
+        query.include("task");
         query.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {
                     List<String> spinnerArray =  new ArrayList<String>();
                     for(Conversation c: conversationsFromQuery) {
-                        spinnerArray.add(FormatterHelper.formatName(c.getCandidate().getString("fbName")) + " - " + c.getOffer().toString());
+                        spinnerArray.add(FormatterHelper.formatName(c.getCandidate().getString("fbName")) + "  -  " + FormatterHelper.formatMoney(c.getOffer().toString()));
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getActivity(), android.R.layout.simple_spinner_item, spinnerArray);
+//                    CandidateSpinnerAdapter adapter = new CandidateSpinnerAdapter(
+//                            getContext(), R.layout.candidate_spinner_item, conversationsFromQuery);
+//
+//                    adapter.setDropDownViewResource(R.layout.candidate_spinner_item);
 
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    ArrayAdapter<String> adapter =  new ArrayAdapter(
+                            getContext(),android.R.layout.simple_list_item_1 ,spinnerArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+
                     spCandidates.setAdapter(adapter);
+                    conversations.addAll(conversationsFromQuery);
                 } else {
                     Log.e("message", "Error Loading Messages" + e);
                 }
             }
         });
+
     }
 
     @Nullable
@@ -81,6 +92,19 @@ public class AcceptTaskDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accept_task, parent, false);
         unbinder = ButterKnife.bind(this, view);
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Conversation conversation = conversations.get(spCandidates.getSelectedItemPosition());
+                Task task =  conversation.getTask();
+                task.setStatus("accepted");
+                task.setCandidate(conversation.getCandidate());
+                task.setAcceptedoffer(new BigDecimal(conversation.getOffer()));
+                task.saveInBackground();
+                dismiss();
+            }
+        });
+
         return view;
     }
 
