@@ -147,6 +147,8 @@ public class ContactOwnerFragment extends DialogFragment {
 
     public void sendMessage(View view){
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
+        query.whereEqualTo("candidate",ParseUser.getCurrentUser());
+        query.whereEqualTo("task",task);
         // TODO figure out which cache policy to use here
         //query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY); // or CACHE_ONLY
         query.getFirstInBackground(new GetCallback<Conversation>() {
