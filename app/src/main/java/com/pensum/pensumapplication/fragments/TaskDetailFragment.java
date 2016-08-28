@@ -84,7 +84,7 @@ public class TaskDetailFragment extends DialogFragment {
         String taskId =  getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
         // First try to find from the cache and only then go to network
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
+        // query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         // Execute the query to find the object with ID
         query.getInBackground(taskId, new GetCallback<Task>() {
             public void done(Task item, ParseException e) {
@@ -112,13 +112,24 @@ public class TaskDetailFragment extends DialogFragment {
             params.addRule(RelativeLayout.ALIGN_PARENT_END);
             button.setLayoutParams(params); //causes layout update
             if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
-                button.setText(getResources().getString(R.string.accept));
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.launchAcceptCandidateDialog(task);
-                    }
-                });
+                if(TextUtils.equals(task.getStatus(),"open")){
+                    button.setText(getResources().getString(R.string.accept));
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            listener.launchAcceptCandidateDialog(task);
+                        }
+                    });
+                } else {
+                    button.setText(getResources().getString(R.string.complete));
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // TODO this needs to be written
+                            //listener.launchCompleteTaskDialog(task);
+                        }
+                    });
+                }
             } else {
                 button.setText(getResources().getString(R.string.contact));
                 button.setOnClickListener(new View.OnClickListener() {
