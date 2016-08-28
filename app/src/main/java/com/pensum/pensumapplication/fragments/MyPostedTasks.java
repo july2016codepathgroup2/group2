@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -74,6 +76,15 @@ public class MyPostedTasks extends GridFragment {
     @Override
     public void onSwipeDelete(String id) {
         // Delete Task in Parse
-        //TODO
+        ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+        query.getInBackground(id, new GetCallback<Task>() {
+            @Override
+            public void done(Task object, ParseException e) {
+                if (e == null)
+                    object.deleteInBackground();
+                else
+                    Toast.makeText(getContext(),"Delete failed",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
