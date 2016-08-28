@@ -132,7 +132,7 @@ public class ConversationFragment extends Fragment {
         candidateQuery.include("posted_by");
 
         subConversationQueries.add(candidateQuery);
-        ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task");
+        ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task").include("candidate").include("posted_by");
         mainConversationQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {

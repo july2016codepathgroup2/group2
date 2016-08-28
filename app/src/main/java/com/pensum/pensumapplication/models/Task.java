@@ -56,6 +56,8 @@ public class Task extends ParseObject {
         put("title",title);
     }
 
+    public void setRating(BigDecimal rating) { put("rating",rating);}
+
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
     public JSONArray getImages() {
@@ -72,6 +74,10 @@ public class Task extends ParseObject {
 
     public Double getAcceptedOffer() {
         return getDouble("accepted_offer");
+    }
+
+    public Double getRating() {
+        return getDouble("rating");
     }
 
     public String getDescription() {
