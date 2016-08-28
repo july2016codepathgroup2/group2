@@ -77,4 +77,9 @@ public class MessagesFragment extends GridFragment{
             Toast.makeText(getContext(),"Go to messages from posted_by",Toast.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        // Not applicable
+    }
 }
