@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 public class FormatterHelper {
     public static String formatName(String fullName){
         String[] nameParts = fullName.split(" ");
-        String displayName = "" + nameParts[0];
+        String displayName = "" + nameParts[0] + " ";
         if(nameParts.length > 1)
         {
             displayName += nameParts[nameParts.length-1].charAt(0) + ".";

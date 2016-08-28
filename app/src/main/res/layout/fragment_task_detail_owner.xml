@@ -61,6 +61,14 @@
         android:layout_toRightOf="@+id/tvStatusLabel"
         tools:text="Open"/>
 
+    <!--<Spinner-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:entries="@array/status_array"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:layout_below="@id/tvBudget"-->
+        <!--android:layout_toRightOf="@+id/tvStatusLabel"/>-->
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTaskImages"
         android:layout_width="match_parent"
@@ -76,6 +84,18 @@
         android:layout_alignParentStart="true"
         tools:src="@mipmap/ic_launcher"
         android:layout_marginBottom="5dp"/>
+
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ibEditTask"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_create_black_24dp"
+        android:layout_alignBottom="@+id/ivTaskDetailOwnerProf"
+        android:layout_toLeftOf="@+id/btnAction"
+        android:layout_alignTop="@+id/btnAction"/>
 
     <Button
         android:layout_width="wrap_content"

@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -33,11 +33,11 @@ public class TaskDetailFragment extends DialogFragment {
 
     @BindView(R.id.tvDescription)TextView tvDescriptionLabel;
     @BindView(R.id.tvTitle)TextView tvTitle;
+    @BindView(R.id.tvStatus)TextView tvStatus;
     @BindView(R.id.tvBudget)TextView tvBudget;
-    @BindView(R.id.btnContact)Button btnContact;
     @BindView(R.id.ivTaskDetailOwnerProf)ImageView ivTaskDetailOwnerProf;
     @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
-    @BindView(R.id.ibEditTask)ImageButton ibEditTask;
+    @BindView(R.id.rlTaskDetail) RelativeLayout rlTaskDetail;
 
     private Task task;
     private OnTaskDetailActionListener listener;
@@ -51,6 +51,7 @@ public class TaskDetailFragment extends DialogFragment {
         void launchContactOwnerDialog(Task task);
         void launchProfileFragment(String userId);
         void launchEditTaskFragment(Task task);
+        void launchAcceptCandidateDialog(Task task);
     }
 
     @Override
@@ -75,16 +76,21 @@ public class TaskDetailFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task_detail, container);
+        View view;
+        fetchSelectedTask();
+        if (TextUtils.equals(task.getPostedBy().getObjectId(),ParseUser.getCurrentUser().getObjectId())){
+            view = inflater.inflate(R.layout.fragment_task_detail_owner, container);
+        } else {
+            view = inflater.inflate(R.layout.fragment_task_detail, container);
+        }
         unbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fetchSelectedTaskAndPopulateView();
+        populateViews(view);
     }
 
     @Override public void onDestroyView() {
@@ -92,73 +98,89 @@ public class TaskDetailFragment extends DialogFragment {
         unbinder.unbind();
     }
 
-    private void fetchSelectedTaskAndPopulateView() {
+    private void fetchSelectedTask() {
         String taskId =  getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
         //TODO The update data will not show
         // First try to find from the cache and only then go to network
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
+        // query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         // Execute the query to find the object with ID
-        query.getInBackground(taskId, new GetCallback<Task>() {
-            public void done(Task item, ParseException e) {
-                if (e == null) {
-                    // item was found
-                    task = item;
-                    populateViews();
-                }
-            }
-        });
+        query.include("posted_by");
+        try {
+            task = query.get(taskId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void populateViews() {
+    private void populateViews(View view) {
         tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
-        if(task.getImages() == null || task.getImages().length() < 1)
+        tvStatus.setText(task.getStatus());
+        if(task.getImages() == null || task.getImages().length() < 1) {
             rvTaskImages.setVisibility(View.GONE);
+        }
 
-        // TODO create button programattically vs in the xml, right now it flashes in and out
-        try {
-            ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
-            if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
-                btnContact.setVisibility(View.INVISIBLE);
-                ibEditTask.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.launchEditTaskFragment(task);
-                        dismiss();
-                    }
-                });
+        Button btnAction = (Button) view.findViewById(R.id.btnAction);
+        ParseUser postedBy = task.getPostedBy();
+         if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
+
+             if(TextUtils.equals(task.getStatus(),"open")){
+                 btnAction.setText(getResources().getString(R.string.accept));
+                 btnAction.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         listener.launchAcceptCandidateDialog(task);
+                         dismiss();
+                     }
+                 });
+             } else if (TextUtils.equals(task.getStatus(),"accepted")){
+                 btnAction.setText(getResources().getString(R.string.complete));
+                 btnAction.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         // TODO this needs to be written
+                         //listener.launchCompleteTaskDialog(task);
+                     }
+                 });
+             }
+
+             ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
+
+             ibEditTask.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     listener.launchEditTaskFragment(task);
+                     dismiss();
+                 }
+             });
             } else {
-                final String userId = postedBy.getObjectId();
-
-                ibEditTask.setVisibility(View.INVISIBLE);
-                btnContact.setVisibility(View.VISIBLE);
-                btnContact.setOnClickListener(new View.OnClickListener() {
+             btnAction.setText(getResources().getString(R.string.contact));
+             btnAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         listener.launchContactOwnerDialog(task);
-                    }
-                });
-
-                ivTaskDetailOwnerProf.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.launchProfileFragment(userId);
-
-                        // Close the dialog and return back to the parent
                         dismiss();
                     }
                 });
             }
 
+            final String userId = postedBy.getObjectId();
+            ivTaskDetailOwnerProf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.launchProfileFragment(userId);
+
+                    // Close the dialog and return back to the parent
+                    dismiss();
+                }
+            });
             String imageUrl = postedBy.getString("profilePicUrl");
             if (imageUrl != null){
                 Picasso.with(getContext()).load(imageUrl).
                         transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 }
+

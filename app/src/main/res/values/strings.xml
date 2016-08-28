@@ -33,6 +33,8 @@
     <string name="cancel">Cancel</string>
     <string name="price">Price Offered</string>
     <string name="zero_dollars">$0.00</string>
+    <string name="choose_candidate">Choose a Candidate</string>
+    <string name="complete">Complete</string>
     <string name="chat_message_hint">Type your message here.</string>
     <string name="profile_me">My Profile Picture</string>
     <string name="profile_other">Other Profile Picture</string>
