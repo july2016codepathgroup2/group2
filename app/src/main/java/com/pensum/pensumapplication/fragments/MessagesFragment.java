@@ -70,11 +70,16 @@ public class MessagesFragment extends GridFragment{
     }
 
     public void showDetailFragment(Task task, Conversation conversation) {
-        if(task.getPostedBy() == ParseUser.getCurrentUser()){
+        if(task.getPostedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())){
             listener.launchConversationsFragment(task);
         } else {
             // go directly to messages if you are the candidate
             listener.launchChatFragment(conversation);
         }
+    }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        // Not applicable
     }
 }

@@ -44,4 +44,9 @@ public class MyCompletedTasks extends GridFragment{
                 TaskDetailFragment.newInstance(task.getObjectId());
         taskDetailFragment.show(fm, "fragment_task_detail");
     }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        // Not applicable
+    }
 }

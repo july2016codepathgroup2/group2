@@ -1,6 +1,7 @@
 package com.pensum.pensumapplication.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.fragments.profile.ItemTouchHelperAdapter;
+import com.pensum.pensumapplication.fragments.profile.ItemTouchHelperViewHolder;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
 
@@ -19,9 +22,15 @@ import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
+public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
+        implements ItemTouchHelperAdapter {
+
+    public interface SwipeDeleteListener {
+        void onSwipeDelete(String id);
+    }
 
     private static OnItemClickListener listener;
+    private SwipeDeleteListener swipeListener;
 
     private List<Task> mTasks;
     private Context mContext;
@@ -30,9 +39,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
     private TextView tvPrice;
     private ImageView ivProfilePicture;
 
-    public TasksAdapter(List<Task> mTasks, Context mContext) {
+    public TasksAdapter(List<Task> mTasks, Context mContext, SwipeDeleteListener swipeListener) {
         this.mTasks = mTasks;
         this.mContext = mContext;
+        this.swipeListener = swipeListener;
     }
 
     public Context getContext() {
@@ -88,11 +98,22 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         this.listener = listener;
     }
 
+    @Override
+    public void onItemDismiss(int position) {
+        String taskId = mTasks.get(position).getObjectId();
+
+        mTasks.remove(position);
+        notifyItemRemoved(position);
+
+        swipeListener.onSwipeDelete(taskId);
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder
+            implements ItemTouchHelperViewHolder {
         public ImageView ivProfilePicture;
         public TextView tvType;
         public TextView tvTaskTitle;
@@ -114,6 +135,16 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
                     }
                 }
             });
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
         }
     }
 }
