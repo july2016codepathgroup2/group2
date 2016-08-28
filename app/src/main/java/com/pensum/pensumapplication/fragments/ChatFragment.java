@@ -69,6 +69,16 @@ public class ChatFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+        final Handler handler = new Handler();
+        Runnable refreshMessagesRunnable = new Runnable() {
+            @Override
+            public void run() {
+                refreshMessages();
+                handler.postDelayed(this, POLL_INTERVAL);
+            }
+        };
+        handler.postDelayed(refreshMessagesRunnable, POLL_INTERVAL);
+
         String conversationId = getArguments().getString("conversationId");
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
