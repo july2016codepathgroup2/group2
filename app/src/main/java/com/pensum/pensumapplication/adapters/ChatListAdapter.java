@@ -56,8 +56,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         ImageView imageProfilePicture = isMe ? viewHolder.ivProfileMe : viewHolder.ivProfileOther;
         String profilePictureUrl = null;
         try {
-            profilePictureUrl = isMe ? String.valueOf(message.getFrom().fetchIfNeeded().get("profilePicUrl")) :
-                    String.valueOf(message.getTo().fetchIfNeeded().get("profilePicUrl"));
+            profilePictureUrl = String.valueOf(message.getFrom().fetchIfNeeded().get("profilePicUrl"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
