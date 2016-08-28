@@ -174,6 +174,16 @@ public class AddTaskFragment extends Fragment {
         etTitle.setText(task.getTitle());
         etType.setText(task.getType());
         etBudget.setText(FormatterHelper.formatDoubleToMoney(task.getBudget()));
+
+        try {
+            ParseFile parseFile = task.getTaskPic();
+            byte[] data = parseFile.getData();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            ivTaskPicPreview.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // TODO might want to add extra ZipCode field in Task
     }
 
