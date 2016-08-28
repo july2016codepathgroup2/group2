@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class TaskDetailFragment extends DialogFragment {
     @BindView(R.id.btnContact)Button btnContact;
     @BindView(R.id.ivTaskDetailOwnerProf)ImageView ivTaskDetailOwnerProf;
     @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
+    @BindView(R.id.ibEditTask)ImageButton ibEditTask;
 
     private Task task;
     private OnTaskDetailActionListener listener;
@@ -48,6 +50,7 @@ public class TaskDetailFragment extends DialogFragment {
     public interface OnTaskDetailActionListener {
         void launchContactOwnerDialog(Task task);
         void launchProfileFragment(String userId);
+        void launchEditTaskFragment(Task task);
     }
 
     @Override
@@ -92,6 +95,7 @@ public class TaskDetailFragment extends DialogFragment {
     private void fetchSelectedTaskAndPopulateView() {
         String taskId =  getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+        //TODO The update data will not show
         // First try to find from the cache and only then go to network
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         // Execute the query to find the object with ID
@@ -118,9 +122,17 @@ public class TaskDetailFragment extends DialogFragment {
             ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
             if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
                 btnContact.setVisibility(View.INVISIBLE);
+                ibEditTask.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.launchEditTaskFragment(task);
+                        dismiss();
+                    }
+                });
             } else {
                 final String userId = postedBy.getObjectId();
 
+                ibEditTask.setVisibility(View.INVISIBLE);
                 btnContact.setVisibility(View.VISIBLE);
                 btnContact.setOnClickListener(new View.OnClickListener() {
                     @Override

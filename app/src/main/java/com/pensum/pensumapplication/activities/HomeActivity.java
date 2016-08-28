@@ -194,9 +194,23 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
     }
 
     @Override
+    public void onNewTaskEdited(Task task) { // TODO Can be combined with onNewTaskCreated()?
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            KeyboardHelper.hideKeyboard(this);
+            fm.popBackStack();
+        }
+        if (task != null) {
+
+        } else {
+            Toast.makeText(this, "You're offline task not saved.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public void onLaunchAddTask() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flContent, new AddTaskFragment());
+        ft.replace(R.id.flContent, AddTaskFragment.newInstance(null));
         ft.addToBackStack("add task fragment");
         ft.commit();
     }
@@ -213,6 +227,14 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.addToBackStack("profile fragment");
         ft.replace(R.id.flContent, ProfileFragment.newInstance(userId)).commit();
+    }
+
+    @Override
+    public void launchEditTaskFragment(Task task) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.flContent, AddTaskFragment.newInstance(task));
+        ft.addToBackStack("edit task fragment");
+        ft.commit();
     }
 
     @Override
