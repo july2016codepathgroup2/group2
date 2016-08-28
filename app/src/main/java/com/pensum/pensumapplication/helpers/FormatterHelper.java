@@ -23,4 +23,9 @@ public class FormatterHelper {
         String formatted = NumberFormat.getCurrencyInstance().format(parsed);
         return formatted;
     }
+
+    public static String formatDoubleToMoney(Double d) {
+        String doubleStr = d.toString();
+        return doubleStr.length() - doubleStr.indexOf('.') -1 == 1? doubleStr+'0' : doubleStr;
+    }
 }

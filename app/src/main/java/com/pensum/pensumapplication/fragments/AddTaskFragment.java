@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.api_clients.ZipCodeApiClient;
@@ -47,13 +50,26 @@ public class AddTaskFragment extends Fragment {
     private Unbinder unbinder;
 
     private OnTaskSavedListener listener;
+    private Task task;
+
+    public static AddTaskFragment newInstance(Task task) {
+        AddTaskFragment addTaskFragment = new AddTaskFragment();
+
+        if(task!=null) {
+            Bundle args = new Bundle();
+            args.putString("taskId", task.getObjectId());
+            addTaskFragment.setArguments(args);
+        }
+        return addTaskFragment;
+    }
 
     public AddTaskFragment(){
 
     }
 
     public interface OnTaskSavedListener {
-        public void onNewTaskCreated(Task task);
+        void onNewTaskCreated(Task task);
+        void onNewTaskEdited(Task task);
     }
 
     @Override
@@ -95,11 +111,13 @@ public class AddTaskFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 String s = editable.toString();
-                etBudget.removeTextChangedListener(this);
-                String formatted = FormatterHelper.formatMoney(s);
-                etBudget.setText(formatted);
-                etBudget.setSelection(formatted.length());
-                etBudget.addTextChangedListener(this);
+                if( s.length() >= 1) {
+                    etBudget.removeTextChangedListener(this);
+                    String formatted = FormatterHelper.formatMoney(s);
+                    etBudget.setText(formatted);
+                    etBudget.setSelection(formatted.length());
+                    etBudget.addTextChangedListener(this);
+                }
             }
         });
         btnAddTask.setOnClickListener(new View.OnClickListener() {
@@ -108,30 +126,58 @@ public class AddTaskFragment extends Fragment {
                 saveTask(view);
             }
         });
+
+        if(getArguments()!=null) {
+            String taskId = getArguments().getString("taskId");
+            btnAddTask.setText("Edit Task");
+
+            ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+            query.getInBackground(taskId,new GetCallback<Task>() {
+                @Override
+                public void done(Task object, com.parse.ParseException e) {
+                    if (e == null) {
+                        Log.d("Parse","Get task from parse");
+                        task = object;
+                        populateView(task);
+                    } else {
+                        Log.d("Parse","Get task from parse error" + e.toString());
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+
+    private void populateView(Task task) {
+        etTitle.setText(task.getTitle());
+        etType.setText(task.getType());
+        etBudget.setText(FormatterHelper.formatDoubleToMoney(task.getBudget()));
+        // TODO might want to add extra ZipCode field in Task
     }
 
     public void saveTask(View view){
         ZipCodeApiClient client = new ZipCodeApiClient();
+
+        if(etLocation.getText().toString().length() == 0)
+            Toast.makeText(getContext(), "Please enter task ZipCode.", Toast.LENGTH_LONG).show();
 
         if (NetworkHelper.isNetworkAvailable(getActivity()) && NetworkHelper.isOnline()) {
             client.getLocationForZip(etLocation.getText().toString(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     try {
-                        Task task = new Task();
-                        task.setStatus("open");
-                        task.setPostedBy(ParseUser.getCurrentUser());
-                        task.setTitle(etTitle.getText().toString());
-                        //task.setDescription(etDescription.getText().toString());
-                        task.setType(etType.getText().toString());
-                        NumberFormat nf = NumberFormat.getCurrencyInstance();
-                        task.setBudget(new BigDecimal(nf.parse(etBudget.getText().toString()).toString()));
-                        location = new ParseGeoPoint();
-                        location.setLatitude(responseBody.getDouble("lat"));
-                        location.setLongitude(responseBody.getDouble("lng"));
-                        task.setLocation(location);
-                        task.saveInBackground();
-                        listener.onNewTaskCreated(task);
+                        if(task == null) {
+                            task = new Task();
+                            task.setStatus("open");
+                            task.setPostedBy(ParseUser.getCurrentUser());
+                            storeTaskFields(responseBody);
+                            task.saveInBackground();
+                            listener.onNewTaskCreated(task);
+                        } else {
+                            storeTaskFields(responseBody);
+                            task.saveInBackground();
+                            listener.onNewTaskEdited(task);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ParseException e) {
@@ -148,5 +194,17 @@ public class AddTaskFragment extends Fragment {
             // Todo maybe call the listener method and check for null there
             Toast.makeText(getContext(), "You're offline task not saved.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void storeTaskFields(JSONObject responseBody) throws ParseException, JSONException {
+        task.setTitle(etTitle.getText().toString());
+        //task.setDescription(etDescription.getText().toString());
+        task.setType(etType.getText().toString());
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        task.setBudget(new BigDecimal(nf.parse(etBudget.getText().toString()).toString()));
+        location = new ParseGeoPoint();
+        location.setLatitude(responseBody.getDouble("lat"));
+        location.setLongitude(responseBody.getDouble("lng"));
+        task.setLocation(location);
     }
 }

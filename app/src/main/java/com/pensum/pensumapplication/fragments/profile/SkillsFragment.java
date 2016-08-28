@@ -3,15 +3,19 @@ package com.pensum.pensumapplication.fragments.profile;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
@@ -28,15 +32,24 @@ import butterknife.Unbinder;
 /**
  * Created by eddietseng on 8/21/16.
  */
-public class SkillsFragment extends Fragment {
+public class SkillsFragment extends Fragment
+        implements RecyclerViewClickListener, EditSkillFragment.EditSkillFragmentListener,
+        ProfileSkillAdapter.SwipeDeleteListener {
     private ArrayList<Skill> skills;
     protected ProfileSkillAdapter aSkills;
+    private ItemTouchHelper mItemTouchHelper;
 
     public static SkillsFragment newInstance(String userId) {
         SkillsFragment frag = new SkillsFragment();
         Bundle args = new Bundle();
-        if(userId != null)
+        boolean isUser = false;
+
+        if(userId!=null)
             args.putString("userId", userId);
+        else
+            isUser = true;
+
+        args.putBoolean("isUser", isUser);
         frag.setArguments(args);
         return frag;
     }
@@ -49,7 +62,7 @@ public class SkillsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         skills = new ArrayList<>();
-        aSkills = new ProfileSkillAdapter(skills);
+        aSkills = new ProfileSkillAdapter(skills, this, this, getArguments().getBoolean("isUser"));
     }
 
     @Override
@@ -66,6 +79,11 @@ public class SkillsFragment extends Fragment {
             }
         });
 
+        if(getArguments().getBoolean("isUser")) {
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(aSkills);
+            mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(rvSkills);
+        }
         populateSkills();
         return v;
     }
@@ -94,26 +112,73 @@ public class SkillsFragment extends Fragment {
 
         // Construct query to execute
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId",userId);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> objects, ParseException e) {
+        query.getInBackground(userId, new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
                 if (e == null) {
-                    if(objects.size() == 1) {
-                        List<Skill> skillList = objects.get(0).getList("skills");
-                        for( Skill s : skillList) {
-                            try {
-                                s.fetchIfNeeded();
-                            } catch (ParseException ex) {
-                                Log.e("message", "Error fetching skill" + ex);
-                            }
+                    List<Skill> skillList = object.getList("skills");
+                    for( Skill s : skillList) {
+                        try {
+                            s.fetchIfNeeded();
+                        } catch (ParseException ex) {
+                            Log.e("message", "Error fetching skill" + ex);
                         }
-                        skills.addAll(skillList);
-                        aSkills.notifyItemRangeInserted(0, skillList.size());
                     }
+                    skills.addAll(skillList);
+                    aSkills.notifyItemRangeInserted(0, skillList.size());
                 } else {
                     Log.e("message", "Error getting user" + e);
                 }
             }
         });
+    }
+
+    @Override
+    public void onRowClicked(int position) {
+        Skill skill = skills.get(position);
+        FragmentManager fm = getChildFragmentManager();
+        EditSkillFragment editSkillDialogFragment =
+                EditSkillFragment.newInstance("Add Skill", skill.getObjectId(), position);
+        editSkillDialogFragment.show(fm, "fragment_profile_edit_skill");
+    }
+
+    @Override
+    public void onFinishEditDialog(Skill skill, int position) {
+        if( position != -1 ) { // Update
+            String oldSkillId = skill.getObjectId();
+            ParseObject oldSkill = ParseObject.createWithoutData("Skill", oldSkillId);
+            oldSkill.put("skillName",skill.getSkillName());
+            oldSkill.put("skillExperience",skill.getSkillExperiences());
+
+            skills.set(position, skill);
+            aSkills.notifyItemChanged(position);
+
+            oldSkill.saveInBackground();
+        }
+
+        //Forward to parent
+        Fragment fragment = getParentFragment();
+        if( fragment instanceof EditSkillFragment.EditSkillFragmentListener )
+            ((EditSkillFragment.EditSkillFragmentListener)fragment).onFinishEditDialog(skill,position);
+    }
+
+    @Override
+    public void onSwipeDelete(String id) {
+        ParseQuery<Skill> query = ParseQuery.getQuery(Skill.class);
+        query.getInBackground(id, new GetCallback<Skill>() {
+            @Override
+            public void done(Skill object, ParseException e) {
+                if (e == null)
+                    object.deleteInBackground();
+                else
+                    Toast.makeText(getContext(),"Delete failed",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Forward to parent
+        Fragment fragment = getParentFragment();
+        if( fragment instanceof ProfileSkillAdapter.SwipeDeleteListener ) {
+            ((ProfileSkillAdapter.SwipeDeleteListener)fragment).onSwipeDelete(id);
+        }
     }
 }
