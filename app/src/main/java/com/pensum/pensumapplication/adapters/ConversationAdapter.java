@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Stat;
@@ -126,7 +127,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             }
         });
         Button btnDecline = holder.btnDecline;
+
         Button btnMessage = holder.btnMessage;
+        btnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity homeActivity = (HomeActivity) getContext();
+                homeActivity.launchChatFragment(conversation);
+            }
+        });
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
