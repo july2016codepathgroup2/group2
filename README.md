@@ -54,13 +54,20 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-TBD
+### FB Login and Dashboard
+<img src='http://i.imgur.com/zJOZJNp.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### Create a Task
+<img src='http://i.imgur.com/Y1dIx9R.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### Accept and Complete a Task
+<img src='http://i.imgur.com/6y6T4EV.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+TBD
 
 ## Open-source libraries used
 
