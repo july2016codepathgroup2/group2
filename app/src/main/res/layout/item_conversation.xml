@@ -30,6 +30,7 @@
         android:id="@+id/rbRating"
         android:layout_below="@+id/tvName"
         android:layout_toRightOf="@+id/ivProfileImage"
+        android:isIndicator="true"
         android:stepSize="0.5"
         android:numStars="5"/>
 
