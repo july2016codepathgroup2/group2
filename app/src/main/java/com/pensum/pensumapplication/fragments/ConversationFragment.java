@@ -86,7 +86,7 @@ public class ConversationFragment extends Fragment {
 
         String taskId = getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
         query.include("posted_by");
         query.getInBackground(taskId, new GetCallback<Task>() {
             public void done(Task item, ParseException e) {
@@ -129,7 +129,7 @@ public class ConversationFragment extends Fragment {
 
         subConversationQueries.add(candidateQuery);
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").
-                or(subConversationQueries).include("task").include("candidate").include("posted_by");
+                or(subConversationQueries).include("task").include("candidate").include("posted_by").include("stats");
         mainConversationQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {

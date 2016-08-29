@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Conversation;
+import com.pensum.pensumapplication.models.Stat;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -72,7 +74,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Conversation conversation = conversations.get(position);
+        final Conversation conversation = conversations.get(position);
         ParseUser candidate = conversation.getCandidate();
 
         TextView tvName = holder.tvName;
@@ -89,10 +91,17 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
 
         RatingBar rbRating = holder.rbRating;
-        // TODO fill out rating for user once we store it
+        Stat candidateStat = null;
+        try {
+            candidateStat = (Stat) conversation.getCandidate().getParseObject("stats").fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (candidateStat != null) {
+            rbRating.setRating(Float.parseFloat(candidateStat.getRating().toString()));
+        }
 
         TextView tvOffer = holder.tvOffer;
-        // TODO fill out with money offer once contact owner is fixed
         if (conversation.getOffer() != null){
             tvOffer.setText(NumberFormat.getCurrencyInstance().format(conversation.getOffer()));
         }
@@ -105,6 +114,13 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
 
         Button btnAccept = holder.btnAccept;
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO link here to dialog
+//                listener.acceptButtonClicked(conversation);
+            }
+        });
         Button btnDecline = holder.btnDecline;
         Button btnMessage = holder.btnMessage;
     }
