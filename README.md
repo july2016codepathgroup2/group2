@@ -63,6 +63,9 @@ Here's a walkthrough of implemented user stories:
 ### Accept and Complete a Task
 <img src='http://i.imgur.com/6y6T4EV.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
+### Chat/Message a task author
+<img src='http://i.imgur.com/29isJwX.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
