@@ -66,6 +66,9 @@ Here's a walkthrough of implemented user stories:
 ### Chat/Message a task author
 <img src='http://i.imgur.com/29isJwX.gif' title='Video Walkthrough' width='300' alt='Video Walkthrough' />
 
+### Attach picture to your task and delete own task
+<img src='http://i.imgur.com/1iwTiss.gif' title='Video Walkthrough' width='300' alt='Video Walkthrough' />
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
