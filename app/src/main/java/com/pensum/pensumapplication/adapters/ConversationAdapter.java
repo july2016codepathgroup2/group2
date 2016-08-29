@@ -78,7 +78,11 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         ParseUser candidate = conversation.getCandidate();
 
         TextView tvName = holder.tvName;
-        tvName.setText(FormatterHelper.formatName(candidate.getString("fbName")));
+        try {
+            tvName.setText(FormatterHelper.formatName(candidate.fetchIfNeeded().getString("fbName")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         ImageView ivProfileImage = holder.ivProfileImage;
         String imageUrl = candidate.getString("profilePicUrl");
