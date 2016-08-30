@@ -36,7 +36,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:id="@+id/new_task_fab"
-        android:src="@drawable/ic_add_circle_black_24dp"
+        android:src="@drawable/ic_add_black_24dp"
         app:layout_anchor="@id/llTabbedLayout"
         app:layout_anchorGravity="bottom|right|end"/>
 </android.support.design.widget.CoordinatorLayout>
