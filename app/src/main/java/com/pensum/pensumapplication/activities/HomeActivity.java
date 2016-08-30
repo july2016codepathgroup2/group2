@@ -74,6 +74,20 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         pd.setTitle("Logging out...");
         pd.setMessage("Please wait.");
         pd.setCancelable(false);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    public void onBackStackChanged() {
+                        // Update your UI here.
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContent);
+                        String name = fragment.getClass().toString();
+                        Toast.makeText(getBaseContext(),name,Toast.LENGTH_SHORT).show();
+//                        nvDrawer.getMenu().getItem(0).setChecked(true);
+//                        setTitle();
+                        //TODO
+                    }
+                }
+        );
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -96,29 +110,36 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass = null;
+        String name = null;
         switch (menuItem.getItemId()) {
             case R.id.home:
                 fragmentClass = HomeFragment.class;
+                name = "home fragment";
                 break;
 
             case R.id.profile:
                 fragmentClass = ProfileFragment.class;
+                name = "profile fragment";
                 break;
 
             case R.id.my_posted_tasks:
                 fragmentClass = MyPostedTasks.class;
+                name = "my posted tasks fragment";
                 break;
 
             case R.id.my_accepted_tasks:
                 fragmentClass = MyAcceptedTasks.class;
+                name = "my accepted tasks fragment";
                 break;
 
             case R.id.my_completed_tasks:
                 fragmentClass = MyCompletedTasks.class;
+                name = "my completed tasks fragment";
                 break;
 
             case R.id.messages:
                 fragmentClass = MessagesFragment.class;
+                name = "messages fragment";
                 break;
 
             case R.id.logOut:
@@ -127,6 +148,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
 
             default:
                 fragmentClass = HomeFragment.class;
+                name = "home fragment";
         }
 
         if(fragmentClass != null) {
@@ -144,7 +166,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.addToBackStack("fragment");
+            fragmentTransaction.addToBackStack(name);
             fragmentTransaction.replace(R.id.flContent, fragment).commit();
 
             // Highlight the selected item has been done by NavigationView
