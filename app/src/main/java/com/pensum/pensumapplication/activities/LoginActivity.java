@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     ParseUser user;
     String name;
     String profilePicUrl;
+    String coverPicUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),
                                             "User logged in through FB", Toast.LENGTH_SHORT).show();
                                     pd.dismiss();
+                                    getUserCoverFromFB();
                                     startWithCurrentUser();
                                 }
                             }
@@ -119,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         user = ParseUser.getCurrentUser();
         user.put("fbName", name);
         user.put("profilePicUrl", profilePicUrl);
+//        user.put("coverPicUrl", coverPicUrl);
 
         //Finally save all the user details
         user.saveInBackground(new SaveCallback() {
@@ -173,10 +176,40 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("Profile pic", "url: " + pictureUrl);
                             profilePicUrl = pictureUrl;
 
-//                            new ProfilePhotoAsync(pictureUrl).execute();
                             userDataUpdate();
 
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
+    //TODO combine this into getUserDetailsFromFB() when all user gets the cover update into Parse
+    public void getUserCoverFromFB() {
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "cover");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me",
+                parameters,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        try {
+                            Log.d("Cover Photo Response", response.getRawResponse());
+                            JSONObject data = response.getJSONObject().getJSONObject("cover");
+
+                            String coverPhotoUrl = data.getString("source");
+
+                            Log.d("Cover photo", "url: " + coverPhotoUrl);
+                            coverPicUrl = coverPhotoUrl;
+
+                            user = ParseUser.getCurrentUser();
+                            user.put("coverPicUrl", coverPicUrl);
+                            user.saveInBackground();
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
