@@ -130,7 +130,7 @@ public class ContactOwnerFragment extends DialogFragment {
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         try{
             postedBy = task.getPostedBy().fetchIfNeeded();
-            tvName.setText(postedBy.getString("fbName"));
+            tvName.setText(FormatterHelper.formatName(postedBy.getString("fbName")));
             ParseFile profileImage = postedBy.getParseFile("profileThumb");
             if(profileImage != null){
                 String imageUrl = profileImage.getUrl();

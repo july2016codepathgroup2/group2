@@ -39,4 +39,6 @@
     <string name="profile_me">My Profile Picture</string>
     <string name="profile_other">Other Profile Picture</string>
     <string name="mark_task_complete">Please Rate Your Candidate</string>
+    <string name="status_label">Status:</string>
+    <string name="budget_label">Budget:</string>
 </resources>

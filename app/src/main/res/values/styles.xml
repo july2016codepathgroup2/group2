@@ -33,4 +33,23 @@
     <style name="DialogWindowTitleText" parent="@android:style/TextAppearance.DialogWindowTitle">
         <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="largeButton">
+        <item name="android:background">@drawable/button_full</item>
+        <item name="android:layout_marginTop">@dimen/view_margin</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="smallButton">
+        <item name="android:background">@drawable/button_small</item>
+        <item name="android:layout_marginTop">@dimen/view_margin</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+    </style>
+
+    <style name="smallCancelButton" parent="smallButton">
+        <item name="android:background">@drawable/button_small_cancel</item>
+    </style>
+
 </resources>

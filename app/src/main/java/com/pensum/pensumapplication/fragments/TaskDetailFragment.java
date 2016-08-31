@@ -33,7 +33,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class TaskDetailFragment extends DialogFragment {
 
-    @BindView(R.id.tvDescription)TextView tvDescriptionLabel;
     @BindView(R.id.tvTitle)TextView tvTitle;
     @BindView(R.id.tvStatus)TextView tvStatus;
     @BindView(R.id.tvBudget)TextView tvBudget;
@@ -118,7 +117,6 @@ public class TaskDetailFragment extends DialogFragment {
     }
 
     private void populateViews(View view) {
-        tvDescriptionLabel.setText(task.getDescription());
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         tvStatus.setText(task.getStatus());
