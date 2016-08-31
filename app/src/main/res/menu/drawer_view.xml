@@ -4,12 +4,12 @@
         <item
             android:id="@+id/home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="HOME" />
+            android:title="@string/home" />
         <item
             android:id="@+id/profile"
             android:icon="@drawable/ic_person_black_24dp"
-            android:title="PROFILE" />
-        <item android:title="MY TASKS">
+            android:title="@string/profile" />
+        <item android:title="@string/my_tasks">
             <menu>
                 <group android:checkableBehavior="single">
                     <item
@@ -30,10 +30,10 @@
         <item
             android:id="@+id/messages"
             android:icon="@drawable/ic_mail_black_24dp"
-            android:title="MESSAGES" />
+            android:title="@string/messages" />
         <item
             android:id="@+id/logOut"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="LOG OUT" />
+            android:title="@string/log_out" />
     </group>
 </menu>

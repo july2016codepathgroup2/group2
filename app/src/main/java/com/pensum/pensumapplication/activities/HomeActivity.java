@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -74,6 +75,45 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         pd.setTitle("Logging out...");
         pd.setMessage("Please wait.");
         pd.setCancelable(false);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    public void onBackStackChanged() {
+                        // Update your UI here.
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContent);
+                        String name = fragment.getClass().toString();
+
+                        if (fragment.getClass() == HomeFragment.class) {
+                            nvDrawer.getMenu().getItem(0).setChecked(true);
+                            setTitle(R.string.home);
+                            Log.d("fragment", "Switch to home");
+                        } else if (fragment.getClass() == ProfileFragment.class) {
+                            nvDrawer.getMenu().getItem(1).setChecked(true);
+                            setTitle(R.string.profile);
+                            Log.d("fragment", "Switch to profile");
+                        } else if (fragment.getClass() == MyPostedTasks.class) {
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(true);
+                            setTitle(R.string.posted);
+                            Log.d("fragment", "Switch to my posted tasks");
+                        } else if (fragment.getClass() == MyAcceptedTasks.class) {
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(true);
+                            setTitle(R.string.accepted);
+                            Log.d("fragment", "Switch to my accepted tasks");
+                        } else if (fragment.getClass() == MyCompletedTasks.class) {
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(true);
+                            setTitle(R.string.completed);
+                            Log.d("fragment", "Switch to my completed tasks");
+                        } else if (fragment.getClass() == MessagesFragment.class) {
+                            nvDrawer.getMenu().getItem(3).setChecked(true);
+                            setTitle(R.string.message);
+                            Log.d("fragment", "Switch to message");
+                        }
+
+                        Log.d("fragment", "Fragment class: " + name
+                                + " Title: " + getTitle() );
+                    }
+                }
+        );
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -96,29 +136,36 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass = null;
+        String name = null;
         switch (menuItem.getItemId()) {
             case R.id.home:
                 fragmentClass = HomeFragment.class;
+                name = "home fragment";
                 break;
 
             case R.id.profile:
                 fragmentClass = ProfileFragment.class;
+                name = "profile fragment";
                 break;
 
             case R.id.my_posted_tasks:
                 fragmentClass = MyPostedTasks.class;
+                name = "my posted tasks fragment";
                 break;
 
             case R.id.my_accepted_tasks:
                 fragmentClass = MyAcceptedTasks.class;
+                name = "my accepted tasks fragment";
                 break;
 
             case R.id.my_completed_tasks:
                 fragmentClass = MyCompletedTasks.class;
+                name = "my completed tasks fragment";
                 break;
 
             case R.id.messages:
                 fragmentClass = MessagesFragment.class;
+                name = "messages fragment";
                 break;
 
             case R.id.logOut:
@@ -127,13 +174,13 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
 
             default:
                 fragmentClass = HomeFragment.class;
+                name = "home fragment";
         }
 
-        if(fragmentClass != null) {
-            if(fragmentClass==ProfileFragment.class) {
+        if (fragmentClass != null) {
+            if (fragmentClass == ProfileFragment.class) {
                 fragment = ProfileFragment.newInstance(null);
-            }
-            else {
+            } else {
                 try {
                     fragment = (Fragment) fragmentClass.newInstance();
                 } catch (Exception e) {
@@ -144,13 +191,9 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.addToBackStack("fragment");
+            fragmentTransaction.addToBackStack(name);
             fragmentTransaction.replace(R.id.flContent, fragment).commit();
 
-            // Highlight the selected item has been done by NavigationView
-            menuItem.setChecked(true);
-            // Set action bar title
-            setTitle(menuItem.getTitle());
             // Close the navigation drawer
             mDrawer.closeDrawers();
         }
@@ -180,7 +223,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
 
@@ -219,7 +262,6 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ft.addToBackStack("add task fragment");
         ft.commit();
     }
-
 
 
     @Override
@@ -269,7 +311,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ft.commit();
     }
 
-    public void launchCompleteTaskDialogFragment(Task task){
+    public void launchCompleteTaskDialogFragment(Task task) {
         FragmentManager fm = getSupportFragmentManager();
         CompleteTaskDialogFragment completeTaskDialogFragment = CompleteTaskDialogFragment.newInstance(task.getObjectId());
         completeTaskDialogFragment.show(fm, "fragment_complete_task");
