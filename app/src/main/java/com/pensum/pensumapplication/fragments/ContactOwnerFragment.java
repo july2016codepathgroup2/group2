@@ -85,7 +85,7 @@ public class ContactOwnerFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contact_owner, parent, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_contact_owner, parent, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

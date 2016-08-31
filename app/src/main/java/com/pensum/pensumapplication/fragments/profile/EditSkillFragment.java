@@ -59,7 +59,7 @@ public class EditSkillFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile_edit_skill, container);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_profile_edit_skill, container);
         unbinder = ButterKnife.bind(this, view);
 
         pd = new ProgressDialog(getContext());

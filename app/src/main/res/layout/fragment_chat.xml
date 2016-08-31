@@ -31,11 +31,10 @@
             android:id="@+id/btSendChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|right"
-            android:paddingRight="10dp"
+            style="@style/smallYellowButton"
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
-            android:text="@string/send"
-            android:textSize="18sp" >
+            android:text="@string/send">
         </Button>
     </RelativeLayout>
 </RelativeLayout>
