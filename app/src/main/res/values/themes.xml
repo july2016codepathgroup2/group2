@@ -6,6 +6,7 @@
         <item name="smallGreyButton">@style/smallGreyButton</item>
         <item name="largeButton">@style/largeButton</item>
         <!--<item name="spinner">@style/spinner</item>-->
+        <item name="textLabel">@style/textLabel</item>
         <item name="textLarge">@style/textLarge</item>
         <item name="textRegular">@style/textRegular</item>
         <item name="textMoney">@style/textMoney</item>

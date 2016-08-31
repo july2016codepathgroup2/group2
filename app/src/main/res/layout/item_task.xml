@@ -32,10 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ivProfilePicture"
             android:layout_centerHorizontal="true"
-            android:padding="5dp"
-            android:textColor="@android:color/white"
-            style="@android:style/TextAppearance.Medium"
-            android:background="@drawable/rounded_corner_textview"
+            style="@style/textLabel"
             tools:text="Label"/>
 
         <TextView

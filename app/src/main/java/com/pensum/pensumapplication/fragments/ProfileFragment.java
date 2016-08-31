@@ -24,6 +24,7 @@ import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.fragments.profile.EditSkillFragment;
 import com.pensum.pensumapplication.fragments.profile.ErrorSkillsFragment;
 import com.pensum.pensumapplication.fragments.profile.SkillsFragment;
+import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Skill;
 import com.squareup.picasso.Picasso;
 
@@ -105,7 +106,7 @@ public class ProfileFragment extends Fragment
             ivProfImage.setImageResource(0);
 
             String fbName = (String) user.get("fbName");
-            tvProfName.setText(fbName);
+            tvProfName.setText(FormatterHelper.formatName(fbName));
 
             String profileUrl = (String) user.get("profilePicUrl");
             Picasso.with(getContext()).load(profileUrl).into(ivProfImage);

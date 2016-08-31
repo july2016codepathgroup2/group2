@@ -5,6 +5,7 @@
     <attr name="textLarge" format="reference" />
     <attr name="textRegular" format="reference" />
     <attr name="textMoney" format="reference" />
+    <attr name="textLabel" format="reference" />
     <attr name="largeButton" format="reference" />
     <attr name="smallYellowButton" format="reference" />
     <attr name="smallGreyButton" format="reference" />
