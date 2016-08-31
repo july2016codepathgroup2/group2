@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <attr name="pageBackground" format="reference" />
+    <attr name="menuBackground" format="reference" />
     <attr name="textSubheader" format="reference" />
     <attr name="textLarge" format="reference" />
     <attr name="textRegular" format="reference" />
+    <attr name="textMoney" format="reference" />
     <attr name="largeButton" format="reference" />
-    <attr name="smallButton" format="reference" />
-    <attr name="smallCancelButton" format="reference" />
+    <attr name="smallYellowButton" format="reference" />
+    <attr name="smallGreyButton" format="reference" />
     <attr name="spinner" format="reference" />
+    <attr name="backgroundGradient" format="reference"/>
 
 </resources>
