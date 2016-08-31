@@ -29,6 +29,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/etSkillName"
+        android:inputType="text"
         android:layout_below="@+id/tvSkillName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -93,6 +94,7 @@
         android:layout_height="wrap_content"
         android:text="save"
         android:id="@+id/btnSkillSave"
+        style="@style/smallYellowButton"
         android:layout_below="@+id/radio_exp_group"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

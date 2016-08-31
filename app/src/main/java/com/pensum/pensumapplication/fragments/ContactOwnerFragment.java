@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
@@ -39,14 +38,22 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
  */
 
 public class ContactOwnerFragment extends DialogFragment {
-    @BindView(R.id.tvTitle) TextView tvTitle;
-    @BindView(R.id.tvBudget) TextView tvBudget;
-    @BindView(R.id.tvName) TextView tvName;
-    @BindView(R.id.etMessage) EditText etMessage;
-    @BindView(R.id.btnSend) Button btnSend;
-    @BindView(R.id.btnCancel) Button btnCancel;
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
-    @BindView(R.id.etOffer) EditText etOffer;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+    @BindView(R.id.tvBudget)
+    TextView tvBudget;
+    @BindView(R.id.tvName)
+    TextView tvName;
+    @BindView(R.id.etMessage)
+    EditText etMessage;
+    @BindView(R.id.btnSend)
+    Button btnSend;
+    @BindView(R.id.btnCancel)
+    Button btnCancel;
+    @BindView(R.id.ivProfileImage)
+    ImageView ivProfileImage;
+    @BindView(R.id.etOffer)
+    EditText etOffer;
     private Unbinder unbinder;
     private Task task;
     private ParseUser postedBy;
@@ -64,6 +71,7 @@ public class ContactOwnerFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         String taskObjectId = getArguments().getString("task_object_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+        query.include("posted_by");
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK); // or CACHE_ONLY
         query.getInBackground(taskObjectId, new GetCallback<Task>() {
             public void done(Task item, ParseException e) {
@@ -77,12 +85,13 @@ public class ContactOwnerFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contact_owner, parent, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_contact_owner, parent, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
@@ -125,30 +134,25 @@ public class ContactOwnerFragment extends DialogFragment {
         });
     }
 
-    private void populateViews(){
+    private void populateViews() {
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
-        try{
-            postedBy = task.getPostedBy().fetchIfNeeded();
-            tvName.setText(postedBy.getString("fbName"));
-            ParseFile profileImage = postedBy.getParseFile("profileThumb");
-            if(profileImage != null){
-                String imageUrl = profileImage.getUrl();
-                Picasso.with(getContext()).load(imageUrl).
-                        transform(new CropCircleTransformation()).into(ivProfileImage);
-            } else {
-                Picasso.with(getContext()).load(R.mipmap.ic_launcher).
-                        transform(new CropCircleTransformation()).into(ivProfileImage);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        postedBy = task.getPostedBy();
+        tvName.setText(FormatterHelper.formatName(postedBy.getString("fbName")));
+        String imageUrl = postedBy.getString("url");
+        if (imageUrl != null) {
+            Picasso.with(getContext()).load(imageUrl).
+                    transform(new CropCircleTransformation()).into(ivProfileImage);
+        } else {
+            Picasso.with(getContext()).load(R.mipmap.ic_launcher).
+                    transform(new CropCircleTransformation()).into(ivProfileImage);
         }
     }
 
-    public void sendMessage(View view){
+    public void sendMessage(View view) {
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
-        query.whereEqualTo("candidate",ParseUser.getCurrentUser());
-        query.whereEqualTo("task",task);
+        query.whereEqualTo("candidate", ParseUser.getCurrentUser());
+        query.whereEqualTo("task", task);
         // TODO figure out which cache policy to use here
         //query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY); // or CACHE_ONLY
         query.getFirstInBackground(new GetCallback<Conversation>() {
@@ -157,7 +161,7 @@ public class ContactOwnerFragment extends DialogFragment {
                     createMessage(conversationFromQuery);
                 } else {
                     String message = e.getMessage();
-                    if (message.toLowerCase().contains("no results found for query")){
+                    if (message.toLowerCase().contains("no results found for query")) {
                         Conversation c;
                         c = new Conversation();
                         c.setTask(task);
@@ -173,7 +177,7 @@ public class ContactOwnerFragment extends DialogFragment {
         });
     }
 
-    private void createMessage(Conversation c){
+    private void createMessage(Conversation c) {
         Message message = new Message();
         c.setUnreadOwnerMessageFlag(true);
         NumberFormat nf = NumberFormat.getCurrencyInstance();

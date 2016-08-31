@@ -106,7 +106,10 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/largeButton"
         android:text="@string/add_task"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="20sp"
         android:id="@+id/btnAddTask"
         android:layout_below="@+id/ibAddPhoto"
         android:layout_alignParentLeft="true"

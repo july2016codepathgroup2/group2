@@ -11,7 +11,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        tools:src="@drawable/ic_person_black_24dp"/>
+        tools:src="@drawable/ic_person_black_24dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +24,8 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="T. Chu"
         android:textStyle="bold"
-        android:textSize="24dp"/>
+        android:textSize="24dp"
+        android:layout_marginTop="5dp"/>
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -35,17 +38,17 @@
         android:numStars="5"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        style="@style/smallYellowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/accept"
         android:id="@+id/btnAccept"
-        android:layout_alignTop="@+id/btnDecline"
         android:layout_toRightOf="@+id/btnMessage"
-        android:layout_toEndOf="@+id/btnMessage"/>
+        android:layout_toEndOf="@+id/btnMessage"
+        android:layout_below="@+id/rbRating"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        style="@style/smallGreyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/decline"
@@ -59,20 +62,19 @@
         android:layout_height="wrap_content"
         tools:text="$250"
         android:id="@+id/tvOffer"
-        android:textStyle="bold"
-        android:textSize="20dp"
+        style="@style/textMoney"
         android:layout_above="@+id/rbRating"
         android:layout_centerHorizontal="true"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        style="@style/smallYellowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/message"
         android:id="@+id/btnMessage"
-        android:layout_alignTop="@+id/btnAccept"
         android:layout_alignLeft="@+id/rbRating"
-        android:layout_alignStart="@+id/rbRating"/>
+        android:layout_alignStart="@+id/rbRating"
+        android:layout_below="@+id/rbRating"/>
 
     <ImageView
         android:layout_width="24dp"

@@ -34,9 +34,8 @@
             android:layout_below="@+id/ivProfImage"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
-            android:text="First Last"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            style="@style/textLabel"
+            android:text="First Last"/>
 
         <TextView
             android:id="@+id/tvProfSkills"

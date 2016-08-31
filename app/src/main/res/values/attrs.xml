@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="menuBackground" format="reference" />
+    <attr name="textSubheader" format="reference" />
+    <attr name="textLarge" format="reference" />
+    <attr name="textRegular" format="reference" />
+    <attr name="textMoney" format="reference" />
+    <attr name="textLabel" format="reference" />
+    <attr name="largeButton" format="reference" />
+    <attr name="smallYellowButton" format="reference" />
+    <attr name="smallGreyButton" format="reference" />
+    <attr name="spinner" format="reference" />
+    <attr name="backgroundGradient" format="reference"/>
+    <attr name="styleProgress" format="reference"/>
+
+</resources>

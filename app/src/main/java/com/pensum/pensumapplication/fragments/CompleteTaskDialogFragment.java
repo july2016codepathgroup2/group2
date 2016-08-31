@@ -71,7 +71,7 @@ public class CompleteTaskDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_complete_task, parent, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_complete_task, parent, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

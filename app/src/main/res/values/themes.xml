@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Theme.Main" parent="AppTheme.Pensum">
+        <item name="smallYellowButton">@style/smallYellowButton</item>
+        <item name="smallGreyButton">@style/smallGreyButton</item>
+        <item name="largeButton">@style/largeButton</item>
+        <!--<item name="spinner">@style/spinner</item>-->
+        <item name="textLabel">@style/textLabel</item>
+        <item name="textLarge">@style/textLarge</item>
+        <item name="textRegular">@style/textRegular</item>
+        <item name="textMoney">@style/textMoney</item>
+        <item name="backgroundGradient">@style/backgroundGradient</item>
+        <item name="styleProgress">@style/styleProgress</item>
+    </style>
+</resources>

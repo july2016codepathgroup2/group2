@@ -19,9 +19,7 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:layout_gravity="center"
-        android:textColor="@android:color/white"
-        style="@android:style/TextAppearance.Medium"
-        android:background="@drawable/rounded_corner_textview"
+        style="@style/textLabel"
         tools:text="Label"/>
 
     <TextView
@@ -39,9 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvBudget"
-        style="@android:style/TextAppearance.Large"
-        android:textStyle="bold"
-        android:textColor="#2BA11A"
+        style="@style/textMoney"
         tools:text="$55.00"
         android:layout_gravity="center"
         />

@@ -107,7 +107,7 @@ public class AddTaskFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_task, parent, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_add_task, parent, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

@@ -18,8 +18,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Terri Chu"
+        tools:text="Terri C."
         android:id="@+id/tvName"
+        style="@style/textLarge"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
@@ -32,68 +33,76 @@
         android:lines="4"
         android:layout_below="@+id/ivProfileImage"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"/>
 
     <Button
-        android:layout_width="255dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send"
         android:id="@+id/btnSend"
-        android:layout_alignTop="@+id/btnCancel"
+        style="@style/smallYellowButton"
+        android:layout_below="@+id/etOffer"
         android:layout_alignRight="@+id/etOffer"
         android:layout_alignEnd="@+id/etOffer"
-        android:layout_toRightOf="@+id/tvName"
-        android:layout_toEndOf="@+id/tvName"/>
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Clean my backyard"
         android:id="@+id/tvTitle"
+        style="@style/textLarge"
         android:layout_below="@+id/tvName"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="$200"
+        style="@style/textMoney"
         android:id="@+id/tvBudget"
         android:layout_below="@+id/tvTitle"
         android:layout_toRightOf="@+id/tvBudgeLabel"
         android:layout_toEndOf="@+id/tvBudgeLabel"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/budget"
+        style="@style/textRegular"
         android:id="@+id/tvBudgeLabel"
         android:layout_below="@+id/tvTitle"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"/>
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_marginTop="10dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
+        style="@style/smallGreyButton"
         android:id="@+id/btnCancel"
-        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/tvBudget"
-        android:layout_alignEnd="@+id/tvBudget"/>
+        android:layout_below="@+id/etOffer"
+        android:layout_marginRight="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/price"
         android:id="@+id/textView"
-        android:textSize="18sp"
-        android:layout_alignBottom="@+id/etOffer"
+        style="@style/textRegular"
+        android:layout_alignTop="@+id/etOffer"
         android:layout_toLeftOf="@+id/tvBudget"
-        android:layout_toStartOf="@+id/tvBudget"/>
+        android:layout_toStartOf="@+id/tvBudget"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:layout_width="wrap_content"

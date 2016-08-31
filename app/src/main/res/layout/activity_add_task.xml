@@ -105,10 +105,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="63dp"
+        style="@style/smallYellowButton"
         android:text="@string/add_task"
-        android:id="@+id/btnAddTask"/>
+        android:textColor="@color/colorSecondaryText"
+        android:id="@+id/btnAddTask"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/etType"
+        android:layout_alignEnd="@+id/etType"/>
 </RelativeLayout>

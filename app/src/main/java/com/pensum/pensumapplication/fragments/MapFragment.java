@@ -154,7 +154,7 @@ public class MapFragment extends Fragment implements
                 if (e == null) {
                     // clear out all old markers ?
                     map.clear();
-                    BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                    BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
 
                     for (int i = 0; i < tasks.size(); i++) {
                         ParseGeoPoint location = tasks.get(i).getLocation();
