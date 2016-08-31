@@ -7,6 +7,7 @@
     <string name="profile">PROFILE</string>
     <string name="my_tasks">MY TASKS</string>
     <string name="messages">MESSAGES</string>
+    <string name="log_out">LOG OUT</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="title_hint">Help me clean my room</string>
