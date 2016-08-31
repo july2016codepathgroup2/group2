@@ -11,5 +11,6 @@
     <attr name="smallGreyButton" format="reference" />
     <attr name="spinner" format="reference" />
     <attr name="backgroundGradient" format="reference"/>
+    <attr name="styleProgress" format="reference"/>
 
 </resources>

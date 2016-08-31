@@ -36,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * Created by eddietseng on 8/19/16.
@@ -109,7 +110,8 @@ public class ProfileFragment extends Fragment
             tvProfName.setText(FormatterHelper.formatName(fbName));
 
             String profileUrl = (String) user.get("profilePicUrl");
-            Picasso.with(getContext()).load(profileUrl).into(ivProfImage);
+            Picasso.with(getContext()).load(profileUrl).
+                    transform(new CropCircleTransformation()).into(ivProfImage);
         }
 
         Fragment fragmentSkills = SkillsFragment.newInstance(userId);

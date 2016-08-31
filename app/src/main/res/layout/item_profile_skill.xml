@@ -19,9 +19,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/pbSkillExperience"
-        android:max="6"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/greenprogress"
+        style="@style/styleProgress"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/ivSkillDelete"
         android:layout_toStartOf="@+id/ivSkillDelete" />

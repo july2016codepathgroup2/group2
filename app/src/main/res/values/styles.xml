@@ -10,6 +10,7 @@
         <item name="colorControlActivated">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
 
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
 
         <!-- Apply default style for dialogs -->
         <item name="android:dialogTheme">@style/AppDialogTheme</item>
@@ -36,6 +37,12 @@
 
     <style name="DialogWindowTitleText" parent="@android:style/TextAppearance.DialogWindowTitle">
         <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
     <style name="largeButton">
@@ -76,5 +83,11 @@
         <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="android:background">@drawable/rounded_corner_textview</item>
         <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="styleProgress" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
+        <item name="android:max">6</item>
+        <item name="android:progressDrawable">@drawable/yellowprogress</item>
+
     </style>
 </resources>

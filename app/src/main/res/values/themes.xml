@@ -11,5 +11,6 @@
         <item name="textRegular">@style/textRegular</item>
         <item name="textMoney">@style/textMoney</item>
         <item name="backgroundGradient">@style/backgroundGradient</item>
+        <item name="styleProgress">@style/styleProgress</item>
     </style>
 </resources>
