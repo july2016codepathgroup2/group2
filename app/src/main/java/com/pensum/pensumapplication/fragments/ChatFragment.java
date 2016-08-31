@@ -42,6 +42,9 @@ public class ChatFragment extends Fragment {
     private ParseUser receivingUser;
     private Conversation conversation;
 
+    private Handler handler;
+    private Runnable refreshMessagesRunnable;
+
     public ChatFragment() {
 
     }
@@ -68,8 +71,8 @@ public class ChatFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
-        final Handler handler = new Handler();
-        Runnable refreshMessagesRunnable = new Runnable() {
+        handler = new Handler();
+        refreshMessagesRunnable = new Runnable() {
             @Override
             public void run() {
                 refreshMessages();
@@ -101,6 +104,12 @@ public class ChatFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        handler.removeCallbacks(refreshMessagesRunnable);
+        super.onDestroyView();
     }
 
     private void setupMessagePosting(View view) {
