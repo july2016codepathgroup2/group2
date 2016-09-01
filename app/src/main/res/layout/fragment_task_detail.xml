@@ -4,7 +4,7 @@
     android:id="@+id/rlTaskDetail"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="10dp">
 
     <TextView
@@ -13,9 +13,8 @@
         android:layout_height="wrap_content"
         style="@style/textLarge"
         tools:text="Task Title"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/tvBudgetLabel"
-        android:layout_alignStart="@+id/tvBudgetLabel"/>
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/ivTaskDetailOwnerProf"/>
 
     <TextView
         android:id="@+id/tvBudgetLabel"
@@ -23,7 +22,7 @@
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Medium"
         android:text="@string/budget_label"
-        android:layout_toRightOf="@+id/ivTaskDetailOwnerProf"
+        android:layout_toLeftOf="@id/tvBudget"
         android:layout_below="@+id/tvTitle"
         android:layout_marginTop="5dp"/>
 
@@ -36,8 +35,8 @@
         android:textColor="#2BA11A"
         android:text="Budget"
         android:layout_below="@+id/tvTitle"
-        android:layout_toRightOf="@+id/tvBudgetLabel"
         android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
         android:layout_alignTop="@+id/tvBudgetLabel"/>
 
 
@@ -46,10 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Medium"
+        android:layout_toLeftOf="@+id/tvStatus"
         android:text="@string/status_label"
         android:layout_below="@+id/tvBudgetLabel"
-        android:layout_alignLeft="@+id/tvBudgetLabel"
-        android:layout_alignStart="@+id/tvBudgetLabel"
         android:layout_marginTop="5dp"/>
 
     <TextView
@@ -57,7 +55,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvStatus"
         android:paddingLeft="10dp"
-        android:layout_toRightOf="@+id/tvStatusLabel"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/tvBudgetLabel"
         tools:text="Open"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="2dp"
@@ -70,12 +69,10 @@
         <!--android:layout_below="@+id/tvStatusLabel"/>-->
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/ivTaskDetailOwnerProf"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         tools:src="@mipmap/ic_launcher"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"/>
