@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class TaskDetailFragment extends DialogFragment {
+public class TaskDetailFragment extends Fragment {
 
     @BindView(R.id.tvDescription)TextView tvDescriptionLabel;
     @BindView(R.id.tvTitle)TextView tvTitle;
@@ -83,9 +83,9 @@ public class TaskDetailFragment extends DialogFragment {
         View view;
         fetchSelectedTask();
         if (TextUtils.equals(task.getPostedBy().getObjectId(),ParseUser.getCurrentUser().getObjectId())){
-            view = inflater.inflate(R.layout.fragment_task_detail_owner, container);
+            view = inflater.inflate(R.layout.fragment_task_detail_owner, container, false);
         } else {
-            view = inflater.inflate(R.layout.fragment_task_detail, container);
+            view = inflater.inflate(R.layout.fragment_task_detail, container, false);
         }
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -145,7 +145,6 @@ public class TaskDetailFragment extends DialogFragment {
                      @Override
                      public void onClick(View view) {
                          listener.launchAcceptCandidateDialog(task);
-                         dismiss();
                      }
                  });
              } else if (TextUtils.equals(task.getStatus(),"accepted")){
@@ -154,7 +153,6 @@ public class TaskDetailFragment extends DialogFragment {
                      @Override
                      public void onClick(View view) {
                          listener.launchCompleteTaskDialogFragment(task);
-                         dismiss();
                      }
                  });
              }
@@ -165,7 +163,6 @@ public class TaskDetailFragment extends DialogFragment {
                  @Override
                  public void onClick(View view) {
                      listener.launchEditTaskFragment(task);
-                     dismiss();
                  }
              });
             } else {
@@ -174,7 +171,6 @@ public class TaskDetailFragment extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         listener.launchContactOwnerDialog(task);
-                        dismiss();
                     }
                 });
             }
@@ -186,7 +182,6 @@ public class TaskDetailFragment extends DialogFragment {
                     listener.launchProfileFragment(userId);
 
                     // Close the dialog and return back to the parent
-                    dismiss();
                 }
             });
             String imageUrl = postedBy.getString("profilePicUrl");

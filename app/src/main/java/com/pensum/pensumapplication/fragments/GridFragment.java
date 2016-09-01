@@ -1,5 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,11 @@ public abstract class GridFragment extends Fragment
     public ArrayList<Task> tasks;
     protected RecyclerView rvTasks;
     public TasksAdapter adapter;
+    public TaskDetailListener listener;
+
+    public interface TaskDetailListener {
+        void showDetailFragment(Task task, Conversation conversation);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,17 @@ public abstract class GridFragment extends Fragment
         setHasOptionsMenu(true);
         tasks = new ArrayList<>();
         adapter = new TasksAdapter(tasks, getContext(), this);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TaskDetailListener) {
+            listener = (TaskDetailListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement TaskDetailListener");
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.pensum.pensumapplication.fragments;
 
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -39,10 +38,7 @@ public class MyAcceptedTasks extends GridFragment {
     }
 
     public void showDetailFragment(Task task, Conversation conversation) {
-        FragmentManager fm = getFragmentManager();
-        TaskDetailFragment taskDetailFragment =
-                TaskDetailFragment.newInstance(task.getObjectId());
-        taskDetailFragment.show(fm, "fragment_task_detail");
+        listener.showDetailFragment(task, conversation);
     }
 
     @Override

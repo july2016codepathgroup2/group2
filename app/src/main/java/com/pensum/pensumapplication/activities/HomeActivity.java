@@ -26,6 +26,7 @@ import com.pensum.pensumapplication.fragments.ChatFragment;
 import com.pensum.pensumapplication.fragments.CompleteTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.ConversationFragment;
+import com.pensum.pensumapplication.fragments.GridFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
 import com.pensum.pensumapplication.fragments.MapFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
@@ -40,7 +41,8 @@ import com.pensum.pensumapplication.models.Task;
 
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
-        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener {
+        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener,
+        GridFragment.TaskDetailListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -319,9 +321,21 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
 
     @Override
     public void infoWindowClicked(Task task) {
-        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         TaskDetailFragment taskDetailFragment =
                 TaskDetailFragment.newInstance(task.getObjectId());
-        taskDetailFragment.show(fm, "fragment_task_detail");
+        ft.replace(R.id.flContent, taskDetailFragment);
+        ft.addToBackStack("task detail");
+        ft.commit();
+    }
+
+    @Override
+    public void showDetailFragment(Task task, Conversation conversation) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        TaskDetailFragment taskDetailFragment =
+                TaskDetailFragment.newInstance(task.getObjectId());
+        ft.replace(R.id.flContent, taskDetailFragment);
+        ft.addToBackStack("task detail");
+        ft.commit();
     }
 }

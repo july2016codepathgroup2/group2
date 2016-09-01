@@ -147,10 +147,7 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
     }
 
     public void showDetailFragment(Task task, Conversation conversation) {
-        FragmentManager fm = getFragmentManager();
-        TaskDetailFragment taskDetailFragment =
-                TaskDetailFragment.newInstance(task.getObjectId());
-        taskDetailFragment.show(fm, "fragment_task_detail");
+        listener.showDetailFragment(task, conversation);
     }
 
     @Override
