@@ -1,7 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +13,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.fragments.profile.SimpleItemTouchHelperCallback;
+import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
 import java.util.List;
@@ -68,10 +67,7 @@ public class MyPostedTasks extends GridFragment {
     }
 
     public void showDetailFragment(Task task, Conversation conversation) {
-        FragmentManager fm = getFragmentManager();
-        TaskDetailFragment taskDetailFragment =
-                TaskDetailFragment.newInstance(task.getObjectId());
-        taskDetailFragment.show(fm, "fragment_task_detail");
+        listener.showDetailFragment(task, conversation);
     }
 
     @Override
