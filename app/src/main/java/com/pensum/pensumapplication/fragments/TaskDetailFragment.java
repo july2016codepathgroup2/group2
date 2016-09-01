@@ -124,13 +124,15 @@ public class TaskDetailFragment extends DialogFragment {
 //            rvTaskImages.setVisibility(View.GONE);
 //        }
 
-        try {
-            ParseFile parseFile = task.getTaskPic();
-            byte[] data = parseFile.getData();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            ivTaskPic.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(task.getTaskPic()!=null) {
+            try {
+                ParseFile parseFile = task.getTaskPic();
+                byte[] data = parseFile.getData();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                ivTaskPic.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Button btnAction = (Button) view.findViewById(R.id.btnAction);

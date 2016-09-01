@@ -86,28 +86,56 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContent);
                         String name = fragment.getClass().toString();
 
+                        //TODO Temp implementation, don't know if there is a better way to handle this
+                        // The single selection for submenu doesn't seem to work
+                        // The Group of the submenu can't be selected,
+                        // so the selection will be wrong when jump back from sub item to a main item
                         if (fragment.getClass() == HomeFragment.class) {
                             nvDrawer.getMenu().getItem(0).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.home);
                             Log.d("fragment", "Switch to home");
                         } else if (fragment.getClass() == ProfileFragment.class) {
                             nvDrawer.getMenu().getItem(1).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.profile);
                             Log.d("fragment", "Switch to profile");
                         } else if (fragment.getClass() == MyPostedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
+                            nvDrawer.getMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.posted);
                             Log.d("fragment", "Switch to my posted tasks");
                         } else if (fragment.getClass() == MyAcceptedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
+                            nvDrawer.getMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.accepted);
                             Log.d("fragment", "Switch to my accepted tasks");
                         } else if (fragment.getClass() == MyCompletedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.completed);
                             Log.d("fragment", "Switch to my completed tasks");
                         } else if (fragment.getClass() == MessagesFragment.class) {
                             nvDrawer.getMenu().getItem(3).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.message);
                             Log.d("fragment", "Switch to message");
                         }
