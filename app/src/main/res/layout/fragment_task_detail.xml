@@ -48,7 +48,7 @@
         style="@android:style/TextAppearance.Medium"
         android:text="@string/status_label"
         android:layout_below="@+id/tvBudgetLabel"
-        android:layout_alignRight="@+id/tvBudgetLabel"
+        android:layout_alignLeft="@+id/tvBudgetLabel"
         android:layout_alignStart="@+id/tvBudgetLabel"
         android:layout_marginTop="5dp"/>
 

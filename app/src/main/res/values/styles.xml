@@ -88,6 +88,9 @@
     <style name="styleProgress" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
         <item name="android:max">6</item>
         <item name="android:progressDrawable">@drawable/yellowprogress</item>
-
+    </style>
+    
+    <style name="NavDrawerStyle">
+        <item name="android:listPreferredItemHeightSmall">44dp</item><!-- default 48dp-->
     </style>
 </resources>

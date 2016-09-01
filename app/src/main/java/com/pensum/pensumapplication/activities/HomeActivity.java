@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -59,6 +61,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        disableNavigationViewScrollbars(nvDrawer);
         setupDrawerContent(nvDrawer);
         drawerToggle = setupDrawerToggle();
 
@@ -125,6 +128,18 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                         return true;
                     }
                 });
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                //Disable scrollbar
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+                //Disable scrolling shadow
+                navigationMenuView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            }
+        }
     }
 
     @Override
