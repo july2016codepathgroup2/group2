@@ -88,6 +88,12 @@
     <style name="styleProgress" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
         <item name="android:max">6</item>
         <item name="android:progressDrawable">@drawable/yellowprogress</item>
-
     </style>
+
+    <style name="styleRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_selector</item>
+        <item name="android:minHeight">45dp</item>
+        <item name="android:maxHeight">45dp</item>
+    </style>
+
 </resources>

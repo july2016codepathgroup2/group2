@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -38,9 +39,9 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         @BindView(R.id.ivNewMessage) ImageView ivNewMessage;
         @BindView(R.id.rbRating) RatingBar rbRating;
         @BindView(R.id.tvOffer) TextView tvOffer;
-        @BindView(R.id.btnAccept) Button btnAccept;
+        @BindView(R.id.btnAccept) ImageButton btnAccept;
         @BindView(R.id.btnMessage) Button btnMessage;
-        @BindView(R.id.btnDecline) Button btnDecline;
+        @BindView(R.id.btnDecline) ImageButton btnDecline;
 
         public ViewHolder (View view) {
             super(view);
@@ -118,7 +119,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             ivNewMessage.setImageDrawable(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.ic_mail_outline_black_24dp, null));
         }
 
-        Button btnAccept = holder.btnAccept;
+        ImageButton btnAccept = holder.btnAccept;
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,7 +127,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 //                listener.acceptButtonClicked(conversation);
             }
         });
-        Button btnDecline = holder.btnDecline;
+        ImageButton btnDecline = holder.btnDecline;
 
         Button btnMessage = holder.btnMessage;
         btnMessage.setOnClickListener(new View.OnClickListener() {
