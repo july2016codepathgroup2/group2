@@ -63,6 +63,8 @@ public class Task extends ParseObject {
         put("taskPic", taskPic);
     }
 
+    public void setHasBidder(boolean hasBidder){ put("has_bidder", hasBidder); }
+
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
     public JSONArray getImages() {
@@ -102,6 +104,8 @@ public class Task extends ParseObject {
     public String getType() {
         return getString("type");
     }
+
+    public boolean getHasBidder() { return getBoolean("has_bidder"); }
 
     public ParseUser getCandidate() { return getParseUser("candidate"); }
 

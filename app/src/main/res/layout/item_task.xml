@@ -54,5 +54,13 @@
             android:layout_centerHorizontal="true"
             style="@style/textMoney"
             tools:text="$100" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/ivBidderTag"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
