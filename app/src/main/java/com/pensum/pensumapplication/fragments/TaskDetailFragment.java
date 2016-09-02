@@ -147,6 +147,8 @@ public class TaskDetailFragment extends Fragment {
                          listener.launchAcceptCandidateDialog(task);
                      }
                  });
+                 if(task.getCandidate()==null)
+                     btnAction.setEnabled(false);
              } else if (TextUtils.equals(task.getStatus(),"accepted")){
                  btnAction.setText(getResources().getString(R.string.complete));
                  btnAction.setOnClickListener(new View.OnClickListener() {
