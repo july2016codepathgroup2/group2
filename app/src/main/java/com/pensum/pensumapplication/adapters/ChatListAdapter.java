@@ -17,6 +17,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
     private Context mContext;
     private List<Message> mMessages;
@@ -61,7 +65,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             e.printStackTrace();
         }
         if (profilePictureUrl != null) {
-            Picasso.with(getContext()).load(profilePictureUrl).into(imageProfilePicture);
+            Picasso.with(getContext()).load(profilePictureUrl).
+                    transform(new CropCircleTransformation()).into(imageProfilePicture);
         }
 
         viewHolder.tvBody.setText(message.getMessage());
@@ -77,16 +82,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView ivProfileOther;
-        public ImageView ivProfileMe;
-        public TextView tvBody;
+        @BindView(R.id.ivProfileOther) ImageView ivProfileOther;
+        @BindView(R.id.ivProfileMe) ImageView ivProfileMe;
+        @BindView(R.id.tvBody) TextView tvBody;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            ivProfileOther = (ImageView) itemView.findViewById(R.id.ivProfileOther);
-            ivProfileMe = (ImageView) itemView.findViewById(R.id.ivProfileMe);
-            tvBody = (TextView) itemView.findViewById(R.id.tvBody);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
