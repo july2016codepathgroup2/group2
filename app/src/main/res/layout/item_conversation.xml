@@ -42,26 +42,6 @@
         android:layout_marginBottom="5dp"/>
 
 
-    <ImageButton
-        android:id="@+id/btnAccept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_check_circle_black_48dp"
-        android:layout_alignBottom="@+id/rbRating"
-        android:layout_alignRight="@+id/ivNewMessage"
-        android:layout_alignEnd="@+id/ivNewMessage"/>
-
-    <ImageButton
-        android:id="@+id/btnDecline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_clear_black_48dp"
-        android:layout_alignTop="@+id/btnAccept"
-        android:layout_toLeftOf="@+id/btnAccept"
-        android:layout_toStartOf="@+id/btnAccept"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,9 +60,9 @@
         android:layout_height="wrap_content"
         android:text="@string/message"
         android:id="@+id/btnMessage"
-        android:layout_below="@+id/btnAccept"
-        android:layout_alignRight="@+id/btnAccept"
-        android:layout_alignEnd="@+id/btnAccept"/>
+        android:layout_alignRight="@+id/ivNewMessage"
+        android:layout_alignEnd="@+id/ivNewMessage"
+        android:layout_marginTop="15dp"/>
 
     <ImageView
         android:layout_width="24dp"

@@ -1,10 +1,12 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,11 @@ public class ConversationFragment extends Fragment {
     public ArrayList<Conversation> conversations;
     private Unbinder unbinder;
     private Task task;
+    private ConversationListener listener;
+
+    public interface ConversationListener{
+        void launchAcceptCandidateDialog(Task task);
+    }
 
     public ConversationFragment(){
 
@@ -66,19 +73,22 @@ public class ConversationFragment extends Fragment {
         adapter = new ConversationAdapter(getContext(),conversations);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ConversationListener) {
+            listener = (ConversationListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement ConversationFragment.ConversationListener");
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conversations, container, false);
         unbinder = ButterKnife.bind(this, view);
-
-        adapter.setOnItemClickListener(new ConversationAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                // TODO build this out
-                //showConversationDetailFragment(conversaionts.get(position));
-            }
-        });
 
         rvConversations.setAdapter(adapter);
         rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -86,7 +96,7 @@ public class ConversationFragment extends Fragment {
 
         String taskId = getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
+//        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
         query.include("posted_by");
         query.getInBackground(taskId, new GetCallback<Task>() {
             public void done(Task item, ParseException e) {
@@ -107,6 +117,59 @@ public class ConversationFragment extends Fragment {
                 }
             }
         });
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int position = viewHolder.getAdapterPosition();
+                Conversation c = conversations.get(position);
+                if(swipeDir == ItemTouchHelper.LEFT){
+                    c.setStatus("declined");
+                    c.saveInBackground();
+                    conversations.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    // TODO could call snack bar here
+                } else {
+                    conversations.add(position,c);
+                    adapter.notifyItemInserted(position);
+                    listener.launchAcceptCandidateDialog(c.getTask());
+                }
+            }
+
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                //Available drag and drop directions
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                //Available swipe directions
+                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            //Disable or Enable drag and drop by long press
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return false;
+            }
+
+            //Disable or Enable swiping
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                //return false;
+                return true;
+            }
+
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+
+        itemTouchHelper.attachToRecyclerView(rvConversations);
+
         return view;
     }
 
@@ -119,6 +182,7 @@ public class ConversationFragment extends Fragment {
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation");
         mainConversationQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
         mainConversationQuery.whereEqualTo("task", task);
+        mainConversationQuery.whereNotEqualTo("status","declined");
         mainConversationQuery.include("task");
         mainConversationQuery.include("posted_by");
 

@@ -40,7 +40,7 @@ import com.pensum.pensumapplication.models.Task;
 
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
-        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener {
+        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener, ConversationFragment.ConversationListener{
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -324,4 +324,5 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                 TaskDetailFragment.newInstance(task.getObjectId());
         taskDetailFragment.show(fm, "fragment_task_detail");
     }
+
 }
