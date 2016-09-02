@@ -38,9 +38,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         @BindView(R.id.ivNewMessage) ImageView ivNewMessage;
         @BindView(R.id.rbRating) RatingBar rbRating;
         @BindView(R.id.tvOffer) TextView tvOffer;
-        @BindView(R.id.btnAccept) Button btnAccept;
         @BindView(R.id.btnMessage) Button btnMessage;
-        @BindView(R.id.btnDecline) Button btnDecline;
 
         public ViewHolder (View view) {
             super(view);
@@ -50,7 +48,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     private List<Conversation> conversations;
     private Context context;
-    private static OnItemClickListener listener;
+//    private static OnItemClickListener listener;
 
     public ConversationAdapter(Context context, List<Conversation> conversations){
         this.context = context;
@@ -118,16 +116,6 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             ivNewMessage.setImageDrawable(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.ic_mail_outline_black_24dp, null));
         }
 
-        Button btnAccept = holder.btnAccept;
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO link here to dialog
-//                listener.acceptButtonClicked(conversation);
-            }
-        });
-        Button btnDecline = holder.btnDecline;
-
         Button btnMessage = holder.btnMessage;
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,13 +126,14 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         });
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+    public void remove(int position) {
+       Conversation c =  conversations.get(position);
+        c.setStatus("declined");
+        c.saveInBackground();
+        conversations.remove(position);
+        notifyItemRemoved(position);
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
-    }
 
     @Override
     public int getItemCount() {

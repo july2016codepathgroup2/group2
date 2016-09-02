@@ -43,7 +43,7 @@ import com.pensum.pensumapplication.models.Task;
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
         MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener,
-        GridFragment.TaskDetailListener {
+        GridFragment.TaskDetailListener, ConversationFragment.ConversationListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -371,4 +371,5 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         ft.addToBackStack("task detail");
         ft.commit();
     }
+
 }

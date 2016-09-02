@@ -89,7 +89,19 @@
         <item name="android:max">6</item>
         <item name="android:progressDrawable">@drawable/yellowprogress</item>
     </style>
-    
+
+    <style name="styleRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_selector</item>
+        <item name="android:minHeight">24dp</item>
+        <item name="android:maxHeight">24dp</item>
+    </style>
+
+    <style name="styleRatingBarLarge" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_selector_large</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:maxHeight">44dp</item>
+    </style>
+
     <style name="NavDrawerStyle">
         <item name="android:listPreferredItemHeightSmall">44dp</item><!-- default 48dp-->
     </style>
@@ -105,4 +117,5 @@
         <item name="android:background">@drawable/rounded_corner_textview</item>
         <item name="android:padding">5dp</item>
     </style>
+
 </resources>

@@ -36,4 +36,7 @@ public class Conversation extends ParseObject{
 
     public void setOffer(BigDecimal offer){ put("offer",offer); }
     public Double getOffer() { return  getDouble("offer"); }
+
+    public void setStatus(String status) { put("status",status); }
+    public String getStatus() { return getString("status"); }
 }

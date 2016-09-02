@@ -12,5 +12,7 @@
         <item name="textMoney">@style/textMoney</item>
         <item name="backgroundGradient">@style/backgroundGradient</item>
         <item name="styleProgress">@style/styleProgress</item>
+        <item name="styleRatingBar">@style/styleRatingBar</item>
+        <item name="styleRatingBarLarge">@style/styleRatingBarLarge</item>
     </style>
 </resources>

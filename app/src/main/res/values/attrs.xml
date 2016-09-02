@@ -12,5 +12,7 @@
     <attr name="spinner" format="reference" />
     <attr name="backgroundGradient" format="reference"/>
     <attr name="styleProgress" format="reference"/>
+    <attr name="styleRatingBar" format="reference"/>
+    <attr name="styleRatingBarLarge" format="reference"/>
 
 </resources>

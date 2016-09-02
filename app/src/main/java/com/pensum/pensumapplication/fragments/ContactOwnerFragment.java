@@ -139,7 +139,7 @@ public class ContactOwnerFragment extends DialogFragment {
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         postedBy = task.getPostedBy();
         tvName.setText(FormatterHelper.formatName(postedBy.getString("fbName")));
-        String imageUrl = postedBy.getString("url");
+        String imageUrl = postedBy.getString("profilePicUrl");
         if (imageUrl != null) {
             Picasso.with(getContext()).load(imageUrl).
                     transform(new CropCircleTransformation()).into(ivProfileImage);

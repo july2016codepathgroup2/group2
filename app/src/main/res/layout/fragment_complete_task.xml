@@ -36,16 +36,20 @@
             tools:text="Terri C."
             android:id="@+id/tvName"
             android:layout_marginLeft="15dp"
-            android:textSize="23sp"/>
+            style="@style/textLarge"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rbRating"
-        android:layout_gravity="center_horizontal"
+        style="@style/styleRatingBarLarge"
+        tools:rating="3.5"
         android:numStars="@integer/number_stars"
-        android:stepSize=".5"/>
+        android:stepSize=".5"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -53,5 +57,6 @@
         android:text="@string/complete"
         style="@style/largeButton"
         android:id="@+id/btnComplete"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
 </LinearLayout>
