@@ -13,7 +13,8 @@
         android:layout_alignParentStart="true"
         tools:src="@drawable/ic_person_black_24dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +30,7 @@
 
     <RatingBar
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="15dp"
         android:id="@+id/rbRating"
         android:layout_below="@+id/tvName"
         android:layout_toRightOf="@+id/ivProfileImage"
@@ -47,9 +48,9 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_check_circle_black_48dp"
-        android:layout_alignTop="@+id/btnMessage"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/btnMessage"/>
+        android:layout_alignBottom="@+id/rbRating"
+        android:layout_alignRight="@+id/ivNewMessage"
+        android:layout_alignEnd="@+id/ivNewMessage"/>
 
     <ImageButton
         android:id="@+id/btnDecline"
@@ -58,8 +59,8 @@
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_clear_black_48dp"
         android:layout_alignTop="@+id/btnAccept"
-        android:layout_toRightOf="@+id/btnAccept"
-        android:layout_marginLeft="20dp"/>
+        android:layout_toLeftOf="@+id/btnAccept"
+        android:layout_toStartOf="@+id/btnAccept"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,7 +69,9 @@
         android:id="@+id/tvOffer"
         style="@style/textMoney"
         android:layout_above="@+id/rbRating"
-        android:layout_centerHorizontal="true"/>
+        android:layout_toRightOf="@+id/tvName"
+        android:layout_toEndOf="@+id/tvName"
+        android:layout_marginLeft="10dp"/>
 
 
     <Button
@@ -77,9 +80,9 @@
         android:layout_height="wrap_content"
         android:text="@string/message"
         android:id="@+id/btnMessage"
-        android:layout_alignLeft="@+id/rbRating"
-        android:layout_alignStart="@+id/rbRating"
-        android:layout_below="@+id/rbRating"/>
+        android:layout_below="@+id/btnAccept"
+        android:layout_alignRight="@+id/btnAccept"
+        android:layout_alignEnd="@+id/btnAccept"/>
 
     <ImageView
         android:layout_width="24dp"

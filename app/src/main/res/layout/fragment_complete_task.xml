@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rbRating"
-        style="@style/styleRatingBar"
+        style="@style/styleRatingBarLarge"
         tools:rating="3.5"
         android:numStars="@integer/number_stars"
         android:stepSize=".5"
