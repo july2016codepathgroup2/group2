@@ -114,6 +114,8 @@ public class ConversationFragment extends Fragment {
                                 transform(new CropCircleTransformation()).into(ivProfilePicture);
                     }
                     populateConversations();
+                } else {
+                    e.printStackTrace();
                 }
             }
         });

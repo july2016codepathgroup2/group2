@@ -56,7 +56,7 @@
         <item name="android:background">@drawable/button_small_yellow</item>
         <item name="android:layout_marginTop">@dimen/view_margin</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="android:textColor">@color/button_small_yellow_text</item>
     </style>
 
     <style name="smallGreyButton" parent="smallYellowButton">
@@ -100,6 +100,22 @@
         <item name="android:progressDrawable">@drawable/ratingbar_selector_large</item>
         <item name="android:minHeight">44dp</item>
         <item name="android:maxHeight">44dp</item>
+    </style>
+
+    <style name="NavDrawerStyle">
+        <item name="android:listPreferredItemHeightSmall">44dp</item><!-- default 48dp-->
+    </style>
+
+    <style name="textProfile" parent="@android:style/TextAppearance.Large">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorIconGreenDark</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="textProfileSub" parent="textRegular">
+        <item name="android:textColor">@color/colorIconGreenLight</item>
+        <item name="android:background">@drawable/rounded_corner_textview</item>
+        <item name="android:padding">5dp</item>
     </style>
 
 </resources>

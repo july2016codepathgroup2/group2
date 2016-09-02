@@ -28,20 +28,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ChatFragment extends Fragment {
     private final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
     private final int POLL_INTERVAL = 1000;
 
-    private RecyclerView rvChat;
+    @BindView(R.id.rvChat) RecyclerView rvChat;
+    @BindView(R.id.etChatMessage) EditText etChatMessage;
+    @BindView(R.id.btSendChat) Button btSendChat;
     private List<Message> messages;
     private ChatListAdapter adapter;
     private boolean firstLoad;
-    private EditText etChatMessage;
-    private Button btSendChat;
     private ParseUser sendingUser;
     private ParseUser receivingUser;
     private Conversation conversation;
 
+    private Unbinder unbinder;
     private Handler handler;
     private Runnable refreshMessagesRunnable;
 
@@ -66,7 +71,9 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_chat, parent, false);
+        View view = inflater.inflate(R.layout.fragment_chat, parent, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -110,6 +117,7 @@ public class ChatFragment extends Fragment {
     public void onDestroyView() {
         handler.removeCallbacks(refreshMessagesRunnable);
         super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void setupMessagePosting(View view) {
@@ -117,13 +125,9 @@ public class ChatFragment extends Fragment {
         firstLoad = true;
         adapter = new ChatListAdapter(getContext(), messages);
 
-        rvChat = (RecyclerView) view.findViewById(R.id.rvChat);
         rvChat.setAdapter(adapter);
         rvChat.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        etChatMessage = (EditText) view.findViewById(R.id.etChatMessage);
-
-        btSendChat = (Button) view.findViewById(R.id.btSendChat);
         btSendChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -24,6 +24,7 @@ import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.fragments.profile.EditSkillFragment;
 import com.pensum.pensumapplication.fragments.profile.ErrorSkillsFragment;
 import com.pensum.pensumapplication.fragments.profile.SkillsFragment;
+import com.pensum.pensumapplication.fragments.profile.StatusFragment;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Skill;
 import com.squareup.picasso.Picasso;
@@ -44,7 +45,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class ProfileFragment extends Fragment
         implements EditSkillFragment.EditSkillFragmentListener,
         ProfileSkillAdapter.SwipeDeleteListener {
-    //    @BindView(R.id.ivProfBGImage)ImageView ivProfBGImage;
+    @BindView(R.id.ivProfBGImage)ImageView ivProfBGImage;
     @BindView(R.id.ivProfImage)ImageView ivProfImage;
     @BindView(R.id.tvProfName)TextView tvProfName;
     @BindView(R.id.btnProfAddSkill)ImageButton btnProfAddSkill;
@@ -105,27 +106,32 @@ public class ProfileFragment extends Fragment
 
         //TODO blur the background
         if (user != null) {
+            ivProfBGImage.setImageResource(0);
             ivProfImage.setImageResource(0);
 
             String fbName = (String) user.get("fbName");
             tvProfName.setText(FormatterHelper.formatName(fbName));
+
+            String backgroundUrl = (String)user.get("coverPicUrl");
+            Picasso.with(getContext()).load(backgroundUrl).resize(600,400).centerCrop().into(ivProfBGImage);
 
             String profileUrl = (String) user.get("profilePicUrl");
             Picasso.with(getContext()).load(profileUrl).
                     transform(new CropCircleTransformation()).into(ivProfImage);
         }
 
-        Fragment fragmentSkills = SkillsFragment.newInstance(userId);
-//        Fragment fragmentStatus = new StatusFragment();
-
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
         if (skills.size() > 0)
-            transaction.replace(R.id.flProfSkills, fragmentSkills);
+            transaction.replace(R.id.flProfSkills, SkillsFragment.newInstance(userId));
         else
             transaction.replace(R.id.flProfSkills, new ErrorSkillsFragment());
 
-        transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());
+        if(user.get("stats") != null)
+            transaction.replace(R.id.flProfStatus, StatusFragment.newInstance(userId));
+        else
+            transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());
+
         transaction.commit();
     }
 

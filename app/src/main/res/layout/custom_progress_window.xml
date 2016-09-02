@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:cpb_progress="30"
+        app:cpb_background_progressbar_color="@color/colorIconGreenDark"
+        app:cpb_background_progressbar_width="10dp"
+        app:cpb_progressbar_color="@color/colorAccent"
+        app:cpb_progressbar_width="15dp"
+        android:id="@+id/cpbCompPercent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="33.3%"
+        android:id="@+id/tvCompPercent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,9 +14,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -26,6 +27,7 @@ import com.pensum.pensumapplication.fragments.ChatFragment;
 import com.pensum.pensumapplication.fragments.CompleteTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.ContactOwnerFragment;
 import com.pensum.pensumapplication.fragments.ConversationFragment;
+import com.pensum.pensumapplication.fragments.GridFragment;
 import com.pensum.pensumapplication.fragments.HomeFragment;
 import com.pensum.pensumapplication.fragments.MapFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
@@ -40,7 +42,8 @@ import com.pensum.pensumapplication.models.Task;
 
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
-        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener, ConversationFragment.ConversationListener{
+        MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener,
+        GridFragment.TaskDetailListener, ConversationFragment.ConversationListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -59,6 +62,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        disableNavigationViewScrollbars(nvDrawer);
         setupDrawerContent(nvDrawer);
         drawerToggle = setupDrawerToggle();
 
@@ -83,34 +87,53 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContent);
                         String name = fragment.getClass().toString();
 
+                        //TODO Temp implementation, don't know if there is a better way to handle this
+                        // The single selection for submenu doesn't seem to work
+                        // The Group of the submenu can't be selected,
+                        // so the selection will be wrong when jump back from sub item to a main item
                         if (fragment.getClass() == HomeFragment.class) {
                             nvDrawer.getMenu().getItem(0).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.home);
-                            Log.d("fragment", "Switch to home");
                         } else if (fragment.getClass() == ProfileFragment.class) {
                             nvDrawer.getMenu().getItem(1).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.profile);
-                            Log.d("fragment", "Switch to profile");
                         } else if (fragment.getClass() == MyPostedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
+                            nvDrawer.getMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.posted);
-                            Log.d("fragment", "Switch to my posted tasks");
                         } else if (fragment.getClass() == MyAcceptedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
+                            nvDrawer.getMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.accepted);
-                            Log.d("fragment", "Switch to my accepted tasks");
                         } else if (fragment.getClass() == MyCompletedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.completed);
-                            Log.d("fragment", "Switch to my completed tasks");
                         } else if (fragment.getClass() == MessagesFragment.class) {
                             nvDrawer.getMenu().getItem(3).setChecked(true);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
+                            nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.message);
-                            Log.d("fragment", "Switch to message");
                         }
-
-                        Log.d("fragment", "Fragment class: " + name
-                                + " Title: " + getTitle() );
                     }
                 }
         );
@@ -125,6 +148,18 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                         return true;
                     }
                 });
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                //Disable scrollbar
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+                //Disable scrolling shadow
+                navigationMenuView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            }
+        }
     }
 
     @Override
@@ -319,10 +354,22 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
 
     @Override
     public void infoWindowClicked(Task task) {
-        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         TaskDetailFragment taskDetailFragment =
                 TaskDetailFragment.newInstance(task.getObjectId());
-        taskDetailFragment.show(fm, "fragment_task_detail");
+        ft.replace(R.id.flContent, taskDetailFragment);
+        ft.addToBackStack("task detail");
+        ft.commit();
+    }
+
+    @Override
+    public void showDetailFragment(Task task, Conversation conversation) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        TaskDetailFragment taskDetailFragment =
+                TaskDetailFragment.newInstance(task.getObjectId());
+        ft.replace(R.id.flContent, taskDetailFragment);
+        ft.addToBackStack("task detail");
+        ft.commit();
     }
 
 }
