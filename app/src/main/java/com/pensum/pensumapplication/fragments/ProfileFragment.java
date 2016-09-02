@@ -45,7 +45,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class ProfileFragment extends Fragment
         implements EditSkillFragment.EditSkillFragmentListener,
         ProfileSkillAdapter.SwipeDeleteListener {
-    //    @BindView(R.id.ivProfBGImage)ImageView ivProfBGImage;
+    @BindView(R.id.ivProfBGImage)ImageView ivProfBGImage;
     @BindView(R.id.ivProfImage)ImageView ivProfImage;
     @BindView(R.id.tvProfName)TextView tvProfName;
     @BindView(R.id.btnProfAddSkill)ImageButton btnProfAddSkill;
@@ -106,10 +106,14 @@ public class ProfileFragment extends Fragment
 
         //TODO blur the background
         if (user != null) {
+            ivProfBGImage.setImageResource(0);
             ivProfImage.setImageResource(0);
 
             String fbName = (String) user.get("fbName");
             tvProfName.setText(FormatterHelper.formatName(fbName));
+
+            String backgroundUrl = (String)user.get("coverPicUrl");
+            Picasso.with(getContext()).load(backgroundUrl).resize(600,400).centerCrop().into(ivProfBGImage);
 
             String profileUrl = (String) user.get("profilePicUrl");
             Picasso.with(getContext()).load(profileUrl).
