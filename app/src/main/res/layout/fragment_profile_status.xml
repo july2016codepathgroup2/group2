@@ -2,6 +2,35 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <include android:id="@+id/taskCompProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/custom_progress_window"
+        android:layout_below="@+id/tvComplete"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp" />
+
+    <include android:id="@+id/ratingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/custom_rating_window"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/taskCompProgress"
+        android:layout_toEndOf="@+id/taskCompProgress"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/complete_status"
+        android:id="@+id/tvComplete"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

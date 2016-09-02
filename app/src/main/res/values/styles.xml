@@ -93,4 +93,16 @@
     <style name="NavDrawerStyle">
         <item name="android:listPreferredItemHeightSmall">44dp</item><!-- default 48dp-->
     </style>
+
+    <style name="textProfile" parent="@android:style/TextAppearance.Large">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorIconGreenDark</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="textProfileSub" parent="textRegular">
+        <item name="android:textColor">@color/colorIconGreenLight</item>
+        <item name="android:background">@drawable/rounded_corner_textview</item>
+        <item name="android:padding">5dp</item>
+    </style>
 </resources>

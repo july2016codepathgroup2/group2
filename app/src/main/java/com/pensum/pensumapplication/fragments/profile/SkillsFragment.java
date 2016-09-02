@@ -127,7 +127,7 @@ public class SkillsFragment extends Fragment
                     skills.addAll(skillList);
                     aSkills.notifyItemRangeInserted(0, skillList.size());
                 } else {
-                    Log.e("message", "Error getting user" + e);
+                    Log.e("message", "Error getting user in profile Skill" + e);
                 }
             }
         });

@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Computer"
+        style="@style/textProfileSub"
         android:id="@+id/tvSkillName"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_alignParentTop="true"

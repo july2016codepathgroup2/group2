@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,14 +97,12 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.home);
-                            Log.d("fragment", "Switch to home");
                         } else if (fragment.getClass() == ProfileFragment.class) {
                             nvDrawer.getMenu().getItem(1).setChecked(true);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.profile);
-                            Log.d("fragment", "Switch to profile");
                         } else if (fragment.getClass() == MyPostedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(true);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
@@ -114,7 +111,6 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                             nvDrawer.getMenu().getItem(1).setChecked(false);
                             nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.posted);
-                            Log.d("fragment", "Switch to my posted tasks");
                         } else if (fragment.getClass() == MyAcceptedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(true);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
@@ -123,7 +119,6 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                             nvDrawer.getMenu().getItem(1).setChecked(false);
                             nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.accepted);
-                            Log.d("fragment", "Switch to my accepted tasks");
                         } else if (fragment.getClass() == MyCompletedTasks.class) {
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(true);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
@@ -132,18 +127,13 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                             nvDrawer.getMenu().getItem(1).setChecked(false);
                             nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.completed);
-                            Log.d("fragment", "Switch to my completed tasks");
                         } else if (fragment.getClass() == MessagesFragment.class) {
                             nvDrawer.getMenu().getItem(3).setChecked(true);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(0).setChecked(false);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(1).setChecked(false);
                             nvDrawer.getMenu().getItem(2).getSubMenu().getItem(2).setChecked(false);
                             setTitle(R.string.message);
-                            Log.d("fragment", "Switch to message");
                         }
-
-                        Log.d("fragment", "Fragment class: " + name
-                                + " Title: " + getTitle() );
                     }
                 }
         );

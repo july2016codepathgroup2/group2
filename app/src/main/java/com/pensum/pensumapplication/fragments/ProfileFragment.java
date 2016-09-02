@@ -24,6 +24,7 @@ import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.fragments.profile.EditSkillFragment;
 import com.pensum.pensumapplication.fragments.profile.ErrorSkillsFragment;
 import com.pensum.pensumapplication.fragments.profile.SkillsFragment;
+import com.pensum.pensumapplication.fragments.profile.StatusFragment;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Skill;
 import com.squareup.picasso.Picasso;
@@ -115,17 +116,18 @@ public class ProfileFragment extends Fragment
                     transform(new CropCircleTransformation()).into(ivProfImage);
         }
 
-        Fragment fragmentSkills = SkillsFragment.newInstance(userId);
-//        Fragment fragmentStatus = new StatusFragment();
-
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
         if (skills.size() > 0)
-            transaction.replace(R.id.flProfSkills, fragmentSkills);
+            transaction.replace(R.id.flProfSkills, SkillsFragment.newInstance(userId));
         else
             transaction.replace(R.id.flProfSkills, new ErrorSkillsFragment());
 
-        transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());
+        if(user.get("stats") != null)
+            transaction.replace(R.id.flProfStatus, StatusFragment.newInstance(userId));
+        else
+            transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());
+
         transaction.commit();
     }
 

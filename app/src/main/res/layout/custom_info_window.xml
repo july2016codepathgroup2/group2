@@ -39,7 +39,6 @@
         android:id="@+id/tvBudget"
         style="@style/textMoney"
         tools:text="$55.00"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center"/>
 
 </LinearLayout>

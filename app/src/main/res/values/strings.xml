@@ -42,4 +42,8 @@
     <string name="mark_task_complete">Please Rate Your Candidate</string>
     <string name="status_label">Status:</string>
     <string name="budget_label">Budget:</string>
+    <string name="no_data_available">NO DATA AVAILABLE AT THIS MOMENT</string>
+    <string name="complete_status">Complete Status</string>
+    <string name="profile_skill">SKILLS</string>
+    <string name="profile_status">STATUS</string>
 </resources>
