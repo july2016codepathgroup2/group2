@@ -3,6 +3,7 @@ package com.pensum.pensumapplication.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.internal.NavigationMenuView;
@@ -14,9 +15,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -315,9 +320,47 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
 
     @Override
     public void launchProfileFragment(String userId) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.addToBackStack("profile fragment");
-        ft.replace(R.id.flContent, ProfileFragment.newInstance(userId)).commit();
+        ProfileFragment profileFragment = ProfileFragment.newInstance(userId);
+
+        // Check that the device is running lollipop
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContent);
+            if (fragment instanceof TaskDetailFragment) {
+                Log.d("TaskD","Test transaction");
+                TaskDetailFragment taskDetailFragment = (TaskDetailFragment)fragment;
+
+                // Inflate transitions to apply
+                Transition changeTransform = TransitionInflater.from(this).
+                        inflateTransition(R.transition.change_image_transform);
+                Transition explodeTransform = TransitionInflater.from(this).
+                        inflateTransition(android.R.transition.explode);
+
+                // Setup exit transition on first fragment
+                taskDetailFragment.setSharedElementReturnTransition(changeTransform);
+                taskDetailFragment.setExitTransition(explodeTransform);
+
+                // Setup enter transition on second fragment
+                profileFragment.setSharedElementEnterTransition(changeTransform);
+                profileFragment.setEnterTransition(explodeTransform);
+
+                // Find the shared element (in Fragment A)
+                ImageView ivTaskDetailOwnerProf = (ImageView) findViewById(R.id.ivTaskDetailOwnerProf);
+
+                // Add second fragment by replacing first
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flContent, profileFragment)
+                        .addToBackStack("transaction profile fragment")
+                        .addSharedElement(ivTaskDetailOwnerProf, "profilePic");
+
+                // Apply the transaction
+                ft.commit();
+            }
+        }
+        else {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.addToBackStack("profile fragment");
+            ft.replace(R.id.flContent, profileFragment).commit();
+        }
     }
 
     @Override
