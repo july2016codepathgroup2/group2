@@ -13,55 +13,66 @@
         android:layout_height="wrap_content"
         style="@style/textLarge"
         tools:text="Task Title"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/tvBudgetLabel"
-        android:layout_alignStart="@+id/tvBudgetLabel"/>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ivTaskDetailOwnerProf" />
 
-    <TextView
-        android:id="@+id/tvBudgetLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium"
-        android:text="@string/budget_label"
-        android:layout_toRightOf="@+id/ivTaskDetailOwnerProf"
+    <RelativeLayout
+        android:id="@+id/rlBudget"
         android:layout_below="@+id/tvTitle"
-        android:layout_marginTop="5dp"/>
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvBudget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium"
-        android:textStyle="bold"
-        android:textColor="#2BA11A"
-        android:text="Budget"
-        android:layout_below="@+id/tvTitle"
-        android:layout_toRightOf="@+id/tvBudgetLabel"
-        android:layout_marginLeft="10dp"
-        android:layout_alignTop="@+id/tvBudgetLabel"/>
+        <TextView
+            android:id="@+id/tvBudgetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.Medium"
+            android:text="@string/budget_label"
+            android:layout_marginTop="5dp" />
 
+        <TextView
+            android:id="@+id/tvBudget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.Medium"
+            android:textStyle="bold"
+            android:textColor="#2BA11A"
+            android:text="Budget"
+            android:layout_toRightOf="@+id/tvBudgetLabel"
+            android:layout_marginLeft="10dp"
+            android:layout_alignTop="@+id/tvBudgetLabel" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvStatusLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium"
-        android:text="@string/status_label"
-        android:layout_below="@+id/tvBudgetLabel"
-        android:layout_alignLeft="@+id/tvBudgetLabel"
-        android:layout_alignStart="@+id/tvBudgetLabel"
-        android:layout_marginTop="5dp"/>
+    <RelativeLayout
+        android:id="@+id/rlStatus"
+        android:layout_below="@+id/rlBudget"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvStatus"
-        android:paddingLeft="10dp"
-        android:layout_toRightOf="@+id/tvStatusLabel"
-        tools:text="Open"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="2dp"
-        android:layout_alignTop="@+id/tvStatusLabel"/>
+        <TextView
+            android:id="@+id/tvStatusLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.Medium"
+            android:text="@string/status_label"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            tools:text="Open"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_toRightOf="@+id/tvStatusLabel"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_alignTop="@+id/tvStatusLabel" />
+    </RelativeLayout>
 
     <!--<android.support.v7.widget.RecyclerView-->
         <!--android:id="@+id/rvTaskImages"-->
@@ -70,13 +81,10 @@
         <!--android:layout_below="@+id/tvStatusLabel"/>-->
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/ivTaskDetailOwnerProf"
-        android:transitionName="profilePic"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         tools:src="@mipmap/ic_launcher"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"/>
@@ -95,7 +103,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ivTaskPic"
         tools:src="@mipmap/ic_launcher"
-        android:layout_below="@+id/tvStatusLabel"
+        android:layout_below="@+id/rlStatus"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"/>
