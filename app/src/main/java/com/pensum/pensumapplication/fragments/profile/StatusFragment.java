@@ -99,7 +99,7 @@ public class StatusFragment  extends Fragment {
             tvTotalRater.setText(stat.getTasksCompleted()+" total");
 
             Drawable progress = rbStatus.getProgressDrawable();
-            DrawableCompat.setTint(progress, ContextCompat.getColor(getContext(), R.color.colorAccent));
+            DrawableCompat.setTint(progress, ContextCompat.getColor(getActivity(), R.color.colorAccent));
             rbStatus.setProgressDrawable(progress);
             rbStatus.setRating(stat.getRating().floatValue());
             rbStatus.setEnabled(false);
