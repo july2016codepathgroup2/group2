@@ -3,6 +3,7 @@ package com.pensum.pensumapplication.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -99,8 +100,8 @@ public class ConversationFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                int position = viewHolder.getAdapterPosition();
-                Conversation c = conversations.get(position);
+                final int position = viewHolder.getAdapterPosition();
+                final Conversation c = conversations.get(position);
                 if(swipeDir == ItemTouchHelper.LEFT){
                     conversations.remove(position);
                     adapter.notifyItemRemoved(position);
@@ -110,11 +111,33 @@ public class ConversationFragment extends Fragment {
                     }
                     c.setStatus("declined");
                     c.saveInBackground();
-                    // TODO could call snack bar here
+                    Snackbar.make(rvConversations, R.string.snackbar_declined, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_undo, new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            conversations.add(position, c);
+                            adapter.notifyItemInserted(position);
+                            rvConversations.scrollToPosition(position);
+                            c.getTask().setHasBidder(true);
+                            c.getTask().saveInBackground();
+                            c.setStatus("bidding");
+                            c.saveInBackground();
+                        }
+                    }).show();
                 } else {
                     conversations.add(position,c);
                     adapter.notifyItemInserted(position);
                     c.getTask().acceptCandidate(c);
+                    Snackbar.make(rvConversations, R.string.snackbar_accepted, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_undo, new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            c.getTask().setStatus("open");
+                            c.getTask().nullAcceptedOffer();
+                            c.getTask().nullCandidate();
+                            c.getTask().saveInBackground();
+                            c.setStatus("bidding");
+                            c.saveInBackground();
+                        }
+                    }).show();
                 }
             }
 

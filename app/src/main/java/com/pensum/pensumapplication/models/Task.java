@@ -8,6 +8,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -64,6 +65,10 @@ public class Task extends ParseObject {
     }
 
     public void setHasBidder(boolean hasBidder){ put("has_bidder", hasBidder); }
+
+    public void nullCandidate() { put("candidate", JSONObject.NULL); }
+
+    public void nullAcceptedOffer() { put("accepted_offer", JSONObject.NULL); }
 
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
