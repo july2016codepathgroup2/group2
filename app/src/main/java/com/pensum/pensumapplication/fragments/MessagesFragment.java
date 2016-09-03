@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by violetaria on 8/21/16.
  */
-public class MessagesFragment extends GridFragment{
+public class MessagesFragment extends GridFragment {
 
     private OnConversationClickedListener listener;
 
@@ -58,11 +58,7 @@ public class MessagesFragment extends GridFragment{
                         Task task = conversationsFromQuery.get(i).getTask();
                         tasksFromQuery.add(conversationsFromQuery.get(i).getTask());
                     }
-                    int previousContentSize = tasks.size();
-                    tasks.clear();
-                    adapter.notifyItemRangeRemoved(0, previousContentSize);
-                    tasks.addAll(tasksFromQuery);
-                    adapter.notifyItemRangeInserted(0, tasksFromQuery.size());
+                    addAll(tasksFromQuery);
                 } else {
                     Log.e("message", "Error Loading Messages" + e);}
             }

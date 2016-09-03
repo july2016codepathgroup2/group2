@@ -43,6 +43,7 @@ public abstract class GridFragment extends Fragment
         setHasOptionsMenu(true);
         tasks = new ArrayList<>();
         adapter = new TasksAdapter(tasks, getContext(), this);
+        populateTasks();
     }
 
     @Override
@@ -91,7 +92,6 @@ public abstract class GridFragment extends Fragment
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvTasks.setLayoutManager(gridLayoutManager);
 
-        populateTasks();
         return view;
     }
 
@@ -102,6 +102,19 @@ public abstract class GridFragment extends Fragment
     abstract void populateTasks();
 
     abstract void showDetailFragment(Task task, Conversation conversation);
+
+    public void addAll(List<Task> tasksToAdd) {
+        int previousContentSize = tasks.size();
+        tasks.clear();
+        adapter.notifyItemRangeRemoved(0, previousContentSize);
+        tasks.addAll(tasksToAdd);
+        adapter.notifyItemRangeInserted(0, tasksToAdd.size());
+    }
+
+    public void add(Task task) {
+        tasks.add(task);
+        adapter.notifyItemInserted(tasks.size() - 1);
+    }
 
     @Override
     public abstract void onSwipeDelete(String id);

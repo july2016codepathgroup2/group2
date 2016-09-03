@@ -69,12 +69,7 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
             public void done(List<Task> items, ParseException e) {
                 if (e == null) {
                     // Access the array of results here
-                    int previousContentSize = tasks.size();
-                    tasks.clear();
-                    adapter.notifyItemRangeRemoved(0, previousContentSize);
-
-                    tasks.addAll(items);
-                    adapter.notifyItemRangeRemoved(0, items.size());
+                    addAll(items);
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
