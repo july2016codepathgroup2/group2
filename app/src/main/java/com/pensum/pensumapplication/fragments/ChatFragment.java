@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -38,7 +38,8 @@ public class ChatFragment extends Fragment {
 
     @BindView(R.id.rvChat) RecyclerView rvChat;
     @BindView(R.id.etChatMessage) EditText etChatMessage;
-    @BindView(R.id.btSendChat) Button btSendChat;
+    @BindView(R.id.btSendChat)
+    ImageView btSendChat;
     private List<Message> messages;
     private ChatListAdapter adapter;
     private boolean firstLoad;
