@@ -94,7 +94,6 @@ public class ConversationFragment extends Fragment {
         rvConversations.setAdapter(adapter);
         rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
         String taskId = getArguments().getString("task_id");
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
 //        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY

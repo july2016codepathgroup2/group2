@@ -8,7 +8,7 @@
     <string name="my_tasks">MY TASKS</string>
     <string name="messages">MESSAGES</string>
     <string name="log_out">LOG OUT</string>
-    <string name="bidding">My Task Bids</string>
+    <string name="bidding">MY BIDS</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="title_hint">Help me clean my room</string>
@@ -25,8 +25,9 @@
     <string name="done">Done</string>
     <string name="filter_search">Filter Search</string>
     <string name="search">Search</string>
-    <string name="posted">Posted</string>
+    <string name="posted">MY TASKS</string>
     <string name="accepted">Accepted</string>
+    <string name="won">Won</string>
     <string name="completed">Completed</string>
     <string name="accept">Accept</string>
     <string name="Decline"/>

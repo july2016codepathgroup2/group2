@@ -4,17 +4,17 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import com.pensum.pensumapplication.fragments.MyPostedTasksFilteredFragment;
+import com.pensum.pensumapplication.fragments.MyBiddedTasksFilteredFragment;
 
 /**
  * Created by violetaria on 9/3/16.
  */
-public class PostedTasksPagerAdapter extends SmartFragmentStatePagerAdapter {
+public class BiddedTasksPagerAdapter extends SmartFragmentStatePagerAdapter {
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String [] { "Open", "Accepted", "Completed" };
+    private String tabTitles[] = new String [] { "Bidding", "Won", "Declined" };
     private Context context;
 
-    public PostedTasksPagerAdapter(FragmentManager fm, Context context){
+    public BiddedTasksPagerAdapter(FragmentManager fm, Context context){
         super(fm);
         this.context = context;
     }
@@ -27,12 +27,13 @@ public class PostedTasksPagerAdapter extends SmartFragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return MyPostedTasksFilteredFragment.newInstance("open");
+            return MyBiddedTasksFilteredFragment.newInstance("bidding");
         } else if (position == 1) {
-            return MyPostedTasksFilteredFragment.newInstance("accepted");
+            return MyBiddedTasksFilteredFragment.newInstance("accepted");
         } else if (position == 2) {
-            return MyPostedTasksFilteredFragment.newInstance("completed");
-        } else {
+            return MyBiddedTasksFilteredFragment.newInstance("declined");
+        }
+        else {
             return null;
         }
 

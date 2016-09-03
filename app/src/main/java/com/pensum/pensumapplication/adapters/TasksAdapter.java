@@ -29,7 +29,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
         void onSwipeDelete(String id);
     }
 
-    private static OnItemClickListener listener;
+    private OnItemClickListener listener;
     private SwipeDeleteListener swipeListener;
 
     private List<Task> mTasks;
@@ -120,7 +120,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
         void onItemClick(View itemView, int position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder
             implements ItemTouchHelperViewHolder {
         public ImageView ivProfilePicture;
         public TextView tvType;
