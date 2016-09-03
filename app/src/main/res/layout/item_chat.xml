@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
+    android:padding="5dp"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/ivProfileOther"
         android:contentDescription="@string/profile_other"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@mipmap/ic_launcher" />
     <TextView
-        android:textSize="18sp"
-        android:id="@+id/tvBody"
-        android:padding="20dp"
-        android:lines="3"
-        android:textColor="@color/colorIconGreenDark"
-        android:layout_marginEnd="64dp"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginRight="64dp">
-    </TextView>
+        android:id="@+id/tvMessageBodyOther"
+        style="@style/chatMessageBodyOther"
+        android:layout_alignTop="@id/ivProfileOther"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@id/ivProfileOther"
+        android:layout_toRightOf="@id/ivProfileOther"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ImageView
         android:id="@+id/ivProfileMe"
         android:contentDescription="@string/profile_me"
-        android:layout_marginStart="-64dp"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_marginLeft="-64dp" />
-</LinearLayout>
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvMessageBodyMe"
+        style="@style/chatMessageBodyMe"
+        android:layout_alignTop="@id/ivProfileMe"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/ivProfileMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@id/ivProfileMe" />
+</RelativeLayout>

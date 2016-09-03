@@ -51,18 +51,24 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         if (isMe) {
             viewHolder.ivProfileMe.setVisibility(View.VISIBLE);
             viewHolder.ivProfileOther.setVisibility(View.GONE);
+            viewHolder.tvMessageBodyMe.setVisibility(View.VISIBLE);
+            viewHolder.tvMessageBodyOther.setVisibility(View.GONE);
             messageBubbleDrawable = new MessageBubbleDrawable(getContext(),
                     R.color.colorPrimaryLight, MessageBubbleDrawable.Gravity.END);
-            viewHolder.tvBody.setBackground(messageBubbleDrawable);
-            viewHolder.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            viewHolder.tvMessageBodyMe.setBackground(messageBubbleDrawable);
+            viewHolder.tvMessageBodyMe.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            viewHolder.tvMessageBodyMe.setText(message.getMessage());
         } else {
             viewHolder.ivProfileOther.setVisibility(View.VISIBLE);
             viewHolder.ivProfileMe.setVisibility(View.GONE);
+            viewHolder.tvMessageBodyOther.setVisibility(View.VISIBLE);
+            viewHolder.tvMessageBodyMe.setVisibility(View.GONE);
 
             messageBubbleDrawable = new MessageBubbleDrawable(getContext(),
                     R.color.colorPrimaryLight, MessageBubbleDrawable.Gravity.START);
-            viewHolder.tvBody.setBackground(messageBubbleDrawable);
-            viewHolder.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            viewHolder.tvMessageBodyOther.setBackground(messageBubbleDrawable);
+            viewHolder.tvMessageBodyOther.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            viewHolder.tvMessageBodyOther.setText(message.getMessage());
         }
 
         ImageView imageProfilePicture = isMe ? viewHolder.ivProfileMe : viewHolder.ivProfileOther;
@@ -76,8 +82,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             Picasso.with(getContext()).load(profilePictureUrl).
                     transform(new CropCircleTransformation()).into(imageProfilePicture);
         }
-
-        viewHolder.tvBody.setText(message.getMessage());
     }
 
     @Override
@@ -93,7 +97,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         @BindView(R.id.ivProfileOther) ImageView ivProfileOther;
         @BindView(R.id.ivProfileMe) ImageView ivProfileMe;
         @BindView(R.id.tvMessageBodyOther)
-        TextView tvBody;
+        TextView tvMessageBodyOther;
+        ;
+        @BindView(R.id.tvMessageBodyMe)
+        TextView tvMessageBodyMe;
 
         public ViewHolder(View itemView) {
             super(itemView);
