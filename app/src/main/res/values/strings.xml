@@ -8,6 +8,7 @@
     <string name="my_tasks">MY TASKS</string>
     <string name="messages">MESSAGES</string>
     <string name="log_out">LOG OUT</string>
+    <string name="bidding">My Task Bids</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="title_hint">Help me clean my room</string>
@@ -46,4 +47,5 @@
     <string name="complete_status">Complete Status</string>
     <string name="profile_skill">SKILLS</string>
     <string name="profile_status">STATUS</string>
+    <string name="filter_tasks">Filter</string>
 </resources>

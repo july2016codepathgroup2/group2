@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="200dp"
+              android:layout_height="match_parent"
+                android:padding="10dp"
+                android:layout_margin="20dp">
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/posted"
+        android:id="@+id/sPosted"
+        android:checked="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="16sp"
+        android:switchPadding="35dp"/>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/accepted"
+        android:id="@+id/sAccepted"
+        android:checked="false"
+        android:layout_below="@+id/sPosted"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="16sp"
+        android:switchPadding="20dp"/>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/completed"
+        android:id="@+id/sCompleted"
+        android:checked="false"
+        android:layout_below="@+id/sAccepted"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="16sp"
+        android:switchPadding="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/smallYellowButton"
+        android:text="@string/filter_tasks"
+        android:id="@+id/btnSaveFilters"
+        android:layout_below="@+id/sCompleted"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"/>
+</RelativeLayout>
