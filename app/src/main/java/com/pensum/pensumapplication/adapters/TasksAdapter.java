@@ -38,6 +38,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
     private TextView tvTaskTitle;
     private TextView tvPrice;
     private ImageView ivProfilePicture;
+    private ImageView ivBidderTag;
 
     public TasksAdapter(List<Task> mTasks, Context mContext, SwipeDeleteListener swipeListener) {
         this.mTasks = mTasks;
@@ -65,6 +66,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
         Task task = mTasks.get(position);
 
         ivProfilePicture = holder.ivProfilePicture;
+
+        if(task.getHasBidder()){
+            holder.ivBidderTag.setImageResource(R.drawable.tag);
+        } else {
+            holder.ivBidderTag.setImageResource(0);
+        }
+
         try {
             ParseUser postedBy = task.getPostedBy().fetchIfNeeded();
             String imageUrl = postedBy.getString("profilePicUrl");
@@ -118,6 +126,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
         public TextView tvType;
         public TextView tvTaskTitle;
         public TextView tvPrice;
+        public ImageView ivBidderTag;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -126,6 +135,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
             tvType = (TextView) itemView.findViewById(R.id.tvType);
             tvTaskTitle = (TextView) itemView.findViewById(R.id.tvTaskTitle);
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            ivBidderTag = (ImageView) itemView.findViewById(R.id.ivBidderTag);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

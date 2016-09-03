@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,17 +71,20 @@ public abstract class GridFragment extends Fragment
                 final Task clickedTask = tasks.get(position);
                 ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");
                 query.whereEqualTo("task", clickedTask);
-                query.whereEqualTo("owner", clickedTask.getPostedBy());
                 query.whereEqualTo("candidate", ParseUser.getCurrentUser());
                 query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
                 query.findInBackground(new FindCallback<Conversation>() {
                     @Override
                     public void done(List<Conversation> conversations, ParseException e) {
-                        Conversation conversation = null;
-                        if (conversations.size() > 0) {
-                            conversation = conversations.get(0);
-                        }
-                        showDetailFragment(clickedTask, conversation);
+                        if(e == null){
+                            Conversation conversation = null;
+                            if (conversations.size() > 0) {
+                                conversation = conversations.get(0);
+                            }
+                            showDetailFragment(clickedTask, conversation);
+                        } else {
+                            Log.e("message", "Error Loading Messages" + e);
+                    }
                     }
                 });
             }

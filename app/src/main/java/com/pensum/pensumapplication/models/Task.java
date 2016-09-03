@@ -63,6 +63,8 @@ public class Task extends ParseObject {
         put("taskPic", taskPic);
     }
 
+    public void setHasBidder(boolean hasBidder){ put("has_bidder", hasBidder); }
+
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
     public JSONArray getImages() {
@@ -103,6 +105,8 @@ public class Task extends ParseObject {
         return getString("type");
     }
 
+    public boolean getHasBidder() { return getBoolean("has_bidder"); }
+
     public ParseUser getCandidate() { return getParseUser("candidate"); }
 
     public ParseFile getTaskPic() {
@@ -117,4 +121,10 @@ public class Task extends ParseObject {
     public Task(){
     }
 
+    public void acceptCandidate(Conversation c){
+        this.setStatus("accepted");
+        this.setCandidate(c.getCandidate());
+        this.setAcceptedoffer(new BigDecimal(c.getOffer()));
+        this.saveInBackground();
+    }
 }

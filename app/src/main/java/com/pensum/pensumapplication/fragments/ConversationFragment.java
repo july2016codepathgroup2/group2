@@ -71,6 +71,7 @@ public class ConversationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         conversations = new ArrayList<>();
         adapter = new ConversationAdapter(getContext(),conversations);
+        populateConversations();
     }
 
     @Override
@@ -113,7 +114,6 @@ public class ConversationFragment extends Fragment {
                         Picasso.with(getContext()).load(R.mipmap.ic_launcher).
                                 transform(new CropCircleTransformation()).into(ivProfilePicture);
                     }
-                    populateConversations();
                 } else {
                     e.printStackTrace();
                 }
@@ -127,15 +127,19 @@ public class ConversationFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 Conversation c = conversations.get(position);
                 if(swipeDir == ItemTouchHelper.LEFT){
-                    c.setStatus("declined");
-                    c.saveInBackground();
                     conversations.remove(position);
                     adapter.notifyItemRemoved(position);
+                    if (conversations.size() == 0) {
+                        c.getTask().setHasBidder(false);
+                        c.getTask().saveInBackground();
+                    }
+                    c.setStatus("declined");
+                    c.saveInBackground();
                     // TODO could call snack bar here
                 } else {
                     conversations.add(position,c);
                     adapter.notifyItemInserted(position);
-                    listener.launchAcceptCandidateDialog(c.getTask());
+                    c.getTask().acceptCandidate(c);
                 }
             }
 

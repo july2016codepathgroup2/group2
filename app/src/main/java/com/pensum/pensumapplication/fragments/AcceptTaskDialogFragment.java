@@ -20,7 +20,6 @@ import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,11 +95,7 @@ public class AcceptTaskDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Conversation conversation = conversations.get(spCandidates.getSelectedItemPosition());
-                Task task =  conversation.getTask();
-                task.setStatus("accepted");
-                task.setCandidate(conversation.getCandidate());
-                task.setAcceptedoffer(new BigDecimal(conversation.getOffer()));
-                task.saveInBackground();
+                conversation.getTask().acceptCandidate(conversation);
                 dismiss();
             }
         });

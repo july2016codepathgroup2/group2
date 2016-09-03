@@ -150,6 +150,8 @@ public class ContactOwnerFragment extends DialogFragment {
     }
 
     public void sendMessage(View view) {
+        task.setHasBidder(true);
+        task.saveInBackground();
         ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
         query.whereEqualTo("candidate", ParseUser.getCurrentUser());
         query.whereEqualTo("task", task);
