@@ -93,6 +93,7 @@ public class ConversationFragment extends Fragment {
         rvConversations.setAdapter(adapter);
         rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback
                 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 

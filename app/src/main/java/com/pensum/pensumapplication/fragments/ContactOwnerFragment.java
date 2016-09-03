@@ -182,6 +182,7 @@ public class ContactOwnerFragment extends DialogFragment {
     private void createMessage(Conversation c) {
         Message message = new Message();
         c.setUnreadOwnerMessageFlag(true);
+        c.setStatus("bidding");
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         try {
             c.setOffer(new BigDecimal(nf.parse(etOffer.getText().toString()).toString()));

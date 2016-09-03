@@ -1,5 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -12,13 +13,34 @@ import com.pensum.pensumapplication.models.Task;
 import java.util.List;
 
 /**
- * Created by violetaria on 8/24/16.
+ * Created by violetaria on 9/3/16.
  */
-public class MyAcceptedTasks extends GridFragment {
+public class MyPostedTasksFilteredFragment extends GridFragment {
+
+    private String statusFilter;
+
+    public MyPostedTasksFilteredFragment() {
+    }
+
+
+    public static MyPostedTasksFilteredFragment newInstance(String statusFilter) {
+        MyPostedTasksFilteredFragment fragment = new MyPostedTasksFilteredFragment();
+        Bundle args = new Bundle();
+        args.putString("status_filter", statusFilter);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        statusFilter = getArguments().getString("status_filter");
+        super.onCreate(savedInstanceState);
+    }
+
     public void populateTasks() {
         ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-        query.whereEqualTo("candidate", ParseUser.getCurrentUser());
-        query.whereEqualTo("status","accepted");
+        query.whereEqualTo("posted_by", ParseUser.getCurrentUser());
+        query.whereEqualTo("status", statusFilter);
         query.setLimit(MAX_TASKS_TO_SHOW);
         query.orderByDescending("createdAt");
 

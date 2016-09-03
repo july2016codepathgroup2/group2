@@ -103,6 +103,7 @@ public abstract class GridFragment extends Fragment
         // TODO handle this here
     }
 
+
     abstract void populateTasks();
 
     abstract void showDetailFragment(Task task, Conversation conversation);

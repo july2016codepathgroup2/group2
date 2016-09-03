@@ -4,36 +4,29 @@
         <item
             android:id="@+id/home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/home" />
+            android:title="@string/home"/>
         <item
             android:id="@+id/profile"
             android:icon="@drawable/ic_person_black_24dp"
-            android:title="@string/profile" />
-        <item android:title="@string/my_tasks">
-            <menu>
-                <group android:checkableBehavior="single">
-                    <item
-                        android:id="@+id/my_posted_tasks"
-                        android:icon="@drawable/ic_assignment_black_24dp"
-                        android:title="@string/posted"/>
-                    <item
-                        android:id="@+id/my_accepted_tasks"
-                        android:icon="@drawable/ic_assignment_black_24dp"
-                        android:title="@string/accepted"/>
-                    <item
-                        android:id="@+id/my_completed_tasks"
-                        android:icon="@drawable/ic_assignment_black_24dp"
-                        android:title="@string/completed"/>
-                </group>
-            </menu>
-        </item>
+            android:title="@string/profile"/>
+
+        <item
+            android:id="@+id/my_posted_tasks"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            android:title="@string/posted"/>
+
+        <item
+            android:id="@+id/my_bids_on_tasks"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            android:title="@string/bidding"/>
+
         <item
             android:id="@+id/messages"
             android:icon="@drawable/ic_mail_black_24dp"
-            android:title="@string/messages" />
+            android:title="@string/messages"/>
         <item
             android:id="@+id/logOut"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="@string/log_out" />
+            android:title="@string/log_out"/>
     </group>
 </menu>
