@@ -121,4 +121,10 @@ public class Task extends ParseObject {
     public Task(){
     }
 
+    public void acceptCandidate(Conversation c){
+        this.setStatus("accepted");
+        this.setCandidate(c.getCandidate());
+        this.setAcceptedoffer(new BigDecimal(c.getOffer()));
+        this.saveInBackground();
+    }
 }

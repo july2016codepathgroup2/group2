@@ -41,10 +41,12 @@ public class MessagesFragment extends GridFragment {
 
         ParseQuery<Conversation> ownerQuery = ParseQuery.getQuery("Conversation");
         ownerQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
+        ownerQuery.whereNotEqualTo("status","declined");
 
         subConversationQueries.add(ownerQuery);
         ParseQuery<Conversation> candidateQuery = ParseQuery.getQuery("Conversation");
         candidateQuery.whereEqualTo("candidate", ParseUser.getCurrentUser());
+        candidateQuery.whereNotEqualTo("status","declined");
 
         subConversationQueries.add(candidateQuery);
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task");
