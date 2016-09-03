@@ -51,7 +51,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity android:name=".activities.HomeActivity"/>
-        <activity android:name=".activities.AddTaskActivity"/>
         <!-- activities and everything here. meta-data last inside application tag -->
         <meta-data
             android:name="com.parse.pensum"
