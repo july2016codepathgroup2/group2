@@ -76,7 +76,7 @@
     </style>
 
     <style name="backgroundGradient">
-        <item name="android:background">@drawable/gradiant_background</item>
+        <item name="android:background">@drawable/gradient_background</item>
     </style>
 
     <style name="textLabel" parent="textRegular">
@@ -117,5 +117,41 @@
         <item name="android:background">@drawable/rounded_corner_textview</item>
         <item name="android:padding">5dp</item>
     </style>
+    
+    <style name="conversationTitleText" parent="textRegular">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
 
+    <style name="chatMessageBodyOther">chatMessageBody
+        <item name="android:textColor">@color/colorIconGreenDark</item>
+        <item name="android:paddingStart">26dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="chatMessageBodyMe">chatMessageBodyMe
+        <item name="android:textColor">@color/colorIconGreenDark</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">26dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="chatLLSendMessage">chatMessageBodyMe
+        <item name="android:background">@drawable/chat_oval_box_shape</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+    </style>
+
+    <style name="ETChatMessage">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/chat_new_message_text_size</item>
+    </style>
 </resources>

@@ -47,7 +47,7 @@ import com.pensum.pensumapplication.models.Task;
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
         MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener,
-        GridFragment.TaskDetailListener, ConversationFragment.ConversationListener {
+        GridFragment.TaskDetailListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;

@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ImageView;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -38,7 +40,8 @@ public class ChatFragment extends Fragment {
 
     @BindView(R.id.rvChat) RecyclerView rvChat;
     @BindView(R.id.etChatMessage) EditText etChatMessage;
-    @BindView(R.id.btSendChat) Button btSendChat;
+    @BindView(R.id.btSendChat) ImageView btSendChat;
+    @BindView(R.id.pbLoading) ProgressBar pb;
     private List<Message> messages;
     private ChatListAdapter adapter;
     private boolean firstLoad;
@@ -157,6 +160,10 @@ public class ChatFragment extends Fragment {
         query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
         query.orderByDescending("createdAt");
         query.whereEqualTo("conversation", conversation);
+
+        if(firstLoad)
+            pb.setVisibility(ProgressBar.VISIBLE);
+
         query.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> queriedMessages, ParseException e) {
@@ -170,10 +177,12 @@ public class ChatFragment extends Fragment {
                         messages.addAll(queriedMessages);
                         adapter.notifyItemRangeInserted(0, queriedMessages.size());
                         rvChat.scrollToPosition(adapter.getItemCount() - 1);
-                        if (firstLoad) {
-                            rvChat.scrollToPosition(adapter.getItemCount() - 1);
-                            firstLoad = false;
-                        }
+                    }
+                    if (firstLoad) {
+                        rvChat.scrollToPosition(adapter.getItemCount() - 1);
+                        firstLoad = false;
+
+                        pb.setVisibility(ProgressBar.INVISIBLE);
                     }
                 } else {
                     Log.e("message", "Error Loading Messages" + e);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.helpers.view.MessageBubbleDrawable;
 import com.pensum.pensumapplication.models.Message;
 import com.squareup.picasso.Picasso;
 
@@ -46,15 +47,28 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         boolean isMe = message.getFrom().getObjectId() != null &&
                 message.getFrom().getObjectId().equals(ParseUser.getCurrentUser().getObjectId());
 
+        MessageBubbleDrawable messageBubbleDrawable;
         if (isMe) {
             viewHolder.ivProfileMe.setVisibility(View.VISIBLE);
             viewHolder.ivProfileOther.setVisibility(View.GONE);
-            viewHolder.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            viewHolder.tvMessageBodyMe.setVisibility(View.VISIBLE);
+            viewHolder.tvMessageBodyOther.setVisibility(View.GONE);
+            messageBubbleDrawable = new MessageBubbleDrawable(getContext(),
+                    R.color.colorPrimaryLight, MessageBubbleDrawable.Gravity.END);
+            viewHolder.tvMessageBodyMe.setBackground(messageBubbleDrawable);
+            viewHolder.tvMessageBodyMe.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            viewHolder.tvMessageBodyMe.setText(message.getMessage());
         } else {
             viewHolder.ivProfileOther.setVisibility(View.VISIBLE);
             viewHolder.ivProfileMe.setVisibility(View.GONE);
+            viewHolder.tvMessageBodyOther.setVisibility(View.VISIBLE);
+            viewHolder.tvMessageBodyMe.setVisibility(View.GONE);
 
-            viewHolder.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            messageBubbleDrawable = new MessageBubbleDrawable(getContext(),
+                    R.color.colorPrimaryLight, MessageBubbleDrawable.Gravity.START);
+            viewHolder.tvMessageBodyOther.setBackground(messageBubbleDrawable);
+            viewHolder.tvMessageBodyOther.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            viewHolder.tvMessageBodyOther.setText(message.getMessage());
         }
 
         ImageView imageProfilePicture = isMe ? viewHolder.ivProfileMe : viewHolder.ivProfileOther;
@@ -68,8 +82,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             Picasso.with(getContext()).load(profilePictureUrl).
                     transform(new CropCircleTransformation()).into(imageProfilePicture);
         }
-
-        viewHolder.tvBody.setText(message.getMessage());
     }
 
     @Override
@@ -84,7 +96,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileOther) ImageView ivProfileOther;
         @BindView(R.id.ivProfileMe) ImageView ivProfileMe;
-        @BindView(R.id.tvBody) TextView tvBody;
+        @BindView(R.id.tvMessageBodyOther)
+        TextView tvMessageBodyOther;
+        ;
+        @BindView(R.id.tvMessageBodyMe)
+        TextView tvMessageBodyMe;
 
         public ViewHolder(View itemView) {
             super(itemView);

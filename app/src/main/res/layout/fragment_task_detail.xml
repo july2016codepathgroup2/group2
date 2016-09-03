@@ -1,103 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlTaskDetail"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/textLarge"
-        tools:text="Task Title"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/tvBudgetLabel"
-        android:layout_alignStart="@+id/tvBudgetLabel"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/tvBudgetLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium"
-        android:text="@string/budget_label"
-        android:layout_toRightOf="@+id/ivTaskDetailOwnerProf"
-        android:layout_below="@+id/tvTitle"
-        android:layout_marginTop="5dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvBudget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium"
-        android:textStyle="bold"
-        android:textColor="#2BA11A"
-        android:text="Budget"
-        android:layout_below="@+id/tvTitle"
-        android:layout_toRightOf="@+id/tvBudgetLabel"
-        android:layout_marginLeft="10dp"
-        android:layout_alignTop="@+id/tvBudgetLabel"/>
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/textLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/ivTaskDetailOwnerProf"
+                android:layout_toEndOf="@+id/ivTaskDetailOwnerProf"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                tools:text="Task Title" />
 
+            <RelativeLayout
+                android:id="@+id/rlBudget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvTitle"
+                android:gravity="center">
 
-    <TextView
-        android:id="@+id/tvStatusLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium"
-        android:text="@string/status_label"
-        android:layout_below="@+id/tvBudgetLabel"
-        android:layout_alignLeft="@+id/tvBudgetLabel"
-        android:layout_alignStart="@+id/tvBudgetLabel"
-        android:layout_marginTop="5dp"/>
+                <TextView
+                    android:id="@+id/tvBudgetLabel"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/budget_label" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvStatus"
-        android:paddingLeft="10dp"
-        android:layout_toRightOf="@+id/tvStatusLabel"
-        tools:text="Open"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="2dp"
-        android:layout_alignTop="@+id/tvStatusLabel"/>
+                <TextView
+                    android:id="@+id/tvBudget"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/tvBudgetLabel"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tvBudgetLabel"
+                    android:text="Budget"
+                    android:textColor="#2BA11A"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/rvTaskImages"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_below="@+id/tvStatusLabel"/>-->
+            <RelativeLayout
+                android:id="@+id/rlStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/rlBudget"
+                android:gravity="center"
+                android:layout_marginBottom="10dp">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/ivTaskDetailOwnerProf"
-        android:transitionName="profilePic"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        tools:src="@mipmap/ic_launcher"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"/>
+                <TextView
+                    android:id="@+id/tvStatusLabel"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/status_label" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="New Button"
-        android:id="@+id/btnAction"
-        style="@style/smallYellowButton"
-        android:layout_below="@+id/ivTaskPic"
-        android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:id="@+id/tvStatus"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/tvStatusLabel"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toRightOf="@+id/tvStatusLabel"
+                    android:paddingLeft="10dp"
+                    tools:text="Open" />
+            </RelativeLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ivTaskPic"
-        tools:src="@mipmap/ic_launcher"
-        android:layout_below="@+id/tvStatusLabel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"/>
+            <ImageView
+                android:id="@+id/ivTaskDetailOwnerProf"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                tools:src="@mipmap/ic_launcher" />
 
+            <Button
+                android:id="@+id/btnAction"
+                style="@style/smallYellowButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cvTaskDetailMap"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                tools:text="New Button" />
+
+            <ImageView
+                android:id="@+id/ivTaskPic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlStatus"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                tools:src="@mipmap/ic_launcher" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvTaskDetailMap"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/ivTaskPic"
+                android:layout_centerHorizontal="true"
+                card_view:cardBackgroundColor="#E6E6E6"
+                card_view:cardCornerRadius="8dp"
+                card_view:cardElevation="2dp">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/detailMap"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -21,7 +21,8 @@
         android:layout_alignParentTop="true"
         android:hint="@string/title_hint"
         android:layout_toRightOf="@+id/tvLocationLabel"
-        android:layout_toEndOf="@+id/tvLocationLabel"/>
+        android:layout_toEndOf="@+id/tvLocationLabel"
+        android:maxLength="70"/>
 
    <!-- <TextView
         android:layout_width="wrap_content"
@@ -61,7 +62,8 @@
         android:hint="@string/budget_hint"
         android:layout_below="@+id/etLocation"
         android:layout_alignLeft="@+id/etLocation"
-        android:layout_alignStart="@+id/etLocation"/>
+        android:layout_alignStart="@+id/etLocation"
+        android:maxLength="10"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,7 +82,9 @@
         android:hint="@string/location_hint"
         android:layout_below="@+id/etTitle"
         android:layout_toRightOf="@+id/tvLocationLabel"
-        android:layout_toEndOf="@+id/tvLocationLabel"/>
+        android:layout_toEndOf="@+id/tvLocationLabel"
+        android:inputType="number"
+        android:maxLength="5"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -101,7 +105,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/etBudget"
-        android:layout_alignStart="@+id/etBudget"/>
+        android:layout_alignStart="@+id/etBudget"
+        android:maxLength="14"/>
 
     <Button
         android:layout_width="match_parent"

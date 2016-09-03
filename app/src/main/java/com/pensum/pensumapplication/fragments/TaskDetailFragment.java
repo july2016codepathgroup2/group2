@@ -15,7 +15,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -37,13 +46,13 @@ public class TaskDetailFragment extends Fragment {
     @BindView(R.id.tvStatus)TextView tvStatus;
     @BindView(R.id.tvBudget)TextView tvBudget;
     @BindView(R.id.ivTaskDetailOwnerProf)ImageView ivTaskDetailOwnerProf;
-//    @BindView(R.id.rvTaskImages)RecyclerView rvTaskImages;
     @BindView(R.id.rlTaskDetail) RelativeLayout rlTaskDetail;
     @BindView(R.id.ivTaskPic) ImageView ivTaskPic;
 
     private Task task;
     private OnTaskDetailActionListener listener;
     private Unbinder unbinder;
+    private SupportMapFragment mapFragment;
 
     public TaskDetailFragment() {
 
@@ -81,10 +90,25 @@ public class TaskDetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view;
         fetchSelectedTask();
+
         if (TextUtils.equals(task.getPostedBy().getObjectId(),ParseUser.getCurrentUser().getObjectId())){
             view = inflater.inflate(R.layout.fragment_task_detail_owner, container, false);
         } else {
             view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+            mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.detailMap));
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap map) {
+                        LatLng location =
+                                new LatLng(task.getLocation().getLatitude(),task.getLocation().getLongitude());
+
+                        loadMap(map,location);
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+            }
         }
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -120,9 +144,6 @@ public class TaskDetailFragment extends Fragment {
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
         tvStatus.setText(task.getStatus());
-//        if(task.getImages() == null || task.getImages().length() < 1) {
-//            rvTaskImages.setVisibility(View.GONE);
-//        }
 
         if(task.getTaskPic()!=null) {
             try {
@@ -191,6 +212,25 @@ public class TaskDetailFragment extends Fragment {
                 Picasso.with(getContext()).load(imageUrl).
                         transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
             }
+    }
+
+    protected void loadMap(GoogleMap googleMap, LatLng location) {
+        if(googleMap!=null) {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            googleMap.getUiSettings().setMapToolbarEnabled(false);
+            googleMap.getUiSettings().setCompassEnabled(false);
+            googleMap.getUiSettings().setRotateGesturesEnabled(false);
+            googleMap.getUiSettings().setScrollGesturesEnabled(false);
+            googleMap.getUiSettings().setTiltGesturesEnabled(false);
+            googleMap.getUiSettings().setZoomControlsEnabled(false);
+            googleMap.getUiSettings().setZoomGesturesEnabled(false);
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+
+            BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .icon(defaultMarker));
+        }
     }
 }
 

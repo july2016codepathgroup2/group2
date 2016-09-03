@@ -10,38 +10,42 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/rlSendMessage"
+        android:layout_above="@+id/llSendMessage"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
-    <RelativeLayout
-        android:id="@+id/rlSendMessage"
+
+    <LinearLayout
+        android:id="@+id/llSendMessage"
+        style="@style/chatLLSendMessage"
         android:layout_alignParentBottom="true"
-        android:paddingTop="5dp"
-        android:paddingBottom="10dp"
+        android:layout_marginBottom="@dimen/chat_new_message_margin"
+        android:layout_marginEnd="@dimen/chat_new_message_margin"
+        android:layout_marginStart="@dimen/chat_new_message_margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <EditText
             android:id="@+id/etChatMessage"
-            android:layout_toLeftOf="@+id/btSendChat"
-            android:layout_toStartOf="@+id/btSendChat"
-            android:layout_width="match_parent"
+            style="@style/ETChatMessage"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btSendChat"
-            android:gravity="top"
-            android:hint="@string/chat_message_hint"
-            android:imeOptions="actionSend"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
-        <Button
+            android:imeOptions="actionSend" />
+
+        <ImageView
             android:id="@+id/btSendChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/smallYellowButton"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:text="@string/send">
-        </Button>
-    </RelativeLayout>
+            android:layout_marginStart="@dimen/chat_new_message_margin"
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/ic_send" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

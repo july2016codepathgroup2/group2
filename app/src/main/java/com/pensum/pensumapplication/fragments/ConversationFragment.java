@@ -12,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -43,16 +43,12 @@ public class ConversationFragment extends Fragment {
     @BindView(R.id.tvType) TextView tvType;
     @BindView(R.id.tvTaskTitle) TextView tvTaskTitle;
     @BindView(R.id.tvPrice) TextView tvPrice;
+    @BindView(R.id.pbConversation) ProgressBar pbConversation;
 
     public ConversationAdapter adapter;
     public ArrayList<Conversation> conversations;
     private Unbinder unbinder;
     private Task task;
-    private ConversationListener listener;
-
-    public interface ConversationListener{
-        void launchAcceptCandidateDialog(Task task);
-    }
 
     public ConversationFragment(){
 
@@ -71,18 +67,21 @@ public class ConversationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         conversations = new ArrayList<>();
         adapter = new ConversationAdapter(getContext(),conversations);
-        populateConversations();
+
+        String taskId = getArguments().getString("task_id");
+        ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
+//        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
+        query.include("posted_by");
+        try {
+            task = query.get(taskId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ConversationListener) {
-            listener = (ConversationListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                    + " must implement ConversationFragment.ConversationListener");
-        }
     }
 
     @Nullable
@@ -94,32 +93,9 @@ public class ConversationFragment extends Fragment {
         rvConversations.setAdapter(adapter);
         rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        String taskId = getArguments().getString("task_id");
-        ParseQuery<Task> query = ParseQuery.getQuery(Task.class);
-//        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE); // or CACHE_ONLY
-        query.include("posted_by");
-        query.getInBackground(taskId, new GetCallback<Task>() {
-            public void done(Task item, ParseException e) {
-                if (e == null) {
-                    task = item;
-                    tvType.setText("#" + task.getType());
-                    tvPrice.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
-                    tvTaskTitle.setText(task.getTitle());
-                    String imageUrl = task.getPostedBy().getString("profilePicUrl");
-                    if (imageUrl != null){
-                        Picasso.with(getContext()).load(imageUrl).
-                                transform(new CropCircleTransformation()).into(ivProfilePicture);
-                    } else {
-                        Picasso.with(getContext()).load(R.mipmap.ic_launcher).
-                                transform(new CropCircleTransformation()).into(ivProfilePicture);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
 
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback
+                = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
@@ -178,12 +154,35 @@ public class ConversationFragment extends Fragment {
         return view;
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
-    public void populateConversations() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        populate();
+        populateConversations();
+    }
+
+    private void populate() {
+        tvType.setText("#" + task.getType());
+        tvPrice.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
+        tvTaskTitle.setText(task.getTitle());
+        String imageUrl = task.getPostedBy().getString("profilePicUrl");
+        if (imageUrl != null){
+            Picasso.with(getContext()).load(imageUrl).
+                    transform(new CropCircleTransformation()).into(ivProfilePicture);
+        } else {
+            Picasso.with(getContext()).load(R.mipmap.ic_launcher).
+                    transform(new CropCircleTransformation()).into(ivProfilePicture);
+        }
+    }
+
+    private void populateConversations() {
+        pbConversation.setVisibility(ProgressBar.VISIBLE);
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation");
         mainConversationQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
         mainConversationQuery.whereEqualTo("task", task);
@@ -202,6 +201,7 @@ public class ConversationFragment extends Fragment {
                 } else {
                     Log.e("message", "Error Loading Messages" + e);
                 }
+                pbConversation.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }

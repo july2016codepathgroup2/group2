@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ivProfilePicture"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
             style="@style/textLabel"
             tools:text="Label"/>
 

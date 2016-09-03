@@ -11,7 +11,9 @@ import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by violetaria on 8/21/16.
@@ -54,13 +56,13 @@ public class MessagesFragment extends GridFragment {
         mainConversationQuery.findInBackground(new FindCallback<Conversation>() {
             public void done(List<Conversation> conversationsFromQuery, ParseException e) {
                 if (e == null) {
-                    ArrayList<Task> tasksFromQuery = new ArrayList<>();
+                    Map<String,Task> tasksFromQuery = new HashMap<>();
                     // TODO fix the query so that it actually brings back the Tasks
                     for(int i = 0; i < conversationsFromQuery.size(); i++){
-                        Task task = conversationsFromQuery.get(i).getTask();
-                        tasksFromQuery.add(conversationsFromQuery.get(i).getTask());
+                        tasksFromQuery.put(conversationsFromQuery.get(i).getTask().getObjectId(),
+                                conversationsFromQuery.get(i).getTask());
                     }
-                    addAll(tasksFromQuery);
+                    addAll(new ArrayList<>(tasksFromQuery.values()));
                 } else {
                     Log.e("message", "Error Loading Messages" + e);}
             }
