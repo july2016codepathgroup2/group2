@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.helpers.view.MessageBubbleDrawable;
 import com.pensum.pensumapplication.models.Message;
 import com.squareup.picasso.Picasso;
 
@@ -46,14 +47,21 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         boolean isMe = message.getFrom().getObjectId() != null &&
                 message.getFrom().getObjectId().equals(ParseUser.getCurrentUser().getObjectId());
 
+        MessageBubbleDrawable messageBubbleDrawable;
         if (isMe) {
             viewHolder.ivProfileMe.setVisibility(View.VISIBLE);
             viewHolder.ivProfileOther.setVisibility(View.GONE);
+            messageBubbleDrawable = new MessageBubbleDrawable(getContext(),
+                    R.color.colorPrimaryLight, MessageBubbleDrawable.Gravity.END);
+            viewHolder.tvBody.setBackground(messageBubbleDrawable);
             viewHolder.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
         } else {
             viewHolder.ivProfileOther.setVisibility(View.VISIBLE);
             viewHolder.ivProfileMe.setVisibility(View.GONE);
 
+            messageBubbleDrawable = new MessageBubbleDrawable(getContext(),
+                    R.color.colorPrimaryLight, MessageBubbleDrawable.Gravity.START);
+            viewHolder.tvBody.setBackground(messageBubbleDrawable);
             viewHolder.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
         }
 
@@ -84,7 +92,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileOther) ImageView ivProfileOther;
         @BindView(R.id.ivProfileMe) ImageView ivProfileMe;
-        @BindView(R.id.tvBody) TextView tvBody;
+        @BindView(R.id.tvMessageBodyOther)
+        TextView tvBody;
 
         public ViewHolder(View itemView) {
             super(itemView);

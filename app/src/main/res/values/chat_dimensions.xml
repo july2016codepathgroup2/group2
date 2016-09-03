@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="chat_message_bubble_left_margin">16dp</dimen>
+    <dimen name="chat_message_bubble_corner_radius">16dp</dimen>
+    <dimen name="chat_message_bump_vertical_position">18dp</dimen>
+    <dimen name="chat_message_bump_diameter">12dp</dimen>
+    <dimen name="chat_message_small_bubble_diameter">6dp</dimen>
+</resources>
