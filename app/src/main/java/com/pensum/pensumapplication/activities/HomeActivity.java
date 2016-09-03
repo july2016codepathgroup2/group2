@@ -38,7 +38,6 @@ import com.pensum.pensumapplication.fragments.MapFragment;
 import com.pensum.pensumapplication.fragments.MessagesFragment;
 import com.pensum.pensumapplication.fragments.MyBidsOnTasksFragment;
 import com.pensum.pensumapplication.fragments.MyPostedTasksFragment;
-import com.pensum.pensumapplication.fragments.MyPostedTasksFragmentV2;
 import com.pensum.pensumapplication.fragments.ProfileFragment;
 import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
@@ -98,38 +97,38 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                         // so the selection will be wrong when jump back from sub item to a main item
                         if (fragment.getClass() == HomeFragment.class) {
                             nvDrawer.getMenu().getItem(0).setChecked(true);
-                            nvDrawer.getMenu().getItem(1).setChecked(false);
-                            nvDrawer.getMenu().getItem(2).setChecked(false);
-                            nvDrawer.getMenu().getItem(3).setChecked(false);
-                            nvDrawer.getMenu().getItem(4).setChecked(false);
+//                            nvDrawer.getMenu().getItem(1).setChecked(false);
+//                            nvDrawer.getMenu().getItem(2).setChecked(false);
+//                            nvDrawer.getMenu().getItem(3).setChecked(false);
+//                            nvDrawer.getMenu().getItem(4).setChecked(false);
                             setTitle(R.string.home);
                         } else if (fragment.getClass() == ProfileFragment.class) {
                             nvDrawer.getMenu().getItem(1).setChecked(true);
-                            nvDrawer.getMenu().getItem(0).setChecked(false);
-                            nvDrawer.getMenu().getItem(2).setChecked(false);
-                            nvDrawer.getMenu().getItem(3).setChecked(false);
-                            nvDrawer.getMenu().getItem(4).setChecked(false);
+//                            nvDrawer.getMenu().getItem(0).setChecked(false);
+//                            nvDrawer.getMenu().getItem(2).setChecked(false);
+//                            nvDrawer.getMenu().getItem(3).setChecked(false);
+//                            nvDrawer.getMenu().getItem(4).setChecked(false);
                             setTitle(R.string.profile);
                         } else if (fragment.getClass() == MyPostedTasksFragment.class) {
                             nvDrawer.getMenu().getItem(2).setChecked(true);
-                            nvDrawer.getMenu().getItem(0).setChecked(false);
-                            nvDrawer.getMenu().getItem(1).setChecked(false);
-                            nvDrawer.getMenu().getItem(3).setChecked(false);
-                            nvDrawer.getMenu().getItem(4).setChecked(false);
+//                            nvDrawer.getMenu().getItem(0).setChecked(false);
+//                            nvDrawer.getMenu().getItem(1).setChecked(false);
+//                            nvDrawer.getMenu().getItem(3).setChecked(false);
+//                            nvDrawer.getMenu().getItem(4).setChecked(false);
                             setTitle(R.string.posted);
                         }  else if (fragment.getClass() == MyBidsOnTasksFragment.class) {
                             nvDrawer.getMenu().getItem(3).setChecked(true);
-                            nvDrawer.getMenu().getItem(0).setChecked(false);
-                            nvDrawer.getMenu().getItem(1).setChecked(false);
-                            nvDrawer.getMenu().getItem(2).setChecked(false);
-                            nvDrawer.getMenu().getItem(4).setChecked(false);
+//                            nvDrawer.getMenu().getItem(0).setChecked(false);
+//                            nvDrawer.getMenu().getItem(1).setChecked(false);
+//                            nvDrawer.getMenu().getItem(2).setChecked(false);
+//                            nvDrawer.getMenu().getItem(4).setChecked(false);
                             setTitle(R.string.bidding);
                         } else if (fragment.getClass() == MessagesFragment.class) {
                             nvDrawer.getMenu().getItem(4).setChecked(true);
-                            nvDrawer.getMenu().getItem(0).setChecked(false);
-                            nvDrawer.getMenu().getItem(1).setChecked(false);
-                            nvDrawer.getMenu().getItem(2).setChecked(false);
-                            nvDrawer.getMenu().getItem(3).setChecked(false);
+//                            nvDrawer.getMenu().getItem(0).setChecked(false);
+//                            nvDrawer.getMenu().getItem(1).setChecked(false);
+//                            nvDrawer.getMenu().getItem(2).setChecked(false);
+//                            nvDrawer.getMenu().getItem(3).setChecked(false);
                             setTitle(R.string.message);
                         }
                     }
@@ -181,14 +180,9 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                 name = "profile fragment";
                 break;
 
-            case R.id.my_posted_tasks:
+            case R.id.my_posted_tasks_v2:
                 fragmentClass = MyPostedTasksFragment.class;
                 name = "my posted tasks fragment";
-                break;
-
-            case R.id.my_posted_tasks_v2:
-                fragmentClass = MyPostedTasksFragmentV2.class;
-                name = "my posted tasks fragment v2";
                 break;
 
             case R.id.my_bids_on_tasks:
