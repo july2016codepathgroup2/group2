@@ -124,7 +124,11 @@ public class TaskDetailFragment extends Fragment {
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        getFragmentManager().beginTransaction().remove(mapFragment).commit();
+
+        if(mapFragment!=null) {
+            getFragmentManager().beginTransaction().remove(mapFragment).commit();
+            mapFragment=null;
+        }
     }
 
     private void fetchSelectedTask() {
