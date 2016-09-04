@@ -59,8 +59,10 @@ public class MessagesFragment extends GridFragment {
                     Map<String,Task> tasksFromQuery = new HashMap<>();
                     // TODO fix the query so that it actually brings back the Tasks
                     for(int i = 0; i < conversationsFromQuery.size(); i++){
-                        tasksFromQuery.put(conversationsFromQuery.get(i).getTask().getObjectId(),
-                                conversationsFromQuery.get(i).getTask());
+                        if(!conversationsFromQuery.get(i).getTask().getStatus().equals("completed")) {
+                            tasksFromQuery.put(conversationsFromQuery.get(i).getTask().getObjectId(),
+                                    conversationsFromQuery.get(i).getTask());
+                        }
                     }
                     addAll(new ArrayList<>(tasksFromQuery.values()));
                 } else {

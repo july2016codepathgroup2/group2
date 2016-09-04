@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,6 +124,7 @@ public class TaskDetailFragment extends Fragment {
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        getFragmentManager().beginTransaction().remove(mapFragment).commit();
     }
 
     private void fetchSelectedTask() {
@@ -143,7 +145,21 @@ public class TaskDetailFragment extends Fragment {
     private void populateViews(View view) {
         tvTitle.setText(task.getTitle());
         tvBudget.setText(NumberFormat.getCurrencyInstance().format(task.getBudget()));
-        tvStatus.setText(task.getStatus());
+        tvStatus.setText(task.getStatus().toUpperCase());
+
+        switch(task.getStatus()){
+            case "open":
+                tvStatus.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                break;
+
+            case "accepted":
+                tvStatus.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorIconGreenDark));
+                break;
+
+            case "completed":
+                tvStatus.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorIconGreenLight));
+                break;
+        }
 
         if(task.getTaskPic()!=null) {
             try {
@@ -158,60 +174,63 @@ public class TaskDetailFragment extends Fragment {
 
         Button btnAction = (Button) view.findViewById(R.id.btnAction);
         ParseUser postedBy = task.getPostedBy();
-         if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
 
-             if(TextUtils.equals(task.getStatus(),"open")){
-                 btnAction.setText(getResources().getString(R.string.accept));
-                 btnAction.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View view) {
-                         listener.launchAcceptCandidateDialog(task);
-                     }
-                 });
-                 if(task.getCandidate()==null)
-                     btnAction.setEnabled(false);
-             } else if (TextUtils.equals(task.getStatus(),"accepted")){
-                 btnAction.setText(getResources().getString(R.string.complete));
-                 btnAction.setOnClickListener(new View.OnClickListener() {
+        if (TextUtils.equals(postedBy.getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
+            if(TextUtils.equals(task.getStatus(),"open")){
+                btnAction.setText(getResources().getString(R.string.accept));
+                btnAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.launchAcceptCandidateDialog(task);
+                    }
+                });
+
+                if(task.getCandidate()==null)
+                    btnAction.setEnabled(false);
+
+            } else if (TextUtils.equals(task.getStatus(),"accepted")){
+                btnAction.setText(getResources().getString(R.string.complete));
+                btnAction.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View view) {
                          listener.launchCompleteTaskDialogFragment(task);
                      }
-                 });
-             }
+                });
+            } else {
+                btnAction.setVisibility(View.INVISIBLE);
+            }
 
-             ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
+            ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
 
-             ibEditTask.setOnClickListener(new View.OnClickListener() {
+            ibEditTask.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
                      listener.launchEditTaskFragment(task);
                  }
-             });
-            } else {
-             btnAction.setText(getResources().getString(R.string.contact));
-             btnAction.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.launchContactOwnerDialog(task);
-                    }
-                });
-            }
+            });
+        } else {
+            btnAction.setText(getResources().getString(R.string.contact));
+            btnAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.launchContactOwnerDialog(task);
+                }
+            });
 
             final String userId = postedBy.getObjectId();
             ivTaskDetailOwnerProf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.launchProfileFragment(userId);
-
-                    // Close the dialog and return back to the parent
-                }
+                 @Override
+                 public void onClick(View view) {
+                     listener.launchProfileFragment(userId);
+                 }
             });
-            String imageUrl = postedBy.getString("profilePicUrl");
-            if (imageUrl != null){
-                Picasso.with(getContext()).load(imageUrl).
-                        transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
-            }
+        }
+
+        String imageUrl = postedBy.getString("profilePicUrl");
+        if (imageUrl != null){
+            Picasso.with(getContext()).load(imageUrl).
+                    transform(new CropCircleTransformation()).into(ivTaskDetailOwnerProf);
+        }
     }
 
     protected void loadMap(GoogleMap googleMap, LatLng location) {
@@ -226,7 +245,9 @@ public class TaskDetailFragment extends Fragment {
             googleMap.getUiSettings().setZoomGesturesEnabled(false);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 
-            BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+            BitmapDescriptor defaultMarker =
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+
             googleMap.addMarker(new MarkerOptions()
                     .position(location)
                     .icon(defaultMarker));

@@ -1,8 +1,11 @@
 package com.pensum.pensumapplication.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +106,10 @@ public class CompleteTaskDialogFragment extends DialogFragment {
             Picasso.with(getContext()).load(R.mipmap.ic_launcher).
                     transform(new CropCircleTransformation()).into(ivProfileImage);
         }
+
+        Drawable progress = rbRating.getProgressDrawable();
+        DrawableCompat.setTint(progress, ContextCompat.getColor(getActivity(), R.color.colorAccent));
+        rbRating.setProgressDrawable(progress);
     }
 
     private void updateCandidateRating(){

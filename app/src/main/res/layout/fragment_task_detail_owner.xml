@@ -26,6 +26,7 @@
         style="@style/textRegular"
         android:text="@string/budget_label"
         android:layout_toRightOf="@+id/ivTaskDetailOwnerProf"
+        android:layout_toEndOf="@+id/ivTaskDetailOwnerProf"
         android:layout_below="@+id/tvTitle"
         android:layout_marginTop="5dp"/>
 
@@ -37,7 +38,9 @@
         tools:text="$500.00"
         android:layout_below="@+id/tvTitle"
         android:layout_toRightOf="@+id/tvBudgetLabel"
+        android:layout_toEndOf="@+id/tvBudgetLabel"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_alignTop="@+id/tvBudgetLabel"/>
 
     <TextView
@@ -59,22 +62,10 @@
         style="@style/textRegular"
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/tvStatusLabel"
+        android:layout_toEndOf="@+id/tvStatusLabel"
         android:layout_alignTop="@+id/tvStatusLabel"
-        android:layout_marginLeft="12dp"/>
-
-    <!--<Spinner-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:entries="@array/status_array"-->
-        <!--android:paddingLeft="10dp"-->
-        <!--android:layout_below="@id/tvBudget"-->
-        <!--android:layout_toRightOf="@+id/tvStatusLabel"/>-->
-
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/rvTaskImages"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_below="@+id/tvStatusLabel"/>-->
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"/>
 
     <ImageView
         android:layout_width="50dp"
@@ -86,9 +77,8 @@
         android:layout_alignParentStart="true"
         tools:src="@mipmap/ic_launcher"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"/>
-
-
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -99,7 +89,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
 
     <Button
         android:layout_width="wrap_content"

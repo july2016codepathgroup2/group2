@@ -16,6 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/ivTaskDetailOwnerProf"
+                android:transitionName="profilePic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                tools:src="@mipmap/ic_launcher" />
+
             <TextView
                 android:id="@+id/tvTitle"
                 style="@style/textLarge"
@@ -83,20 +93,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/tvStatusLabel"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="2dp"
                     android:layout_toRightOf="@+id/tvStatusLabel"
+                    android:layout_toEndOf="@+id/tvStatusLabel"
                     android:paddingLeft="10dp"
                     tools:text="Open" />
             </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/ivTaskDetailOwnerProf"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                tools:src="@mipmap/ic_launcher" />
 
             <Button
                 android:id="@+id/btnAction"

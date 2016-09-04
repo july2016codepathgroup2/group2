@@ -107,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),
                                             "User logged in through FB", Toast.LENGTH_SHORT).show();
                                     pd.dismiss();
-                                    getUserCoverFromFB();
                                     startWithCurrentUser();
                                 }
                             }
@@ -121,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         user = ParseUser.getCurrentUser();
         user.put("fbName", name);
         user.put("profilePicUrl", profilePicUrl);
-//        user.put("coverPicUrl", coverPicUrl);
+        user.put("coverPicUrl", coverPicUrl);
 
         //Finally save all the user details
         user.saveInBackground(new SaveCallback() {
@@ -175,20 +174,15 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d("Profile pic", "url: " + pictureUrl);
                             profilePicUrl = pictureUrl;
-
-                            userDataUpdate();
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 }
         ).executeAsync();
-    }
 
-    //TODO combine this into getUserDetailsFromFB() when all user gets the cover update into Parse
-    public void getUserCoverFromFB() {
-        Bundle parameters = new Bundle();
+        parameters.remove("type");
+        parameters.remove("redirect");
         parameters.putString("fields", "cover");
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -206,9 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("Cover photo", "url: " + coverPhotoUrl);
                             coverPicUrl = coverPhotoUrl;
 
-                            user = ParseUser.getCurrentUser();
-                            user.put("coverPicUrl", coverPicUrl);
-                            user.saveInBackground();
+                            userDataUpdate();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
