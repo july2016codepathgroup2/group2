@@ -70,6 +70,10 @@ public class Task extends ParseObject {
 
     public void nullAcceptedOffer() { put("accepted_offer", JSONObject.NULL); }
 
+    public void setZip(String zip) { put("zip",zip); }
+
+    public String getZip() { return getString("zip"); }
+
     public ParseGeoPoint getLocation(){ return getParseGeoPoint("location"); }
 
     public JSONArray getImages() {

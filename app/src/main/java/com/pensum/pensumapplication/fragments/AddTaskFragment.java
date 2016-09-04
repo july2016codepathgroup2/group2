@@ -174,7 +174,7 @@ public class AddTaskFragment extends Fragment {
         etTitle.setText(task.getTitle());
         etType.setText(task.getType());
         etBudget.setText(FormatterHelper.formatDoubleToMoney(task.getBudget()));
-
+        etLocation.setText(task.getZip());
         try {
             ParseFile parseFile = task.getTaskPic();
             byte[] data = parseFile.getData();
@@ -194,7 +194,8 @@ public class AddTaskFragment extends Fragment {
             Toast.makeText(getContext(), "Please enter task ZipCode.", Toast.LENGTH_LONG).show();
 
         if (NetworkHelper.isNetworkAvailable(getActivity()) && NetworkHelper.isOnline()) {
-            client.getLocationForZip(etLocation.getText().toString(), new JsonHttpResponseHandler() {
+            final String zip = etLocation.getText().toString();
+            client.getLocationForZip(zip, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     try {
@@ -231,6 +232,7 @@ public class AddTaskFragment extends Fragment {
     private void storeTaskFields(JSONObject responseBody) throws ParseException, JSONException {
         task.setTitle(etTitle.getText().toString());
         //task.setDescription(etDescription.getText().toString());
+        task.setZip(responseBody.getString("zip_code"));
         task.setType(etType.getText().toString());
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         task.setBudget(new BigDecimal(nf.parse(etBudget.getText().toString()).toString()));
