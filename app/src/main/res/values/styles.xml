@@ -154,4 +154,8 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">@dimen/chat_new_message_text_size</item>
     </style>
+
+    <style name="conversationSupportIconText" parent="textRegular">
+        <item name="android:textColor">@color/colorIconGreenDark</item>
+    </style>
 </resources>

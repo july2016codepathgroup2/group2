@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -45,6 +46,8 @@ public class ConversationFragment extends Fragment {
     @BindView(R.id.tvTaskTitle) TextView tvTaskTitle;
     @BindView(R.id.tvPrice) TextView tvPrice;
     @BindView(R.id.pbConversation) ProgressBar pbConversation;
+    @BindView(R.id.ivAcceptIcon) ImageView ivAcceptIcon;
+    @BindView(R.id.ivDeclineIcon) ImageView ivDeclineIcon;
 
     public ConversationAdapter adapter;
     public ArrayList<Conversation> conversations;
@@ -218,6 +221,9 @@ public class ConversationFragment extends Fragment {
             Picasso.with(getContext()).load(R.mipmap.ic_launcher).
                     transform(new CropCircleTransformation()).into(ivProfilePicture);
         }
+
+        ivDeclineIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorIconGreenLight));
+        ivAcceptIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorIconGreenLight));
     }
 
     private void populateConversations() {
