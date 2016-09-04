@@ -72,7 +72,8 @@ public abstract class GridFragment extends Fragment
                 ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");
                 query.whereEqualTo("task", clickedTask);
                 query.whereEqualTo("candidate", ParseUser.getCurrentUser());
-                query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+                Log.d("DEBUG","click task id: " + clickedTask.getObjectId());
                 query.findInBackground(new FindCallback<Conversation>() {
                     @Override
                     public void done(List<Conversation> conversations, ParseException e) {
@@ -80,6 +81,7 @@ public abstract class GridFragment extends Fragment
                             Conversation conversation = null;
                             if (conversations.size() > 0) {
                                 conversation = conversations.get(0);
+                                Log.d("DEBUG","conversation " +  conversation.getObjectId());
                             }
                             showDetailFragment(clickedTask, conversation);
                         } else {

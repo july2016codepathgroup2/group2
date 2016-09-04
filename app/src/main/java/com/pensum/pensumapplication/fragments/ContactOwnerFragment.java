@@ -18,6 +18,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Conversation;
@@ -180,6 +181,7 @@ public class ContactOwnerFragment extends DialogFragment {
     }
 
     private void createMessage(Conversation c) {
+        Log.d("DEBUG","contact owner conversation id: " + c);
         Message message = new Message();
         c.setUnreadOwnerMessageFlag(true);
         c.setStatus("bidding");
@@ -194,7 +196,14 @@ public class ContactOwnerFragment extends DialogFragment {
         message.setTo(postedBy);
         message.setConversation(c);
         message.setMessage(etMessage.getText().toString());
-        message.saveInBackground();
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.d("DEBUG","message save");
+                if(e!=null)
+                e.printStackTrace();
+            }
+        });
         dismiss();
     }
 
