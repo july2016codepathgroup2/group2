@@ -50,6 +50,22 @@ public class ConversationFragment extends Fragment {
     public ArrayList<Conversation> conversations;
     private Unbinder unbinder;
     private Task task;
+    private OnConversationAcceptedListener listener;
+
+    public interface OnConversationAcceptedListener{
+        void launchChatFragment(Conversation conversation);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnConversationAcceptedListener) {
+            listener = (OnConversationAcceptedListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement ConversationFragment.OnConversationAcceptedListener");
+        }
+    }
 
     public ConversationFragment(){
 
@@ -78,11 +94,6 @@ public class ConversationFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     @Nullable
@@ -124,20 +135,25 @@ public class ConversationFragment extends Fragment {
                         }
                     }).show();
                 } else {
-                    conversations.add(position,c);
-                    adapter.notifyItemInserted(position);
+//                    conversations.add(position,c);
+//                    adapter.notifyItemInserted(position);
+                    c.setStatus("accepted");
+                    c.saveInBackground();
                     c.getTask().acceptCandidate(c);
-                    Snackbar.make(rvConversations, R.string.snackbar_accepted, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_undo, new View.OnClickListener(){
-                        @Override
-                        public void onClick(View view){
-                            c.getTask().setStatus("open");
-                            c.getTask().nullAcceptedOffer();
-                            c.getTask().nullCandidate();
-                            c.getTask().saveInBackground();
-                            c.setStatus("bidding");
-                            c.saveInBackground();
-                        }
-                    }).show();
+                    Snackbar.make(rvConversations, R.string.snackbar_accepted, Snackbar.LENGTH_LONG).show();
+                    listener.launchChatFragment(c);
+
+//                    Snackbar.make(rvConversations, R.string.snackbar_accepted, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_undo, new View.OnClickListener(){
+//                        @Override
+//                        public void onClick(View view){
+//                            c.getTask().setStatus("open");
+//                            c.getTask().nullAcceptedOffer();
+//                            c.getTask().nullCandidate();
+//                            c.getTask().saveInBackground();
+//                            c.setStatus("bidding");
+//                            c.saveInBackground();
+//                        }
+//                    }).show();
                 }
             }
 
