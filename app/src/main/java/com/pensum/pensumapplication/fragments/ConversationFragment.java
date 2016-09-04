@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -137,6 +138,8 @@ public class ConversationFragment extends Fragment {
                 } else {
 //                    conversations.add(position,c);
 //                    adapter.notifyItemInserted(position);
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.popBackStack();
                     c.setStatus("accepted");
                     c.saveInBackground();
                     c.getTask().acceptCandidate(c);
