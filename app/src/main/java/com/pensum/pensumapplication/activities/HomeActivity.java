@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
-import com.pensum.pensumapplication.fragments.AcceptTaskDialogFragment;
 import com.pensum.pensumapplication.fragments.AddTaskFragment;
 import com.pensum.pensumapplication.fragments.ChatFragment;
 import com.pensum.pensumapplication.fragments.CompleteTaskDialogFragment;
@@ -278,12 +277,12 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         contactOwnerFragment.show(fm, "fragment_contact_owner");
     }
 
-    @Override
-    public void launchAcceptCandidateDialog(Task task) {
-        FragmentManager fm = getSupportFragmentManager();
-        AcceptTaskDialogFragment acceptTaskFragment = AcceptTaskDialogFragment.newInstance(task.getObjectId());
-        acceptTaskFragment.show(fm, "fragment_accept_task");
-    }
+//    @Override
+//    public void launchAcceptCandidateDialog(Task task) {
+//        FragmentManager fm = getSupportFragmentManager();
+//        AcceptTaskDialogFragment acceptTaskFragment = AcceptTaskDialogFragment.newInstance(task.getObjectId());
+//        acceptTaskFragment.show(fm, "fragment_accept_task");
+//    }
 
     @Override
     public void launchProfileFragment(String userId) {
