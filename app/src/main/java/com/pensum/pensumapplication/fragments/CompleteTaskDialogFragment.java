@@ -1,6 +1,6 @@
 package com.pensum.pensumapplication.fragments;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -107,9 +107,14 @@ public class CompleteTaskDialogFragment extends DialogFragment {
                     transform(new CropCircleTransformation()).into(ivProfileImage);
         }
 
-        Drawable progress = rbRating.getProgressDrawable();
-        DrawableCompat.setTint(progress, ContextCompat.getColor(getActivity(), R.color.colorAccent));
-        rbRating.setProgressDrawable(progress);
+        if (rbRating.getProgressDrawable() instanceof LayerDrawable) {
+            LayerDrawable stars = (LayerDrawable) rbRating.getProgressDrawable();
+            DrawableCompat.setTint(stars.getDrawable(2), ContextCompat.getColor(getActivity(), R.color.colorAccent));
+        }
+        else {
+            // for Android 4.3, ratingBar.getProgressDrawable()=DrawableWrapperHoneycomb
+            DrawableCompat.setTint(rbRating.getProgressDrawable(), ContextCompat.getColor(getActivity(), R.color.colorAccent));
+        }
     }
 
     private void updateCandidateRating(){

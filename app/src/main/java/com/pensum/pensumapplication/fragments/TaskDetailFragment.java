@@ -63,7 +63,8 @@ public class TaskDetailFragment extends Fragment {
         void launchContactOwnerDialog(Task task);
         void launchProfileFragment(String userId);
         void launchEditTaskFragment(Task task);
-        void launchAcceptCandidateDialog(Task task);
+//        void launchAcceptCandidateDialog(Task task);
+        void launchConversationsFragment(Task task);
         void launchCompleteTaskDialogFragment(Task task);
     }
 
@@ -175,6 +176,7 @@ public class TaskDetailFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+        ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
 
         Button btnAction = (Button) view.findViewById(R.id.btnAction);
         ParseUser postedBy = task.getPostedBy();
@@ -185,11 +187,13 @@ public class TaskDetailFragment extends Fragment {
                 btnAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listener.launchAcceptCandidateDialog(task);
+                        listener.launchConversationsFragment(task);
                     }
                 });
 
-                if(task.getCandidate()==null)
+                if(task.getHasBidder())
+                    btnAction.setEnabled(true);
+                else
                     btnAction.setEnabled(false);
 
             } else if (TextUtils.equals(task.getStatus(),"accepted")){
@@ -200,11 +204,12 @@ public class TaskDetailFragment extends Fragment {
                          listener.launchCompleteTaskDialogFragment(task);
                      }
                 });
+                ibEditTask.setImageResource(0);
             } else {
                 btnAction.setVisibility(View.INVISIBLE);
+                ibEditTask.setImageResource(0);
             }
 
-            ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
 
             ibEditTask.setOnClickListener(new View.OnClickListener() {
                  @Override
