@@ -204,10 +204,10 @@ public class TaskDetailFragment extends Fragment {
                          listener.launchCompleteTaskDialogFragment(task);
                      }
                 });
-                ibEditTask.setImageResource(0);
+                ibEditTask.setImageResource(R.drawable.ic_lock_black_24dp);
             } else {
                 btnAction.setVisibility(View.INVISIBLE);
-                ibEditTask.setImageResource(0);
+                ibEditTask.setImageResource(R.drawable.ic_lock_black_24dp);
             }
 
 
