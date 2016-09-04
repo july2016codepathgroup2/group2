@@ -44,11 +44,13 @@ public class MessagesFragment extends GridFragment {
         ParseQuery<Conversation> ownerQuery = ParseQuery.getQuery("Conversation");
         ownerQuery.whereEqualTo("owner", ParseUser.getCurrentUser());
         ownerQuery.whereNotEqualTo("status","declined");
+        ownerQuery.whereNotEqualTo("status","completed");
 
         subConversationQueries.add(ownerQuery);
         ParseQuery<Conversation> candidateQuery = ParseQuery.getQuery("Conversation");
         candidateQuery.whereEqualTo("candidate", ParseUser.getCurrentUser());
         candidateQuery.whereNotEqualTo("status","declined");
+        candidateQuery.whereNotEqualTo("status","completed");
 
         subConversationQueries.add(candidateQuery);
         ParseQuery<Conversation> mainConversationQuery = ParseQuery.getQuery("Conversation").or(subConversationQueries).include("task");
@@ -58,10 +60,9 @@ public class MessagesFragment extends GridFragment {
                 if (e == null) {
                     Map<String,Task> tasksFromQuery = new HashMap<>();
                     // TODO fix the query so that it actually brings back the Tasks
-                    for(int i = 0; i < conversationsFromQuery.size(); i++){
-                        if(!conversationsFromQuery.get(i).getTask().getStatus().equals("completed")) {
-                            tasksFromQuery.put(conversationsFromQuery.get(i).getTask().getObjectId(),
-                                    conversationsFromQuery.get(i).getTask());
+                    for(Conversation c: conversationsFromQuery) {
+                        if(!c.getStatus().equals("declined") && !c.getTask().getStatus().equals("completed")) {
+                            tasksFromQuery.put(c.getTask().getObjectId(), c.getTask());
                         }
                     }
                     addAll(new ArrayList<>(tasksFromQuery.values()));
@@ -72,10 +73,10 @@ public class MessagesFragment extends GridFragment {
     }
 
     public void showDetailFragment(Task task, Conversation conversation) {
-        if(task.getPostedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())){
+        if(task.getStatus().equals("open") && task.getPostedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())){
             listener.launchConversationsFragment(task);
         } else {
-            // go directly to messages if you are the candidate
+            // go directly to messages if you are the candidate or if task is accepted
             listener.launchChatFragment(conversation);
         }
     }

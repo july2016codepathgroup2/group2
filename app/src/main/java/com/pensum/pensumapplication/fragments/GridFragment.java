@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,10 +70,21 @@ public abstract class GridFragment extends Fragment
             public void onItemClick(View itemView, int position) {
                 //Searching for conversation
                 final Task clickedTask = tasks.get(position);
+                // if task owner and accepted, find the convo for the winning candidate
+                // if task owner and not accepted, doesn't matter
+                // if not tas owner, find my candidate conversation
                 ParseQuery<Conversation> query = ParseQuery.getQuery("Conversation");
+                if (TextUtils.equals(clickedTask.getPostedBy().getObjectId(),ParseUser.getCurrentUser().getObjectId())) {
+                    if(clickedTask.getStatus().equals("accepted")){
+                        query.whereEqualTo("status","accepted");
+                    } else {
+                        query.whereEqualTo("status","bidding");
+                    }
+                } else {
+                    query.whereEqualTo("candidate", ParseUser.getCurrentUser());
+                }
                 query.whereEqualTo("task", clickedTask);
-                query.whereEqualTo("candidate", ParseUser.getCurrentUser());
-                query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+//                query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
                 Log.d("DEBUG","click task id: " + clickedTask.getObjectId());
                 query.findInBackground(new FindCallback<Conversation>() {
                     @Override

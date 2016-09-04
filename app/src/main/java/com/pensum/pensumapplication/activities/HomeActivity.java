@@ -46,7 +46,7 @@ import com.pensum.pensumapplication.models.Task;
 public class HomeActivity extends AppCompatActivity implements AddTaskFragment.OnTaskSavedListener,
         HomeFragment.OnAddTaskListener, TaskDetailFragment.OnTaskDetailActionListener,
         MessagesFragment.OnConversationClickedListener, MapFragment.InfoWindowListener,
-        GridFragment.TaskDetailListener {
+        GridFragment.TaskDetailListener, ConversationFragment.OnConversationAcceptedListener {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -277,12 +277,6 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         contactOwnerFragment.show(fm, "fragment_contact_owner");
     }
 
-//    @Override
-//    public void launchAcceptCandidateDialog(Task task) {
-//        FragmentManager fm = getSupportFragmentManager();
-//        AcceptTaskDialogFragment acceptTaskFragment = AcceptTaskDialogFragment.newInstance(task.getObjectId());
-//        acceptTaskFragment.show(fm, "fragment_accept_task");
-//    }
 
     @Override
     public void launchProfileFragment(String userId) {
