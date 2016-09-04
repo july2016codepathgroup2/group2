@@ -175,6 +175,7 @@ public class TaskDetailFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+        ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
 
         Button btnAction = (Button) view.findViewById(R.id.btnAction);
         ParseUser postedBy = task.getPostedBy();
@@ -200,11 +201,12 @@ public class TaskDetailFragment extends Fragment {
                          listener.launchCompleteTaskDialogFragment(task);
                      }
                 });
+                ibEditTask.setImageResource(0);
             } else {
                 btnAction.setVisibility(View.INVISIBLE);
+                ibEditTask.setImageResource(0);
             }
 
-            ImageButton ibEditTask = (ImageButton) view.findViewById(R.id.ibEditTask);
 
             ibEditTask.setOnClickListener(new View.OnClickListener() {
                  @Override
