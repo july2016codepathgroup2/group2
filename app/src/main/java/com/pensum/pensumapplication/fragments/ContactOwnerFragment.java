@@ -205,7 +205,7 @@ public class ContactOwnerFragment extends DialogFragment {
                 e.printStackTrace();
             }
         });
-        NotificationHelper.sendBidAlert(getContext(),"Bid Received",task);
+        NotificationHelper.sendAlert(getContext(), "Bid received for task", task.getPostedBy().getObjectId());
         dismiss();
     }
 

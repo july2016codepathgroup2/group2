@@ -23,6 +23,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.adapters.ConversationAdapter;
+import com.pensum.pensumapplication.helpers.NotificationHelper;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
@@ -136,27 +137,14 @@ public class ConversationFragment extends Fragment {
                         }
                     }).show();
                 } else {
-//                    conversations.add(position,c);
-//                    adapter.notifyItemInserted(position);
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.popBackStack();
                     c.setStatus("accepted");
                     c.saveInBackground();
                     c.getTask().acceptCandidate(c);
                     Snackbar.make(rvConversations, R.string.snackbar_accepted, Snackbar.LENGTH_LONG).show();
+                    NotificationHelper.sendAlert(getContext(), "Your bid has been accepted", c.getCandidate().getObjectId());
                     listener.launchChatFragment(c);
-
-//                    Snackbar.make(rvConversations, R.string.snackbar_accepted, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_undo, new View.OnClickListener(){
-//                        @Override
-//                        public void onClick(View view){
-//                            c.getTask().setStatus("open");
-//                            c.getTask().nullAcceptedOffer();
-//                            c.getTask().nullCandidate();
-//                            c.getTask().saveInBackground();
-//                            c.setStatus("bidding");
-//                            c.saveInBackground();
-//                        }
-//                    }).show();
                 }
             }
 

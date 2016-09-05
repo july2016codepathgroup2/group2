@@ -1,7 +1,6 @@
 package com.pensum.pensumapplication.applications;
 
 import android.app.Application;
-import android.text.TextUtils;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
@@ -37,7 +36,7 @@ public class PensumApplication extends Application {
                 .server("https://pensumapi.herokuapp.com/parse").build());
 
         //Enable logging and paste the output from logcat so we can see if GCM was set up properly:
-        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
+//        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
 
         ParseFacebookUtils.initialize(this);
 
@@ -46,39 +45,6 @@ public class PensumApplication extends Application {
         installation.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
         installation.put("GCMSenderId",getResources().getString(R.string.gcm_sender_id));
         installation.saveInBackground();
-//        installation.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e == null) {
-//                    Log.e("installation", "success");
-//                    Log.i("parse", "token after save : " + ParseInstallation.getCurrentInstallation().getString("deviceToken"));
-//                    ParsePush.subscribeInBackground("", new SaveCallback() {
-//
-//                        @Override
-//                        public void done(ParseException e) {
-//
-//                            if (e != null) {
-//
-//                                Log.e("error: ", e.getLocalizedMessage());
-//                                e.printStackTrace();
-//                            } else {
-//
-//                                Log.e("subscribed: ", "to broadcast channel");
-//                                Log.i("parse", "token after subscribe : " + ParseInstallation.getCurrentInstallation().getString("deviceToken"));
-//                            }
-//                        }
-//                    });
-//
-//                } else {
-//                    Log.e("installation", "failed");
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-    }
-
-    public static boolean isAccountValid(ParseUser account) {
-        return !(account == null || TextUtils.isEmpty(account.getObjectId()));
     }
 }
 
