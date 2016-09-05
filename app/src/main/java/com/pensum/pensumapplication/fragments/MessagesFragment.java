@@ -1,12 +1,15 @@
 package com.pensum.pensumapplication.fragments;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
@@ -36,6 +39,12 @@ public class MessagesFragment extends GridFragment {
             throw new ClassCastException(context.toString()
                     + " must implement MessagesFragment.OnConversationClickedListener");
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).updateTitle();
     }
 
     public void populateTasks() {

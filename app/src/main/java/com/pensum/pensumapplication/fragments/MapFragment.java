@@ -48,6 +48,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.fragments.FilterSearchDialogFragment.FilterSearchDialogListener;
 import com.pensum.pensumapplication.helpers.SearchHelper;
 import com.pensum.pensumapplication.models.Task;
@@ -257,6 +258,12 @@ public class MapFragment extends Fragment implements
 
             return false;
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).updateTitle();
     }
 
     @Override

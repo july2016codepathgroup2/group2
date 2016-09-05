@@ -23,6 +23,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.adapters.ConversationAdapter;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
@@ -197,6 +198,12 @@ public class ConversationFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(rvConversations);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).updateTitle();
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.adapters.profile.ProfileSkillAdapter;
 import com.pensum.pensumapplication.fragments.profile.EditSkillFragment;
 import com.pensum.pensumapplication.fragments.profile.ErrorSkillsFragment;
@@ -98,6 +99,12 @@ public class ProfileFragment extends Fragment
             user = ParseUser.getCurrentUser();
             populateView(null);
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).updateTitle();
     }
 
     private void populateView(String userId) {
