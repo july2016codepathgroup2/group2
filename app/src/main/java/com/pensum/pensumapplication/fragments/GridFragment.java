@@ -2,6 +2,7 @@ package com.pensum.pensumapplication.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -16,6 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.adapters.TasksAdapter;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
@@ -46,6 +48,12 @@ public abstract class GridFragment extends Fragment
         tasks = new ArrayList<>();
         adapter = new TasksAdapter(tasks, getContext(), this);
         populateTasks();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).updateTitle();
     }
 
     @Override

@@ -51,4 +51,5 @@
     <string name="snackbar_undo">Undo</string>
     <string name="snackbar_declined">Declined Bid</string>
     <string name="snackbar_accepted">Accepted Bid</string>
+    <string name="task_title">TASK</string>
 </resources>
