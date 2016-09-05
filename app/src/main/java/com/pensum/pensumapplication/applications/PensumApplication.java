@@ -4,14 +4,16 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Skill;
-import com.pensum.pensumapplication.models.Task;
 import com.pensum.pensumapplication.models.Stat;
+import com.pensum.pensumapplication.models.Task;
 
 /**
  * Created by violetaria on 8/17/16.
@@ -33,8 +35,16 @@ public class PensumApplication extends Application {
                 .clientKey(getString(R.string.parse_client_key))
                 .server("https://pensumapi.herokuapp.com/parse").build());
 
+        //Enable logging and paste the output from logcat so we can see if GCM was set up properly:
+//        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
+
         ParseFacebookUtils.initialize(this);
 
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
+        installation.put("GCMSenderId",getResources().getString(R.string.gcm_sender_id));
+        installation.saveInBackground();
     }
 }
 

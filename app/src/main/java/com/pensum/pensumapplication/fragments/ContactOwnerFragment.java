@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
+import com.pensum.pensumapplication.helpers.NotificationHelper;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Task;
@@ -204,6 +205,7 @@ public class ContactOwnerFragment extends DialogFragment {
                 e.printStackTrace();
             }
         });
+        NotificationHelper.sendAlert(getContext(), "Bid received for task", task.getPostedBy().getObjectId());
         dismiss();
     }
 

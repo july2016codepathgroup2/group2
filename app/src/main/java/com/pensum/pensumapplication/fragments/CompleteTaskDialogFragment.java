@@ -22,6 +22,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
+import com.pensum.pensumapplication.helpers.NotificationHelper;
 import com.pensum.pensumapplication.models.Stat;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
@@ -93,6 +94,7 @@ public class CompleteTaskDialogFragment extends DialogFragment {
                 task.setRating(new BigDecimal(rbRating.getRating()));
                 task.saveInBackground();
                 updateCandidateRating();
+                NotificationHelper.sendAlert(getContext(), "Your task is complete with a rating of " + rbRating.getRating(), task.getCandidate().getObjectId());
                 dismiss();
             }
         });

@@ -2,13 +2,12 @@
 <manifest package="com.pensum.pensumapplication"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <permission android:name="com.codepath.pensum.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
+    <permission android:name="com.pensum.pensumapplication.MAPS_RECEIVE" android:protectionLevel="signature"/>
     <permission android:name="android.permission.ACCESS_FINE_LOCATION" android:protectionLevel="dangerous"/>
     <permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:protectionLevel="dangerous"/>
 
-    <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="com.pensum.pensumapplication.permission.MAPS_RECEIVE"/>
 
-    <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -19,6 +18,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:protectionLevel="signature"
+                android:name="com.pensum.pensumapplication.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.pensum.pensumapplication.permission.C2D_MESSAGE" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
@@ -51,6 +58,23 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity android:name=".activities.HomeActivity"/>
+        <service android:name="com.parse.PushService" />
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.GcmBroadcastReceiver"
+                  android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.pensum.pensumapplication" />
+            </intent-filter>
+        </receiver>
         <!-- activities and everything here. meta-data last inside application tag -->
         <meta-data
             android:name="com.parse.pensum"
@@ -58,6 +82,10 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
+        <meta-data
+            android:name="com.parse.push.gcm_sender_id"
+            android:value="@string/gcm_sender_id"/>
+        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/lighthouse_icon"/>
     </application>
 
 </manifest>
