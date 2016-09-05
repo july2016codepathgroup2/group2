@@ -114,7 +114,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                             setTitle(R.string.bidding);
                         } else if (fragment.getClass() == MessagesFragment.class) {
                             nvDrawer.getMenu().getItem(4).setChecked(true);
-                            setTitle(R.string.message);
+                            setTitle(R.string.messages);
                         }
                     }
                 }
@@ -254,7 +254,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         } else if (fragment.getClass() == MessagesFragment.class ||
                 fragment.getClass() == ChatFragment.class ||
                 fragment.getClass() == ConversationFragment.class) {
-            setTitle(R.string.message);
+            setTitle(R.string.messages);
         } else if (fragment.getClass() == TaskDetailFragment.class) {
             setTitle(R.string.task_title);
         }
