@@ -7,7 +7,6 @@ import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
@@ -37,15 +36,45 @@ public class PensumApplication extends Application {
                 .clientKey(getString(R.string.parse_client_key))
                 .server("https://pensumapi.herokuapp.com/parse").build());
 
+        //Enable logging and paste the output from logcat so we can see if GCM was set up properly:
+        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
+
         ParseFacebookUtils.initialize(this);
 
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("user", ParseUser.getCurrentUser());
         installation.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
-        if(isAccountValid(ParseUser.getCurrentUser())) {
-            ParsePush.subscribeInBackground("parse_user_channel_" + ParseUser.getCurrentUser().getObjectId());
-        }
+        installation.put("GCMSenderId",getResources().getString(R.string.gcm_sender_id));
         installation.saveInBackground();
-
+//        installation.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if (e == null) {
+//                    Log.e("installation", "success");
+//                    Log.i("parse", "token after save : " + ParseInstallation.getCurrentInstallation().getString("deviceToken"));
+//                    ParsePush.subscribeInBackground("", new SaveCallback() {
+//
+//                        @Override
+//                        public void done(ParseException e) {
+//
+//                            if (e != null) {
+//
+//                                Log.e("error: ", e.getLocalizedMessage());
+//                                e.printStackTrace();
+//                            } else {
+//
+//                                Log.e("subscribed: ", "to broadcast channel");
+//                                Log.i("parse", "token after subscribe : " + ParseInstallation.getCurrentInstallation().getString("deviceToken"));
+//                            }
+//                        }
+//                    });
+//
+//                } else {
+//                    Log.e("installation", "failed");
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     public static boolean isAccountValid(ParseUser account) {

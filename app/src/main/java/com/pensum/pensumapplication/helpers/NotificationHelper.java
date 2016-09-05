@@ -20,6 +20,7 @@ public class NotificationHelper {
     public static void sendBidAlert(Context context, String message, Task task) {
 
         final Map<String, Object> params = new HashMap<>();
+        params.put("action","SEND_PUSH");
         params.put("message", message);
         params.put("postOwnerId", ParseUser.getCurrentUser().getObjectId());
         params.put("useMasterKey", true);//Must have this line
