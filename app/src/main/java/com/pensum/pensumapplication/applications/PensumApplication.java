@@ -1,17 +1,21 @@
 package com.pensum.pensumapplication.applications;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.ParseUser;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Message;
 import com.pensum.pensumapplication.models.Skill;
-import com.pensum.pensumapplication.models.Task;
 import com.pensum.pensumapplication.models.Stat;
+import com.pensum.pensumapplication.models.Task;
 
 /**
  * Created by violetaria on 8/17/16.
@@ -35,6 +39,17 @@ public class PensumApplication extends Application {
 
         ParseFacebookUtils.initialize(this);
 
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
+        if(isAccountValid(ParseUser.getCurrentUser())) {
+            ParsePush.subscribeInBackground("parse_user_channel_" + ParseUser.getCurrentUser().getObjectId());
+        }
+        installation.saveInBackground();
+
+    }
+
+    public static boolean isAccountValid(ParseUser account) {
+        return !(account == null || TextUtils.isEmpty(account.getObjectId()));
     }
 }
 

@@ -20,6 +20,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!--
+      IMPORTANT: Change "com.codepath.parseportpush.permission.C2D_MESSAGE" in the lines below
+      to match your app's package name + ".permission.C2D_MESSAGE".
+    -->
+    <permission android:protectionLevel="signature"
+                android:name="com.pensum.pensumapplication.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.pensum.pensumapplicatio.permission.C2D_MESSAGE" />
+
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
@@ -31,6 +43,9 @@
         android:theme="@style/AppTheme.Pensum">
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.parse.push.gcm_sender_id"
+            android:value="@string/gcm_sender_id"/>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
@@ -58,6 +73,30 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
+
+        <service android:name="com.parse.PushService" />
+        <!--<receiver android:name="com.pensum.pensumapplication.helpers.PensumReceiver"-->
+        <receiver android:name="com.parse.ParseBroadcastReceiver"
+                  android:exported="false">
+
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.GcmBroadcastReceiver"
+                  android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <!--
+                  IMPORTANT: Change "com.codepath.parseportpush" to match your app's package name.
+                -->
+                <category android:name="com.pensum.pensumapplication" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

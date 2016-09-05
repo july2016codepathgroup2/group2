@@ -1,7 +1,10 @@
 package com.pensum.pensumapplication.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +44,7 @@ import com.pensum.pensumapplication.fragments.MyPostedTasksFragment;
 import com.pensum.pensumapplication.fragments.ProfileFragment;
 import com.pensum.pensumapplication.fragments.TaskDetailFragment;
 import com.pensum.pensumapplication.helpers.KeyboardHelper;
+import com.pensum.pensumapplication.helpers.PensumReceiver;
 import com.pensum.pensumapplication.models.Conversation;
 import com.pensum.pensumapplication.models.Task;
 
@@ -52,6 +57,27 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     ProgressDialog pd;
+    private BroadcastReceiver mPensumReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getApplicationContext(), "onReceive invoked!", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mPensumReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mPensumReceiver, new IntentFilter(PensumReceiver.intentAction));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
