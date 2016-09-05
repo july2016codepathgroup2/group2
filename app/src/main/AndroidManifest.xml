@@ -30,7 +30,7 @@
     -->
     <permission android:protectionLevel="signature"
                 android:name="com.pensum.pensumapplication.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.pensum.pensumapplicatio.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.pensum.pensumapplication.permission.C2D_MESSAGE" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
