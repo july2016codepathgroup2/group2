@@ -20,6 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/relativeLayout">
+            <RelativeLayout
+                android:id="@+id/rvTopRV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/ivProfilePicture"
@@ -63,6 +67,52 @@
                 android:layout_toRightOf="@+id/ivProfilePicture"
                 android:layout_toEndOf="@+id/ivProfilePicture"
                 android:layout_marginTop="10dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rvTopRV"
+                android:layout_marginTop="5dp">
+                <ImageView
+                    android:id="@+id/ivDeclineIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+                <ImageView
+                    android:id="@+id/ivAcceptIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/ic_navigate_next_white_24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Decline"
+                    android:id="@+id/tvIconDecline"
+                    style="@style/conversationSupportIconText"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/ivDeclineIcon"
+                    android:layout_toEndOf="@+id/ivDeclineIcon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Accept"
+                    android:id="@+id/tvIconAccept"
+                    style="@style/conversationSupportIconText"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/ivAcceptIcon"
+                    android:layout_toStartOf="@+id/ivAcceptIcon" />
+
+            </RelativeLayout>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

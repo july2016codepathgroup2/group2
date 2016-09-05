@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     ProgressDialog pd;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,14 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
 
         //Initial load
         nvDrawer.getMenu().getItem(0).setChecked(true);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, new HomeFragment()).commit();
-        setTitle(R.string.home);
+        if (savedInstanceState != null) {
+            homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("home fragment");
+        } else if (homeFragment == null) {
+            homeFragment = new HomeFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, homeFragment, "home fragment").commit();
+            setTitle(R.string.home);
+        }
 
         pd = new ProgressDialog(this);
         pd.setTitle("Logging out...");
@@ -108,7 +114,7 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
                             setTitle(R.string.bidding);
                         } else if (fragment.getClass() == MessagesFragment.class) {
                             nvDrawer.getMenu().getItem(4).setChecked(true);
-                            setTitle(R.string.message);
+                            setTitle(R.string.messages);
                         }
                     }
                 }
@@ -232,7 +238,27 @@ public class HomeActivity extends AppCompatActivity implements AddTaskFragment.O
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
+    public void updateTitle() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContent);
 
+        //TODO temp implementation, may be better way to do this
+        if (fragment.getClass() == HomeFragment.class) {
+            setTitle(R.string.home);
+        } else if (fragment.getClass() == ProfileFragment.class) {
+            setTitle(R.string.profile);
+        } else if (fragment.getClass() == MyPostedTasksFragment.class ||
+                fragment.getClass() == ContactOwnerFragment.class) {
+            setTitle(R.string.posted);
+        } else if (fragment.getClass() == MyBiddedTasksFragment.class) {
+            setTitle(R.string.bidding);
+        } else if (fragment.getClass() == MessagesFragment.class ||
+                fragment.getClass() == ChatFragment.class ||
+                fragment.getClass() == ConversationFragment.class) {
+            setTitle(R.string.messages);
+        } else if (fragment.getClass() == TaskDetailFragment.class) {
+            setTitle(R.string.task_title);
+        }
+    }
     @Override
     public void onNewTaskCreated(Task task) {
         FragmentManager fm = getSupportFragmentManager();

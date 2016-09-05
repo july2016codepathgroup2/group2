@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.activities.HomeActivity;
 import com.pensum.pensumapplication.models.Task;
 import com.squareup.picasso.Picasso;
 
@@ -54,6 +57,7 @@ public class TaskDetailFragment extends Fragment {
     private OnTaskDetailActionListener listener;
     private Unbinder unbinder;
     private SupportMapFragment mapFragment;
+    View view;
 
     public TaskDetailFragment() {
 
@@ -90,27 +94,36 @@ public class TaskDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view;
+        if (view!= null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+
         fetchSelectedTask();
 
-        if (TextUtils.equals(task.getPostedBy().getObjectId(),ParseUser.getCurrentUser().getObjectId())){
-            view = inflater.inflate(R.layout.fragment_task_detail_owner, container, false);
-        } else {
-            view = inflater.inflate(R.layout.fragment_task_detail, container, false);
-            mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.detailMap));
-            if (mapFragment != null) {
-                mapFragment.getMapAsync(new OnMapReadyCallback() {
-                    @Override
-                    public void onMapReady(GoogleMap map) {
-                        LatLng location =
-                                new LatLng(task.getLocation().getLatitude(),task.getLocation().getLongitude());
-
-                        loadMap(map,location);
-                    }
-                });
+        try {
+            if (TextUtils.equals(task.getPostedBy().getObjectId(), ParseUser.getCurrentUser().getObjectId())) {
+                view = inflater.inflate(R.layout.fragment_task_detail_owner, container, false);
             } else {
-                Toast.makeText(getContext(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+                view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+                mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.detailMap));
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap map) {
+                            LatLng location =
+                                    new LatLng(task.getLocation().getLatitude(), task.getLocation().getLongitude());
+
+                            loadMap(map, location);
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+                }
             }
+        } catch (InflateException e) {
+            Log.d("DEBUG","map is already there, just return view as it is ");
         }
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -122,14 +135,15 @@ public class TaskDetailFragment extends Fragment {
         populateViews(view);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HomeActivity) getActivity()).updateTitle();
+    }
+
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
-        if(mapFragment!=null) {
-            getFragmentManager().beginTransaction().remove(mapFragment).commit();
-            mapFragment=null;
-        }
     }
 
     private void fetchSelectedTask() {

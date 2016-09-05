@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.LoginActivity"
+    android:background="@color/colorPrimaryDark">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -12,15 +13,20 @@
         android:id="@+id/btnFbLogin"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/log_in_fb"
+        android:src="@drawable/fb_login"
+        android:scaleType="fitCenter"
         android:background="?android:attr/selectableItemBackground" />
+
+
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="220dp"
         android:id="@+id/ivLogoPic"
         android:src="@drawable/menu_header_2"
         android:scaleType="fitCenter"
+        android:background="@color/colorPrimaryDark"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 </RelativeLayout>
