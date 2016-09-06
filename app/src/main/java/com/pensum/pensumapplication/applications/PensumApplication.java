@@ -4,9 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.pensum.pensumapplication.R;
 import com.pensum.pensumapplication.models.Conversation;
@@ -39,12 +37,6 @@ public class PensumApplication extends Application {
 //        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
 
         ParseFacebookUtils.initialize(this);
-
-        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        installation.put("user", ParseUser.getCurrentUser());
-        installation.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
-        installation.put("GCMSenderId",getResources().getString(R.string.gcm_sender_id));
-        installation.saveInBackground();
     }
 }
 

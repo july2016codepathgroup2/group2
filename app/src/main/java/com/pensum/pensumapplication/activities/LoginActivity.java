@@ -16,6 +16,7 @@ import com.facebook.HttpMethod;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
@@ -74,6 +75,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startWithCurrentUser() {
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
+        installation.put("GCMSenderId",getResources().getString(R.string.gcm_sender_id));
+        installation.saveInBackground();
+
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
     }
