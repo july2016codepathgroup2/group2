@@ -135,6 +135,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_photo_camera_black_24dp"
+        android:src="@drawable/ic_add_a_photo_black_24dp"
         android:background="?android:attr/selectableItemBackground"/>
 </RelativeLayout>

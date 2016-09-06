@@ -2,6 +2,7 @@ package com.pensum.pensumapplication.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -70,7 +71,11 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>
 
         if(task.getHasBidder()){
             if(TextUtils.equals(task.getStatus(),"accepted")) {
+                holder.ivBidderTag.setImageResource(R.drawable.ic_person_pin_white_24dp);
+                holder.ivBidderTag.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorIconGreenLight));
+            } else if(TextUtils.equals(task.getStatus(),"completed")) {
                 holder.ivBidderTag.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                holder.ivBidderTag.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorIconGreenLight));
             } else {
                 holder.ivBidderTag.setImageResource(R.drawable.tag);
             }
