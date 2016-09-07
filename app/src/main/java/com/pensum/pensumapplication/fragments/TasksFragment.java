@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -87,7 +90,7 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
     }
 
     private void setupSearchMenuItem(Menu menu) {
-        MenuItem searchItem  = menu.findItem(R.id.miSearch);
+        final MenuItem searchItem = menu.findItem(R.id.miSearch);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -122,6 +125,23 @@ public class TasksFragment extends GridFragment implements FilterSearchDialogLis
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
+            }
+        });
+
+        ImageView searchCloseButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
+        searchCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                populateTasks();
+                EditText etSearch = (EditText) searchView.findViewById(R.id.search_src_text);
+                // Clear the text from the EditText View
+                etSearch.setText("");
+                //Clear query
+                searchView.setQuery("", false);
+                //Collapse the action view
+                searchView.onActionViewCollapsed();
+                //Collapse the search widget
+                searchItem.collapseActionView();
             }
         });
     }
