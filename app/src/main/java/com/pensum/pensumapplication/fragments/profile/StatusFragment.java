@@ -79,18 +79,8 @@ public class StatusFragment  extends Fragment {
                 }
             });
         } else {
-            ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseUser>() {
-                @Override
-                public void done(ParseUser object, ParseException e) {
-                    if (e == null) {
-                        stat = (Stat) ParseUser.getCurrentUser().get("stats");
-                        setStatus();
-                    } else {
-                        Log.e("message", "Error getting user in profile Status" + e);
-                    }
-                }
-            });
-
+            stat = (Stat) ParseUser.getCurrentUser().get("stats");
+            setStatus();
         }
 
         return view;

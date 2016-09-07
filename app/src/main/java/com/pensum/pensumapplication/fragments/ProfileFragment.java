@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -97,8 +98,16 @@ public class ProfileFragment extends Fragment
                 }
             });
         } else { //current user
-            user = ParseUser.getCurrentUser();
-            populateView(null);
+            ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseUser>(){
+                @Override
+                public void done(ParseUser object, ParseException e) {
+                    if(e==null) {
+                        user = object;
+                        populateView(null);
+                    } else
+                        e.printStackTrace();
+                }
+            });
         }
     }
 
@@ -135,10 +144,15 @@ public class ProfileFragment extends Fragment
         else
             transaction.replace(R.id.flProfSkills, new ErrorSkillsFragment());
 
-        if(user.get("stats") != null && ((Stat)user.get("stats")).getTasksCompleted()>0)
-            transaction.replace(R.id.flProfStatus, StatusFragment.newInstance(userId));
-        else
-            transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());
+        try{
+            Stat stat = ((Stat)user.get("stats")).fetchIfNeeded();
+            if(stat != null && stat.getTasksCompleted()>0)
+                transaction.replace(R.id.flProfStatus, StatusFragment.newInstance(userId));
+            else
+                transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         transaction.commit();
     }
