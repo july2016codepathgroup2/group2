@@ -28,6 +28,7 @@ import com.pensum.pensumapplication.fragments.profile.SkillsFragment;
 import com.pensum.pensumapplication.fragments.profile.StatusFragment;
 import com.pensum.pensumapplication.helpers.FormatterHelper;
 import com.pensum.pensumapplication.models.Skill;
+import com.pensum.pensumapplication.models.Stat;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -134,7 +135,7 @@ public class ProfileFragment extends Fragment
         else
             transaction.replace(R.id.flProfSkills, new ErrorSkillsFragment());
 
-        if(user.get("stats") != null)
+        if(user.get("stats") != null && ((Stat)user.get("stats")).getTasksCompleted()>0)
             transaction.replace(R.id.flProfStatus, StatusFragment.newInstance(userId));
         else
             transaction.replace(R.id.flProfStatus, new ErrorSkillsFragment());

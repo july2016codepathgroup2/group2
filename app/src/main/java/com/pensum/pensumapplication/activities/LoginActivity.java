@@ -20,6 +20,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pensum.pensumapplication.R;
+import com.pensum.pensumapplication.models.Stat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -128,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
         user.put("fbName", name);
         user.put("profilePicUrl", profilePicUrl);
         user.put("coverPicUrl", coverPicUrl);
+        user.put("stats", new Stat());
 
         //Finally save all the user details
         user.saveInBackground(new SaveCallback() {

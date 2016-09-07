@@ -79,8 +79,18 @@ public class StatusFragment  extends Fragment {
                 }
             });
         } else {
-            stat = (Stat) ParseUser.getCurrentUser().get("stats");
-            setStatus();
+            ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser object, ParseException e) {
+                    if (e == null) {
+                        stat = (Stat) ParseUser.getCurrentUser().get("stats");
+                        setStatus();
+                    } else {
+                        Log.e("message", "Error getting user in profile Status" + e);
+                    }
+                }
+            });
+
         }
 
         return view;
@@ -89,7 +99,6 @@ public class StatusFragment  extends Fragment {
     public void setStatus() {
         try {
             stat.fetchIfNeeded();
-
             float percent = (float)(stat.getTasksCompleted()/stat.getTasksCompleted()); //TODO need and extra field
             int animationDuration = 2500;
             circularProgressBar.setProgressWithAnimation(percent*100, animationDuration);
