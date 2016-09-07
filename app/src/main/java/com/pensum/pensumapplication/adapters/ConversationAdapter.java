@@ -96,7 +96,9 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         RatingBar rbRating = holder.rbRating;
         Stat candidateStat = null;
         try {
-            candidateStat = (Stat) conversation.getCandidate().getParseObject("stats").fetchIfNeeded();
+            if (candidate.getParseObject("stats") != null) {
+                candidateStat = (Stat) candidate.getParseObject("stats").fetchIfNeeded();
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
