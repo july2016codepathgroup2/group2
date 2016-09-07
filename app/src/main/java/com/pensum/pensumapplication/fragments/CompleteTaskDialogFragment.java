@@ -142,7 +142,11 @@ public class CompleteTaskDialogFragment extends DialogFragment {
             ratingSum += t.getRating();
         }
 
-        final BigDecimal rating = new BigDecimal(ratingSum /completedTasks.size());
+        int totalComplete = 1;
+        if (completedTasks.size() > 0)
+            totalComplete = completedTasks.size();
+
+        final BigDecimal rating = new BigDecimal(ratingSum / totalComplete);
 
         ParseQuery<Stat> query = ParseQuery.getQuery(Stat.class);
         query.whereEqualTo("user",task.getCandidate());
